@@ -98,12 +98,12 @@ Launch is achieved when:
 ## Phase 1 — Authentication, sessions, RBAC (launch gate)
 
 ### Step 1.1 — Better Auth integration + session handling
-- [ ] **BE (Owner: BE)**: Implement session creation/validation; integrate with TanStack Start middleware.
-- [ ] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
-- [ ] **FE (Owner: FE)**: Login/logout flows; session-expired handling; safe redirect behavior.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Unit: session parsing/validation logic (where applicable).
-  - [ ] E2E: login, logout, session expiry redirect.
+- [x] **BE (Owner: BE)**: Implement session creation/validation; integrate with TanStack Start middleware.
+- [x] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
+- [x] **FE (Owner: FE)**: Login/logout flows; session-expired handling; safe redirect behavior.
+- [x] **TEST (Owner: QA)**:
+  - [x] Unit: session parsing/validation logic (where applicable).
+  - [x] E2E: login, logout, session expiry redirect.
   - **Done**: Anonymous users cannot access admin UI routes or mutations.
 
 ### Step 1.2 — RBAC enforced on the server (Admin vs Editor)

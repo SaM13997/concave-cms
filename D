@@ -1,0 +1,15 @@
+### Client (Vite)
+VITE_CONVEX_URL=
+VITE_CONVEX_SITE_URL=
+
+### Server (Better Auth)
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=
+
+### Convex / Better Auth integration
+CONVEX_SITE_URL=
+SITE_URL=
+
+### OAuth (Google)
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=

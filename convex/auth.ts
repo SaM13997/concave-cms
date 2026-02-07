@@ -51,3 +51,10 @@ export const getCurrentUser = query({
     return authComponent.getAuthUser(ctx);
   },
 });
+
+export const getCurrentUserOrNull = query({
+  args: {},
+  handler: async (ctx) => {
+    return authComponent.safeGetAuthUser(ctx);
+  },
+});

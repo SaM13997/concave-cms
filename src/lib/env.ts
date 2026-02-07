@@ -6,6 +6,7 @@ import { z } from "zod/v4";
  */
 const clientEnvSchema = z.object({
   VITE_CONVEX_URL: z.url("VITE_CONVEX_URL must be a valid URL"),
+  VITE_CONVEX_SITE_URL: z.url("VITE_CONVEX_SITE_URL must be a valid URL"),
 });
 
 /**
@@ -27,6 +28,7 @@ export type ServerEnv = z.infer<typeof serverEnvSchema>;
 export function getClientEnv(): ClientEnv {
   const result = clientEnvSchema.safeParse({
     VITE_CONVEX_URL: import.meta.env.VITE_CONVEX_URL,
+    VITE_CONVEX_SITE_URL: import.meta.env.VITE_CONVEX_SITE_URL,
   });
 
   if (!result.success) {

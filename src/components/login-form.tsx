@@ -10,6 +10,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { getSafeRedirect } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
@@ -18,13 +19,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { reason } = router.state.location.search as { reason?: string };
 
   const navigateAfterAuth = () => {
-    const search = router.state.location.search as { redirect?: unknown } | undefined;
-    const redirect =
-      typeof search?.redirect === "string" && search.redirect.length > 0
-        ? search.redirect
-        : undefined;
+    const search = router.state.location.search as { redirect?: string | null } | undefined;
+    const redirect = getSafeRedirect(search?.redirect ?? undefined);
 
     if (redirect) {
       router.history.push(redirect);
@@ -115,6 +114,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
             </FieldDescription>
           </div>
 
+          {reason === "expired" && !error && (
+            <p className="text-sm text-amber-500 text-center">
+              Your session expired. Please sign in again.
+            </p>
+          )}
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
           {isSignUp && (

@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
-import { fetchSession, getCookieName } from "@convex-dev/better-auth/react-start";
 import type { ConvexQueryClient } from "@convex-dev/react-query";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
@@ -9,27 +8,29 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
+  redirect,
   Scripts,
   useRouteContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { createServerFn } from "@tanstack/react-start";
-import { getCookie, getRequest } from "@tanstack/react-start/server";
 import type { ConvexReactClient } from "convex/react";
 import type * as React from "react";
+import { getSafeRedirect } from "@/lib/auth";
 import { authClient } from "@/lib/auth-client";
+import { getServerAuth, getServerSessionAuth } from "@/lib/auth-server";
 import { BottomNav } from "../components/BottomNav";
 import appCss from "../styles.css?url";
 
 // Get auth information for SSR using available cookies
 const fetchAuth = createServerFn({ method: "GET" }).handler(async () => {
-  const { createAuth } = await import("../../convex/auth");
-  const { session } = await fetchSession(getRequest());
-  const sessionCookieName = getCookieName(createAuth);
-  const token = getCookie(sessionCookieName);
+  const auth = await getServerAuth();
+  const sessionAuth = await getServerSessionAuth();
+
   return {
-    userId: session?.user.id,
-    token,
+    userId: auth.userId,
+    token: auth.token,
+    sessionToken: sessionAuth.token,
   };
 });
 
@@ -56,12 +57,29 @@ export const Route = createRootRouteWithContext<{
   beforeLoad: async (ctx) => {
     // all queries, mutations and action made with TanStack Query will be
     // authenticated by an identity token.
-    const { userId, token } = await fetchAuth();
+    const { userId, token, sessionToken } = await fetchAuth();
 
     // During SSR only (the only time serverHttpClient exists),
     // set the auth token to make HTTP queries with.
     if (token) {
       ctx.context.convexQueryClient.serverHttpClient?.setAuth(token);
+    }
+
+    const isLoginRoute = ctx.location.pathname === "/login";
+
+    if (!userId && !isLoginRoute) {
+      const search = ctx.location.search as { redirect?: string | null };
+      const next = getSafeRedirect(search.redirect);
+      const redirectTarget = next ?? ctx.location.href;
+      const reason = sessionToken ? "expired" : undefined;
+
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: redirectTarget,
+          reason,
+        },
+      });
     }
 
     return { userId, token };
