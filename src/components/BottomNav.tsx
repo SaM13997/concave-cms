@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 
 import { bottomNavItems } from "@/config/navigation";
 import { cn } from "@/lib/utils";
@@ -40,14 +40,14 @@ export function BottomNav() {
               viewTransition
               className={cn(
                 "p-3 transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
-                active ? item.color : "hover:bg-white/10"
+                active ? item.color : "hover:bg-white/10",
               )}
             >
               <span className="sr-only">{item.label}</span>
               <Icon
                 className={cn(
                   "h-5 w-5 text-white transition-colors",
-                  active ? item.darkColor : "text-white"
+                  active ? item.darkColor : "text-white",
                 )}
               />
             </Link>

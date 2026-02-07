@@ -18,4 +18,3 @@ export const bottomNavItems: BottomNavItem[] = [
     darkColor: "text-cyan-400",
   },
 ] as const;
-

@@ -6,7 +6,11 @@
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "serve": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "biome check src/ convex/",
+    "lint:fix": "biome check --write src/ convex/",
+    "format": "biome format --write src/ convex/",
+    "check": "tsc --noEmit && biome check src/ convex/"
   },
   "dependencies": {
     "@convex-dev/better-auth": "^0.9.6",
@@ -38,9 +42,11 @@
     "react-dom": "^19.2.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.16",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.14",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/node": "^22.10.2",

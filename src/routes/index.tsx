@@ -1,15 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
-import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
+import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
 import { UserButton } from "@/components/User-button";
-import {
-  Layers,
-  FileText,
-  Image,
-  Settings,
-  type LucideIcon,
-} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   component: HomePage,
@@ -60,12 +54,8 @@ function DashboardCard({
             <Icon className="h-4 w-4 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="text-sm font-medium text-card-foreground">
-              {title}
-            </h3>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              {description}
-            </p>
+            <h3 className="text-sm font-medium text-card-foreground">{title}</h3>
+            <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
           </div>
         </div>
         <span className="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
@@ -81,10 +71,7 @@ function HomePage() {
 
   const user = sessionData?.user ?? null;
   const isAuthenticated = !!sessionData?.session;
-  const displayName =
-    (user?.name && user.name.trim()) ||
-    (user?.email && user.email.split("@")[0]) ||
-    null;
+  const displayName = user?.name?.trim() || user?.email?.split("@")[0] || null;
 
   return (
     <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
@@ -100,9 +87,7 @@ function HomePage() {
                 : "Welcome to Concave"}
             </h1>
           )}
-          <p className="mt-1 text-sm text-muted-foreground">
-            Convex-native headless CMS
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">Convex-native headless CMS</p>
         </div>
         {isAuthenticated && <UserButton />}
       </header>
@@ -125,9 +110,7 @@ function HomePage() {
       {!isPending && !isAuthenticated && (
         <div className="mx-auto mt-8 w-full max-w-3xl">
           <div className="rounded-lg border border-border bg-card p-5 text-center">
-            <p className="text-sm text-muted-foreground">
-              Sign in to start managing your content.
-            </p>
+            <p className="text-sm text-muted-foreground">Sign in to start managing your content.</p>
             <Button asChild variant="default" size="sm" className="mt-3">
               <Link to="/login">Sign in</Link>
             </Button>
