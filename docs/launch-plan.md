@@ -71,24 +71,24 @@ Launch is achieved when:
 ## Phase 0 — Bootstrap foundations (repo, tooling, environments)
 
 ### Step 0.1 — Repository scaffolding + scripts
-- [ ] **BE (Owner: BE)**: Decide code organization (monorepo vs single package) and Convex directory layout.
-- [ ] **FE (Owner: FE)**: Scaffold TanStack Start app with shadcn baseline primitives.
-- [ ] **TEST (Owner: QA)**: Choose test layers + tooling (unit, integration, e2e) and define test data reset strategy.
-- [ ] **OPS (Owner: OPS)**: Add scripts for `dev`, `build`, `typecheck`, `lint`, `test` and wire into CI.
+- [x] **BE (Owner: BE)**: Decide code organization (monorepo vs single package) and Convex directory layout.
+- [x] **FE (Owner: FE)**: Scaffold TanStack Start app with shadcn baseline primitives.
+- [x] **TEST (Owner: QA)**: Choose test layers + tooling (unit, integration, e2e) and define test data reset strategy.
+- [x] **OPS (Owner: OPS)**: Add scripts for `dev`, `build`, `typecheck`, `lint`, `test` and wire into CI.
   - **Done**: Fresh clone → single command starts dev environment; CI runs all checks.
 
 ### Step 0.2 — Configuration and environment management (self-hosted)
-- [ ] **BE (Owner: BE)**: Define configuration schema (auth secrets, preview secret, Convex config, etc.).
-- [ ] **FE (Owner: FE)**: Implement environment-aware config loading; show env banner (dev/staging/prod).
+- [x] **BE (Owner: BE)**: Define configuration schema (auth secrets, preview secret, Convex config, etc.).
+- [x] **FE (Owner: FE)**: Implement environment-aware config loading; show env banner (dev/staging/prod).
 - [ ] **TEST (Owner: QA)**: Ensure tests do not require manual secrets; use deterministic test secrets.
 - [ ] **OPS (Owner: OPS)**: Provide `.env.example` + quickstart docs.
   - **Done**: New user can configure and run without reading code.
 
 ### Step 0.3 — Core product decisions (unblocker ADRs)
-- [ ] **BE (Owner: BE)**: Write ADRs for:
+- [x] **BE (Owner: BE)**: Write ADRs for:
   - Canonical schema representation (stored in Convex).
-  - Code schema vs UI schema precedence + conflict handling (“bilingual schema”).
-  - Schema “apply” strategy for self-hosted (e.g., export/codegen/deploy vs runtime-generic models).
+  - Code schema vs UI schema precedence + conflict handling ("bilingual schema").
+  - Schema "apply" strategy for self-hosted (e.g., export/codegen/deploy vs runtime-generic models).
 - [ ] **FE (Owner: FE)**: UX contract for schema changes (draft → validate → apply) and failure/rollback messaging.
 - [ ] **TEST (Owner: QA)**: Contract tests plan for schema export + apply.
   - **Done**: Decisions are documented and used as constraints in later tasks.
