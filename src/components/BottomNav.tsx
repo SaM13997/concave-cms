@@ -14,7 +14,7 @@ export function BottomNav() {
     setMounted(true);
   }, []);
 
-  if (!mounted) {
+  if (!mounted || pathname === "/sign-in") {
     return null;
   }
 
