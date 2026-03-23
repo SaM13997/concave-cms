@@ -1,8 +1,11 @@
+import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { ConvexQueryClient } from "@convex-dev/react-query";
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ConvexReactClient } from "convex/react";
+
+import { authClient } from "./lib/auth-client";
 import { getClientEnv } from "./lib/env";
 import { routeTree } from "./routeTree.gen";
 
@@ -30,7 +33,9 @@ export function getRouter() {
       scrollRestoration: true,
       context: { queryClient, convexClient: convex, convexQueryClient },
       Wrap: ({ children }) => (
-        <ConvexProvider client={convexQueryClient.convexClient}>{children}</ConvexProvider>
+        <ConvexBetterAuthProvider client={convex} authClient={authClient}>
+          {children}
+        </ConvexBetterAuthProvider>
       ),
     }),
     queryClient,

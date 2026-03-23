@@ -1,5 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
+
+import { UserButton } from "@/components/UserButton";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -64,6 +68,9 @@ function DashboardCard({
 }
 
 function HomePage() {
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user ?? null;
+
   return (
     <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
       {/* Header */}
@@ -74,6 +81,15 @@ function HomePage() {
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">Convex-native headless CMS</p>
         </div>
+        {isPending ? (
+          <div className="h-9 w-9 animate-pulse rounded-full bg-muted" />
+        ) : user ? (
+          <UserButton user={user} />
+        ) : (
+          <Button asChild>
+            <Link to="/sign-in">Sign in</Link>
+          </Button>
+        )}
       </header>
 
       {/* Dashboard Grid */}
