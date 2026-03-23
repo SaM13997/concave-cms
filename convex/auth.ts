@@ -4,6 +4,7 @@ import { betterAuth } from "better-auth";
 import { emailOTP } from "better-auth/plugins";
 
 import { components } from "./_generated/api";
+import { sendAuthOtpEmail } from "./lib/send-auth-otp";
 
 export const betterAuthComponent = createClient(components.betterAuth);
 
@@ -26,7 +27,7 @@ async function sendVerificationOTP({
   otp: string;
   type: "sign-in" | "email-verification" | "forget-password";
 }) {
-  console.info(`[auth:${type}] OTP for ${email}: ${otp}`);
+  await sendAuthOtpEmail({ email, otp, type });
 }
 
 export function createAuth(ctx: AuthContext, _opts?: { optionsOnly?: boolean }) {
