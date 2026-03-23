@@ -9,5 +9,6 @@ describe("authClient", () => {
     expect(typeof authClient.emailOtp.sendVerificationOtp).toBe("function");
     expect(typeof authClient.signIn.emailOtp).toBe("function");
     expect(typeof authClient.convex.token).toBe("function");
+    expect(typeof authClient.getCookie).toBe("function");
   });
 });

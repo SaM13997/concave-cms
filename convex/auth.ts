@@ -1,5 +1,5 @@
 import { createClient } from "@convex-dev/better-auth";
-import { convex } from "@convex-dev/better-auth/plugins";
+import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
 import { betterAuth } from "better-auth";
 import { emailOTP } from "better-auth/plugins";
 
@@ -10,6 +10,10 @@ export const betterAuthComponent = createClient(components.betterAuth);
 type AuthContext = Parameters<typeof betterAuthComponent.adapter>[0];
 
 function getPublicAuthUrl() {
+  return process.env.SITE_URL ?? process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
+}
+
+function getAppOrigin() {
   return process.env.SITE_URL ?? process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
 }
 
@@ -40,6 +44,9 @@ export function createAuth(ctx: AuthContext, _opts?: { optionsOnly?: boolean }) 
         otpLength: 6,
         allowedAttempts: 3,
         sendVerificationOTP,
+      }),
+      crossDomain({
+        siteUrl: getAppOrigin(),
       }),
       convex(),
     ],

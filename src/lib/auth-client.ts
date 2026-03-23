@@ -1,4 +1,4 @@
-import { convexClient } from "@convex-dev/better-auth/client/plugins";
+import { convexClient, crossDomainClient } from "@convex-dev/better-auth/client/plugins";
 import { emailOTPClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
@@ -8,5 +8,5 @@ export const authBasePath = "/api/auth";
 export const authClient = createAuthClient({
   baseURL: authBaseUrl,
   basePath: authBasePath,
-  plugins: [emailOTPClient(), convexClient()],
+  plugins: [emailOTPClient(), convexClient(), crossDomainClient()],
 });
