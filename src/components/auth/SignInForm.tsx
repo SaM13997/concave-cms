@@ -45,6 +45,19 @@ export function SignInForm() {
     }
   };
 
+  const resendCode = async () => {
+    setError(null);
+    setIsSubmitting(true);
+
+    const result = await requestSignInCode(email);
+
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setError(result.error);
+    }
+  };
+
   return step === "email" ? (
     <form className="flex flex-col gap-4" onSubmit={submitEmail}>
       <FieldGroup>
@@ -70,6 +83,10 @@ export function SignInForm() {
     </form>
   ) : (
     <form className="flex flex-col gap-4" onSubmit={submitOtp}>
+      <div className="space-y-1">
+        <p className="text-sm font-medium">Check your email</p>
+        <p className="text-sm text-muted-foreground">We sent a six-digit code to {email}.</p>
+      </div>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="otp">Verification code</FieldLabel>
@@ -87,6 +104,29 @@ export function SignInForm() {
         </Field>
       </FieldGroup>
       <FieldError>{error}</FieldError>
+      <div className="flex items-center justify-between gap-3 text-sm">
+        <button
+          type="button"
+          className="text-muted-foreground transition-colors hover:text-foreground"
+          onClick={() => {
+            setOtp("");
+            setError(null);
+            setStep("email");
+          }}
+        >
+          Use another email
+        </button>
+        <button
+          type="button"
+          className="text-muted-foreground transition-colors hover:text-foreground"
+          onClick={() => {
+            void resendCode();
+          }}
+          disabled={isSubmitting}
+        >
+          Resend code
+        </button>
+      </div>
       <Button type="submit" disabled={isSubmitting || otp.length < 6}>
         {isSubmitting ? "Signing in..." : "Sign in"}
       </Button>
