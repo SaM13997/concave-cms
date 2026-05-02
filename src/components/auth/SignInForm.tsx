@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { requestSignInCode, verifySignInCode } from "./sign-in-actions";
+import { authClient } from "@/lib/auth-client";
+import { getErrorMessage } from "@/lib/utils";
 
 type SignInStep = "email" | "otp";
 
@@ -14,12 +15,38 @@ export function SignInForm() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const sendCode = async (email: string) => {
+    const result = await authClient.emailOtp.sendVerificationOtp({
+      email,
+      type: "sign-in",
+    });
+
+    if (result.error) {
+      return { ok: false as const, error: getErrorMessage(result.error, "Could not send code") };
+    }
+
+    return { ok: true as const };
+  };
+
+  const verifyCode = async (email: string, otp: string) => {
+    const result = await authClient.signIn.emailOtp({ email, otp });
+
+    if (result.error) {
+      return {
+        ok: false as const,
+        error: getErrorMessage(result.error, "Invalid or expired code"),
+      };
+    }
+
+    return { ok: true as const };
+  };
+
   const submitEmail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
     setIsSubmitting(true);
 
-    const result = await requestSignInCode(email);
+    const result = await sendCode(email);
 
     setIsSubmitting(false);
 
@@ -36,7 +63,7 @@ export function SignInForm() {
     setError(null);
     setIsSubmitting(true);
 
-    const result = await verifySignInCode(email, otp);
+    const result = await verifyCode(email, otp);
 
     setIsSubmitting(false);
 
@@ -49,7 +76,7 @@ export function SignInForm() {
     setError(null);
     setIsSubmitting(true);
 
-    const result = await requestSignInCode(email);
+    const result = await sendCode(email);
 
     setIsSubmitting(false);
 

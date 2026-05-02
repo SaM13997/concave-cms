@@ -4,19 +4,12 @@ import { betterAuth } from "better-auth";
 import { emailOTP } from "better-auth/plugins";
 
 import { components } from "./_generated/api";
+import { getPublicUrl, requireEnv } from "./lib/env";
 import { sendAuthOtpEmail } from "./lib/send-auth-otp";
 
 export const betterAuthComponent = createClient(components.betterAuth);
 
 type AuthContext = Parameters<typeof betterAuthComponent.adapter>[0];
-
-function getPublicAuthUrl() {
-  return process.env.SITE_URL ?? process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
-}
-
-function getAppOrigin() {
-  return process.env.SITE_URL ?? process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
-}
 
 async function sendVerificationOTP({
   email,
@@ -31,11 +24,13 @@ async function sendVerificationOTP({
 }
 
 export function createAuth(ctx: AuthContext, _opts?: { optionsOnly?: boolean }) {
+  const publicUrl = getPublicUrl();
+
   return betterAuth({
     database: betterAuthComponent.adapter(ctx),
-    baseURL: getPublicAuthUrl(),
+    baseURL: publicUrl,
     basePath: "/api/auth",
-    secret: process.env.BETTER_AUTH_SECRET,
+    secret: requireEnv("BETTER_AUTH_SECRET"),
     rateLimit: {
       storage: "database",
     },
@@ -47,7 +42,7 @@ export function createAuth(ctx: AuthContext, _opts?: { optionsOnly?: boolean }) 
         sendVerificationOTP,
       }),
       crossDomain({
-        siteUrl: getAppOrigin(),
+        siteUrl: publicUrl,
       }),
       convex(),
     ],
