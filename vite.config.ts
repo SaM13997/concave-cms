@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -16,6 +17,12 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  test: {
+    env: {
+      VITE_CONVEX_URL: 'https://example.convex.cloud',
+      VITE_CONVEX_SITE_URL: 'https://example.convex.site',
+    },
+  },
 })
 
 export default config

@@ -14,15 +14,11 @@ export function BottomNav() {
     setMounted(true);
   }, []);
 
-  if (!mounted || pathname === "/sign-in") {
+  if (!mounted) {
     return null;
   }
 
   const isActive = (href: (typeof bottomNavItems)[number]["href"]) => {
-    if (href === "/") {
-      return pathname === "/";
-    }
-
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 

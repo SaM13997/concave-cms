@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { sendAuthOtpEmail } from "../../convex/lib/send-auth-otp";
+import { sendAuthOtpEmail } from "../lib/send-auth-otp";
 
 describe("sendAuthOtpEmail", () => {
   it("logs OTPs in non-production environments", async () => {

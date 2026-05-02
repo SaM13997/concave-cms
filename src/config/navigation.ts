@@ -11,7 +11,7 @@ export type BottomNavItem = {
 
 export const bottomNavItems: BottomNavItem[] = [
   {
-    href: "/",
+    href: "/app",
     label: "Home",
     icon: Home,
     color: "bg-cyan-500/10",

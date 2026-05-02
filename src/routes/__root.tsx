@@ -7,7 +7,6 @@ import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanst
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import type { ConvexReactClient } from "convex/react";
 import type * as React from "react";
-import { BottomNav } from "../components/BottomNav";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRouteWithContext<{
@@ -49,18 +48,19 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="h-lvh flex flex-col overflow-x-clip w-full">
         <div className="flex-1 flex flex-col">{children}</div>
-        <BottomNav />
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        {import.meta.env.DEV && (
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[
+              {
+                name: "Tanstack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+            ]}
+          />
+        )}
         <Scripts />
       </body>
     </html>

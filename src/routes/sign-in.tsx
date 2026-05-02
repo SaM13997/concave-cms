@@ -14,7 +14,7 @@ function SignInPage() {
 
   useEffect(() => {
     if (session) {
-      void navigate({ to: "/" });
+      void navigate({ to: "/app" });
     }
   }, [navigate, session]);
 
