@@ -1,0 +1,6 @@
+one-feature-rule-ok
+feature-list-rule-ok
+changelog-rule-ok
+date-ok
+bullet-ok
+changelog-ok

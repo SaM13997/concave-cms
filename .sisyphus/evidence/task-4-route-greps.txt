@@ -1,0 +1,8 @@
+heading-ok
+requirement-coverage-ok
+launch-gates-ok
+gap-categories-ok
+evidence-ok
+changelog-ok
+dev-guard-ok
+no-static-featurelist-import-ok

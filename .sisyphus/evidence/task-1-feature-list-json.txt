@@ -1,0 +1,7 @@
+valid
+valid
+conservative
+sources-ok
+launch-gates-ok
+hygiene-ok
+statuses-ok

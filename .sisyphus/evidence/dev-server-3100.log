@@ -1,0 +1,7 @@
+
+  VITE v7.1.12  ready in 1770 ms
+
+  ➜  Local:   http://127.0.0.1:3100/
+[vite] connected.
+8:17:45 PM [vite] changed tsconfig file detected: /home/ubuntu/dev/concave-cms/.nitro/types/tsconfig.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+[vite] program reload

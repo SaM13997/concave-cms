@@ -1,0 +1,14 @@
+
+> test
+> vitest run
+
+
+ RUN  v3.2.4 /home/ubuntu/dev/concave-cms
+
+ ✓ src/lib/checklist-utils.test.ts (4 tests) 6ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  20:15:48
+   Duration  331ms (transform 54ms, setup 0ms, collect 50ms, tests 6ms, environment 0ms, prepare 76ms)
+

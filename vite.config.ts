@@ -6,9 +6,15 @@ import tailwindcss from '@tailwindcss/vite'
 import { nitroV2Plugin } from '@tanstack/nitro-v2-vite-plugin'
 
 const config = defineConfig({
+  server: {
+    allowedHosts: ['devhub'],
+    watch: {
+      ignored: ['**/.nitro/**', '**/.output/**', '**/.sisyphus/**', '**/dist/**'],
+      usePolling: true,
+    },
+  },
   plugins: [
     nitroV2Plugin(),
-    // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),

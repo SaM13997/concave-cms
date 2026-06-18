@@ -1,0 +1,1241 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-06-18",
+  "sources": [
+    "docs/requirements.md",
+    "docs/launch-plan.md"
+  ],
+  "statusValues": [
+    "planned",
+    "in_progress",
+    "blocked",
+    "implemented",
+    "verified",
+    "deferred"
+  ],
+  "gapCategories": [
+    "missing_traceability",
+    "missing_acceptance_criteria",
+    "missing_evidence",
+    "implementation_gap",
+    "test_gap",
+    "documentation_gap",
+    "launch_gate_gap"
+  ],
+  "features": [
+    {
+      "id": "RQ-001",
+      "title": "Users must not need to run a manual “sync” between Concave and the database.",
+      "source": "docs/requirements.md",
+      "category": "Zero-sync + reactive baseline",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Users must not need to run a manual “sync” between Concave and the database."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-002",
+      "title": "When content is updated in the CMS, consuming applications must receive updates via real-time Convex subscriptions.",
+      "source": "docs/requirements.md",
+      "category": "Zero-sync + reactive baseline",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "When content is updated in the CMS, consuming applications must receive updates via real-time Convex subscriptions."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-003",
+      "title": "The CMS must present itself as the interface for the database (data management UI directly against Convex).",
+      "source": "docs/requirements.md",
+      "category": "Zero-sync + reactive baseline",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The CMS must present itself as the interface for the database (data management UI directly against Convex)."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-010",
+      "title": "Developers must be able to define schema in TypeScript (`schema.ts`).",
+      "source": "docs/requirements.md",
+      "category": "Schema as source of truth (bilingual schema)",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Developers must be able to define schema in TypeScript (`schema.ts`)."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-011",
+      "title": "Marketers must be able to define the schema via a visual builder UI.",
+      "source": "docs/requirements.md",
+      "category": "Schema as source of truth (bilingual schema)",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Marketers must be able to define the schema via a visual builder UI."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-012",
+      "title": "The system must treat the code schema and visual schema as two representations of the same underlying schema logic.",
+      "source": "docs/requirements.md",
+      "category": "Schema as source of truth (bilingual schema)",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system must treat the code schema and visual schema as two representations of the same underlying schema logic."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-013",
+      "title": "The system must maintain strict compatibility with Convex typing constraints.",
+      "source": "docs/requirements.md",
+      "category": "Schema as source of truth (bilingual schema)",
+      "phase": "Phase 1 — Convex-native foundation",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system must maintain strict compatibility with Convex typing constraints."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 1"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-100",
+      "title": "Marketers must be able to create and modify content structures using a drag-and-drop interface.",
+      "source": "docs/requirements.md",
+      "category": "Drag-and-drop schema authoring",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Marketers must be able to create and modify content structures using a drag-and-drop interface."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-101",
+      "title": "Marketers must be able to add tables (content types/collections) via the UI.",
+      "source": "docs/requirements.md",
+      "category": "Drag-and-drop schema authoring",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Marketers must be able to add tables (content types/collections) via the UI."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-102",
+      "title": "Marketers must be able to define relationships between tables/content types.",
+      "source": "docs/requirements.md",
+      "category": "Drag-and-drop schema authoring",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Marketers must be able to define relationships between tables/content types."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-110",
+      "title": "Marketers must be able to add fields to a table/content type via the UI.",
+      "source": "docs/requirements.md",
+      "category": "Field types & configuration",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Marketers must be able to add fields to a table/content type via the UI."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-111",
+      "title": "The UI must support choosing field types including (at minimum) Rich Text, Image, and Reference.",
+      "source": "docs/requirements.md",
+      "category": "Field types & configuration",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The UI must support choosing field types including (at minimum) Rich Text, Image, and Reference."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-112",
+      "title": "The UI must map visual field definitions to concrete typed representations compatible with Convex.",
+      "source": "docs/requirements.md",
+      "category": "Field types & configuration",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The UI must map visual field definitions to concrete typed representations compatible with Convex."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-120",
+      "title": "The visual schema engine must prevent marketers from creating schemas that violate Convex’s strict typing rules.",
+      "source": "docs/requirements.md",
+      "category": "Structural guardrails (Convex typing compliance)",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The visual schema engine must prevent marketers from creating schemas that violate Convex’s strict typing rules."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-121",
+      "title": "When a user attempts an invalid schema change, the system must block the change (or require correction) rather than persisting an invalid schema.",
+      "source": "docs/requirements.md",
+      "category": "Structural guardrails (Convex typing compliance)",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "When a user attempts an invalid schema change, the system must block the change (or require correction) rather than persisting an invalid schema."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-130",
+      "title": "Visual schema changes must generate a corresponding configuration representation.",
+      "source": "docs/requirements.md",
+      "category": "Seamless handover to developers (“lock into code”)",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Visual schema changes must generate a corresponding configuration representation."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-131",
+      "title": "Developers must be able to “lock” visually created schema changes into code (eventual code ownership) as needed.",
+      "source": "docs/requirements.md",
+      "category": "Seamless handover to developers (“lock into code”)",
+      "phase": "Phase 2 — Visual Schema Engine (Marketer Mode)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Developers must be able to “lock” visually created schema changes into code (eventual code ownership) as needed."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 2"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-200",
+      "title": "Every content entry/document must support both a Draft state and a Published state.",
+      "source": "docs/requirements.md",
+      "category": "Shadow drafting (draft vs published in same collection)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Every content entry/document must support both a Draft state and a Published state."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-201",
+      "title": "Draft and Published states must exist within the same collection.",
+      "source": "docs/requirements.md",
+      "category": "Shadow drafting (draft vs published in same collection)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Draft and Published states must exist within the same collection."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-202",
+      "title": "The draft/publish state system must prevent unfinished content from leaking into production.",
+      "source": "docs/requirements.md",
+      "category": "Shadow drafting (draft vs published in same collection)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The draft/publish state system must prevent unfinished content from leaking into production."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-203",
+      "title": "Publishing must use Convex transactional atomicity to ensure consistent state transitions.",
+      "source": "docs/requirements.md",
+      "category": "Shadow drafting (draft vs published in same collection)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Publishing must use Convex transactional atomicity to ensure consistent state transitions."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-210",
+      "title": "Marketers must be able to generate preview URLs with one click.",
+      "source": "docs/requirements.md",
+      "category": "Preview environments (one-click preview URLs)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Marketers must be able to generate preview URLs with one click."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-211",
+      "title": "Preview URLs must allow viewing how a draft appears on the live frontend prior to publishing.",
+      "source": "docs/requirements.md",
+      "category": "Preview environments (one-click preview URLs)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Preview URLs must allow viewing how a draft appears on the live frontend prior to publishing."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-220",
+      "title": "Users must be able to view a qualitative history of changes for a content entry.",
+      "source": "docs/requirements.md",
+      "category": "Time travel (version history, diff/compare, revert)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Users must be able to view a qualitative history of changes for a content entry."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-221",
+      "title": "Users must be able to compare versions of a content entry.",
+      "source": "docs/requirements.md",
+      "category": "Time travel (version history, diff/compare, revert)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Users must be able to compare versions of a content entry."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-222",
+      "title": "Users must be able to revert a content entry to a previous version.",
+      "source": "docs/requirements.md",
+      "category": "Time travel (version history, diff/compare, revert)",
+      "phase": "Phase 3 — Content lifecycle: Drafts, publishing, preview, history",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Users must be able to revert a content entry to a previous version."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 3"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-300",
+      "title": "The CMS must provide a management dashboard.",
+      "source": "docs/requirements.md",
+      "category": "High-performance, accessible management dashboard",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The CMS must provide a management dashboard."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-301",
+      "title": "The dashboard must prioritize high performance.",
+      "source": "docs/requirements.md",
+      "category": "High-performance, accessible management dashboard",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The dashboard must prioritize high performance."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-302",
+      "title": "The dashboard must be accessible.",
+      "source": "docs/requirements.md",
+      "category": "High-performance, accessible management dashboard",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The dashboard must be accessible."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-303",
+      "title": "The dashboard UI stack must be compatible with (and intended to leverage) TanStack Start and shadcn.",
+      "source": "docs/requirements.md",
+      "category": "High-performance, accessible management dashboard",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The dashboard UI stack must be compatible with (and intended to leverage) TanStack Start and shadcn."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-310",
+      "title": "Users must be able to navigate between content types and entries with near-instant transitions.",
+      "source": "docs/requirements.md",
+      "category": "Fluid navigation",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Users must be able to navigate between content types and entries with near-instant transitions."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-311",
+      "title": "Navigation must leverage TanStack Start’s router.",
+      "source": "docs/requirements.md",
+      "category": "Fluid navigation",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Navigation must leverage TanStack Start’s router."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-320",
+      "title": "The dashboard must provide a global search experience invoked via Cmd+K.",
+      "source": "docs/requirements.md",
+      "category": "Command Center global search (Cmd+K)",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The dashboard must provide a global search experience invoked via Cmd+K."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-321",
+      "title": "Global search must find content entries.",
+      "source": "docs/requirements.md",
+      "category": "Command Center global search (Cmd+K)",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Global search must find content entries."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-322",
+      "title": "Global search must find schema definitions.",
+      "source": "docs/requirements.md",
+      "category": "Command Center global search (Cmd+K)",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Global search must find schema definitions."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-323",
+      "title": "Global search must find media assets.",
+      "source": "docs/requirements.md",
+      "category": "Command Center global search (Cmd+K)",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Global search must find media assets."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-330",
+      "title": "Users must be able to see real-time presence indicators showing who else is editing the same item.",
+      "source": "docs/requirements.md",
+      "category": "Contextual feedback (presence + notifications)",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Users must be able to see real-time presence indicators showing who else is editing the same item."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-331",
+      "title": "The system must provide toast notifications for successful deployments.",
+      "source": "docs/requirements.md",
+      "category": "Contextual feedback (presence + notifications)",
+      "phase": "Phase 4 — Admin experience (TanStack Start + shadcn)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system must provide toast notifications for successful deployments."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 4"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-400",
+      "title": "The system must provide authentication suitable for a CMS admin dashboard.",
+      "source": "docs/requirements.md",
+      "category": "Identity and session management",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system must provide authentication suitable for a CMS admin dashboard."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-401",
+      "title": "Session management must be secure and modern.",
+      "source": "docs/requirements.md",
+      "category": "Identity and session management",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Session management must be secure and modern."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-402",
+      "title": "Session management must integrate with TanStack Start middleware.",
+      "source": "docs/requirements.md",
+      "category": "Identity and session management",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Session management must integrate with TanStack Start middleware."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-403",
+      "title": "Session management must integrate with Convex server-side functions.",
+      "source": "docs/requirements.md",
+      "category": "Identity and session management",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Session management must integrate with Convex server-side functions."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-410",
+      "title": "The system must support role-based access control.",
+      "source": "docs/requirements.md",
+      "category": "Role-based access control (RBAC)",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system must support role-based access control."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-411",
+      "title": "Roles must define clear boundaries for actions.",
+      "source": "docs/requirements.md",
+      "category": "Role-based access control (RBAC)",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Roles must define clear boundaries for actions."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-412",
+      "title": "Editors must be able to change content.",
+      "source": "docs/requirements.md",
+      "category": "Role-based access control (RBAC)",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Editors must be able to change content."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-413",
+      "title": "Only admins must be able to change the schema.",
+      "source": "docs/requirements.md",
+      "category": "Role-based access control (RBAC)",
+      "phase": "Phase 5 — Governance & security (Better Auth)",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "Only admins must be able to change the schema."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 5"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-500",
+      "title": "The system must ensure complete agreement between visual schema constraints and backend database constraints.",
+      "source": "docs/requirements.md",
+      "category": "Schema parity",
+      "phase": "Phase 6 — Operational requirements aligned to success metrics",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system must ensure complete agreement between visual schema constraints and backend database constraints."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 6"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-510",
+      "title": "The publish operation must be designed such that content becomes visible on the frontend via Convex subscriptions in under 200ms.",
+      "source": "docs/requirements.md",
+      "category": "Publish latency",
+      "phase": "Phase 6 — Operational requirements aligned to success metrics",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The publish operation must be designed such that content becomes visible on the frontend via Convex subscriptions in under 200ms."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 6"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    },
+    {
+      "id": "RQ-520",
+      "title": "The system UX must enable a non-technical user to create a “Blog” content type and publish their first post in under 2 minutes.",
+      "source": "docs/requirements.md",
+      "category": "Onboarding speed",
+      "phase": "Phase 6 — Operational requirements aligned to success metrics",
+      "status": "planned",
+      "acceptanceCriteria": [
+        "The system UX must enable a non-technical user to create a “Blog” content type and publish their first post in under 2 minutes."
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "implementation_gap"
+      ],
+      "launchPlanRefs": [
+        "Phase 6"
+      ],
+      "notes": "Seeded from requirements; implementation evidence has not been linked yet."
+    }
+  ],
+  "launchGates": [
+    {
+      "id": "LG-001",
+      "title": "All requirements implemented or explicitly deferred with rationale",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "All requirements implemented or explicitly deferred with rationale"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-002",
+      "title": "RBAC enforced server-side for sensitive actions",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "RBAC enforced server-side for sensitive actions"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-003",
+      "title": "Draft/publish prevents draft leakage",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Draft/publish prevents draft leakage"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-004",
+      "title": "Preview URLs work and can expire or be revoked",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Preview URLs work and can expire or be revoked"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-005",
+      "title": "Version history compare and revert works",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Version history compare and revert works"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-006",
+      "title": "Cmd+K global search works across content, schema, and media",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Cmd+K global search works across content, schema, and media"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-007",
+      "title": "Presence indicators work reliably",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Presence indicators work reliably"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-008",
+      "title": "Publish latency is measured and meets target",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Publish latency is measured and meets target"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-009",
+      "title": "Self-hosted install path documented and smoke-tested",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Self-hosted install path documented and smoke-tested"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-010",
+      "title": "A11y baseline met for core admin routes",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "A11y baseline met for core admin routes"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-011",
+      "title": "Backup, restore, upgrade, and migration story documented and drilled",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Backup, restore, upgrade, and migration story documented and drilled"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    },
+    {
+      "id": "LG-012",
+      "title": "Release candidate regression, security, ops, a11y, notes, and rollback checks pass",
+      "source": "docs/launch-plan.md",
+      "status": "planned",
+      "relatedFeatureIds": [],
+      "acceptanceCriteria": [
+        "Release candidate regression, security, ops, a11y, notes, and rollback checks pass"
+      ],
+      "evidence": [],
+      "gaps": [
+        "missing_evidence",
+        "launch_gate_gap"
+      ]
+    }
+  ],
+  "hygieneChecks": [
+    {
+      "id": "HC-001",
+      "title": "featureList updated",
+      "status": "planned",
+      "source": "AGENTS.md",
+      "evidence": [],
+      "gaps": [
+        "missing_evidence"
+      ]
+    },
+    {
+      "id": "HC-002",
+      "title": "changelog updated",
+      "status": "planned",
+      "source": "AGENTS.md",
+      "evidence": [],
+      "gaps": [
+        "missing_evidence"
+      ]
+    },
+    {
+      "id": "HC-003",
+      "title": "acceptance criteria satisfied before completion",
+      "status": "planned",
+      "source": "AGENTS.md",
+      "evidence": [],
+      "gaps": [
+        "missing_evidence"
+      ]
+    },
+    {
+      "id": "HC-004",
+      "title": "one pending feature at a time",
+      "status": "planned",
+      "source": "AGENTS.md",
+      "evidence": [],
+      "gaps": [
+        "missing_evidence"
+      ]
+    },
+    {
+      "id": "HC-005",
+      "title": "commit message produced in chat only",
+      "status": "planned",
+      "source": "AGENTS.md",
+      "evidence": [],
+      "gaps": [
+        "missing_evidence"
+      ]
+    }
+  ]
+}
