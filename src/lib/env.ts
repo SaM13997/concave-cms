@@ -41,6 +41,22 @@ export function getClientEnv(): ClientEnv {
  * Validate and return server environment variables.
  * Only call from server context (SSR, server functions).
  */
+export type AppEnvironment = "development" | "staging" | "production";
+
+/** Client-safe deployment label for env banner. */
+export function getAppEnvironment(): AppEnvironment {
+  const configured = import.meta.env.VITE_APP_ENV;
+  if (configured === "staging" || configured === "production") {
+    return configured;
+  }
+
+  return import.meta.env.PROD ? "production" : "development";
+}
+
+export function shouldShowEnvBanner(): boolean {
+  return getAppEnvironment() !== "production";
+}
+
 export function getServerEnv(): ServerEnv {
   const result = serverEnvSchema.safeParse({
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,

@@ -13,24 +13,29 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+type LoginFormProps = React.ComponentProps<"div"> & {
+  redirect?: string;
+  sessionExpired?: boolean;
+};
+
+export function LoginForm({
+  className,
+  redirect,
+  sessionExpired = false,
+  ...props
+}: LoginFormProps) {
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigateAfterAuth = () => {
-    const search = router.state.location.search as { redirect?: unknown } | undefined;
-    const redirect =
-      typeof search?.redirect === "string" && search.redirect.length > 0
-        ? search.redirect
-        : undefined;
-
-    if (redirect) {
+    if (redirect && redirect.length > 0) {
       router.history.push(redirect);
-    } else {
-      router.navigate({ to: "/" });
+      return;
     }
+
+    router.navigate({ to: "/" });
   };
 
   const handleEmailAuth = async (event: FormEvent<HTMLFormElement>) => {
@@ -114,6 +119,15 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </button>
             </FieldDescription>
           </div>
+
+          {sessionExpired && (
+            <p
+              className="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200 text-center"
+              role="status"
+            >
+              Your session has expired. Please sign in again.
+            </p>
+          )}
 
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 

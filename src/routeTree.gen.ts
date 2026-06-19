@@ -10,51 +10,196 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
+import { Route as AuthenticatedSchemaIndexRouteImport } from './routes/_authenticated/schema/index'
+import { Route as AuthenticatedOnboardingIndexRouteImport } from './routes/_authenticated/onboarding/index'
+import { Route as AuthenticatedMediaIndexRouteImport } from './routes/_authenticated/media/index'
+import { Route as AuthenticatedContentIndexRouteImport } from './routes/_authenticated/content/index'
+import { Route as AuthenticatedAuditIndexRouteImport } from './routes/_authenticated/audit/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthenticatedSchemaTableIdRouteImport } from './routes/_authenticated/schema/$tableId'
+import { Route as AuthenticatedContentTypeIndexRouteImport } from './routes/_authenticated/content/$type/index'
+import { Route as AuthenticatedContentTypeNewRouteImport } from './routes/_authenticated/content/$type/new'
+import { Route as AuthenticatedContentTypeEntryIdRouteImport } from './routes/_authenticated/content/$type/$entryId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSettingsIndexRoute =
+  AuthenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSchemaIndexRoute =
+  AuthenticatedSchemaIndexRouteImport.update({
+    id: '/schema/',
+    path: '/schema/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedOnboardingIndexRoute =
+  AuthenticatedOnboardingIndexRouteImport.update({
+    id: '/onboarding/',
+    path: '/onboarding/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMediaIndexRoute = AuthenticatedMediaIndexRouteImport.update({
+  id: '/media/',
+  path: '/media/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedContentIndexRoute =
+  AuthenticatedContentIndexRouteImport.update({
+    id: '/content/',
+    path: '/content/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAuditIndexRoute = AuthenticatedAuditIndexRouteImport.update({
+  id: '/audit/',
+  path: '/audit/',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSchemaTableIdRoute =
+  AuthenticatedSchemaTableIdRouteImport.update({
+    id: '/schema/$tableId',
+    path: '/schema/$tableId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedContentTypeIndexRoute =
+  AuthenticatedContentTypeIndexRouteImport.update({
+    id: '/content/$type/',
+    path: '/content/$type/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedContentTypeNewRoute =
+  AuthenticatedContentTypeNewRouteImport.update({
+    id: '/content/$type/new',
+    path: '/content/$type/new',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedContentTypeEntryIdRoute =
+  AuthenticatedContentTypeEntryIdRouteImport.update({
+    id: '/content/$type/$entryId',
+    path: '/content/$type/$entryId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/schema/$tableId': typeof AuthenticatedSchemaTableIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/audit': typeof AuthenticatedAuditIndexRoute
+  '/content': typeof AuthenticatedContentIndexRoute
+  '/media': typeof AuthenticatedMediaIndexRoute
+  '/onboarding': typeof AuthenticatedOnboardingIndexRoute
+  '/schema': typeof AuthenticatedSchemaIndexRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/content/$type/$entryId': typeof AuthenticatedContentTypeEntryIdRoute
+  '/content/$type/new': typeof AuthenticatedContentTypeNewRoute
+  '/content/$type': typeof AuthenticatedContentTypeIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/schema/$tableId': typeof AuthenticatedSchemaTableIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/audit': typeof AuthenticatedAuditIndexRoute
+  '/content': typeof AuthenticatedContentIndexRoute
+  '/media': typeof AuthenticatedMediaIndexRoute
+  '/onboarding': typeof AuthenticatedOnboardingIndexRoute
+  '/schema': typeof AuthenticatedSchemaIndexRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
+  '/content/$type/$entryId': typeof AuthenticatedContentTypeEntryIdRoute
+  '/content/$type/new': typeof AuthenticatedContentTypeNewRoute
+  '/content/$type': typeof AuthenticatedContentTypeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/schema/$tableId': typeof AuthenticatedSchemaTableIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_authenticated/audit/': typeof AuthenticatedAuditIndexRoute
+  '/_authenticated/content/': typeof AuthenticatedContentIndexRoute
+  '/_authenticated/media/': typeof AuthenticatedMediaIndexRoute
+  '/_authenticated/onboarding/': typeof AuthenticatedOnboardingIndexRoute
+  '/_authenticated/schema/': typeof AuthenticatedSchemaIndexRoute
+  '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
+  '/_authenticated/content/$type/$entryId': typeof AuthenticatedContentTypeEntryIdRoute
+  '/_authenticated/content/$type/new': typeof AuthenticatedContentTypeNewRoute
+  '/_authenticated/content/$type/': typeof AuthenticatedContentTypeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/api/auth/$'
+  fullPaths:
+    | '/login'
+    | '/'
+    | '/schema/$tableId'
+    | '/api/auth/$'
+    | '/audit'
+    | '/content'
+    | '/media'
+    | '/onboarding'
+    | '/schema'
+    | '/settings'
+    | '/content/$type/$entryId'
+    | '/content/$type/new'
+    | '/content/$type'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/api/auth/$'
-  id: '__root__' | '/' | '/login' | '/api/auth/$'
+  to:
+    | '/login'
+    | '/'
+    | '/schema/$tableId'
+    | '/api/auth/$'
+    | '/audit'
+    | '/content'
+    | '/media'
+    | '/onboarding'
+    | '/schema'
+    | '/settings'
+    | '/content/$type/$entryId'
+    | '/content/$type/new'
+    | '/content/$type'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/login'
+    | '/_authenticated/'
+    | '/_authenticated/schema/$tableId'
+    | '/api/auth/$'
+    | '/_authenticated/audit/'
+    | '/_authenticated/content/'
+    | '/_authenticated/media/'
+    | '/_authenticated/onboarding/'
+    | '/_authenticated/schema/'
+    | '/_authenticated/settings/'
+    | '/_authenticated/content/$type/$entryId'
+    | '/_authenticated/content/$type/new'
+    | '/_authenticated/content/$type/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -68,12 +213,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings/': {
+      id: '/_authenticated/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/schema/': {
+      id: '/_authenticated/schema/'
+      path: '/schema'
+      fullPath: '/schema'
+      preLoaderRoute: typeof AuthenticatedSchemaIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/onboarding/': {
+      id: '/_authenticated/onboarding/'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/media/': {
+      id: '/_authenticated/media/'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof AuthenticatedMediaIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/content/': {
+      id: '/_authenticated/content/'
+      path: '/content'
+      fullPath: '/content'
+      preLoaderRoute: typeof AuthenticatedContentIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/audit/': {
+      id: '/_authenticated/audit/'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -82,11 +276,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/schema/$tableId': {
+      id: '/_authenticated/schema/$tableId'
+      path: '/schema/$tableId'
+      fullPath: '/schema/$tableId'
+      preLoaderRoute: typeof AuthenticatedSchemaTableIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/content/$type/': {
+      id: '/_authenticated/content/$type/'
+      path: '/content/$type'
+      fullPath: '/content/$type'
+      preLoaderRoute: typeof AuthenticatedContentTypeIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/content/$type/new': {
+      id: '/_authenticated/content/$type/new'
+      path: '/content/$type/new'
+      fullPath: '/content/$type/new'
+      preLoaderRoute: typeof AuthenticatedContentTypeNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/content/$type/$entryId': {
+      id: '/_authenticated/content/$type/$entryId'
+      path: '/content/$type/$entryId'
+      fullPath: '/content/$type/$entryId'
+      preLoaderRoute: typeof AuthenticatedContentTypeEntryIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedSchemaTableIdRoute: typeof AuthenticatedSchemaTableIdRoute
+  AuthenticatedAuditIndexRoute: typeof AuthenticatedAuditIndexRoute
+  AuthenticatedContentIndexRoute: typeof AuthenticatedContentIndexRoute
+  AuthenticatedMediaIndexRoute: typeof AuthenticatedMediaIndexRoute
+  AuthenticatedOnboardingIndexRoute: typeof AuthenticatedOnboardingIndexRoute
+  AuthenticatedSchemaIndexRoute: typeof AuthenticatedSchemaIndexRoute
+  AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
+  AuthenticatedContentTypeEntryIdRoute: typeof AuthenticatedContentTypeEntryIdRoute
+  AuthenticatedContentTypeNewRoute: typeof AuthenticatedContentTypeNewRoute
+  AuthenticatedContentTypeIndexRoute: typeof AuthenticatedContentTypeIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedSchemaTableIdRoute: AuthenticatedSchemaTableIdRoute,
+  AuthenticatedAuditIndexRoute: AuthenticatedAuditIndexRoute,
+  AuthenticatedContentIndexRoute: AuthenticatedContentIndexRoute,
+  AuthenticatedMediaIndexRoute: AuthenticatedMediaIndexRoute,
+  AuthenticatedOnboardingIndexRoute: AuthenticatedOnboardingIndexRoute,
+  AuthenticatedSchemaIndexRoute: AuthenticatedSchemaIndexRoute,
+  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
+  AuthenticatedContentTypeEntryIdRoute: AuthenticatedContentTypeEntryIdRoute,
+  AuthenticatedContentTypeNewRoute: AuthenticatedContentTypeNewRoute,
+  AuthenticatedContentTypeIndexRoute: AuthenticatedContentTypeIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
