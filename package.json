@@ -10,7 +10,9 @@
     "lint": "biome check src/ convex/",
     "lint:fix": "biome check --write src/ convex/",
     "format": "biome format --write src/ convex/",
-    "check": "tsc --noEmit && biome check src/ convex/"
+    "check": "tsc --noEmit && biome check src/ convex/",
+    "backup": "node scripts/backup-export.mjs",
+    "restore": "node scripts/restore-import.mjs"
   },
   "dependencies": {
     "@convex-dev/better-auth": "^0.9.6",

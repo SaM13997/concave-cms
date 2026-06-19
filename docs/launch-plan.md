@@ -99,7 +99,7 @@ Launch is achieved when:
 
 ### Step 1.1 — Better Auth integration + session handling
 - [ ] **BE (Owner: BE)**: Implement session creation/validation; integrate with TanStack Start middleware.
-- [ ] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
+- [x] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
 - [ ] **FE (Owner: FE)**: Login/logout flows; session-expired handling; safe redirect behavior.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Unit: session parsing/validation logic (where applicable).
@@ -107,10 +107,10 @@ Launch is achieved when:
   - **Done**: Anonymous users cannot access admin UI routes or mutations.
 
 ### Step 1.2 — RBAC enforced on the server (Admin vs Editor)
-- [ ] **BE (Owner: BE)**: Define roles and permission matrix.
+- [x] **BE (Owner: BE)**: Define roles and permission matrix.
   - Admin: schema changes
   - Editor: content changes
-- [ ] **BE (Owner: BE)**: Enforce RBAC at function/mutation boundaries (never UI-only).
+- [x] **BE (Owner: BE)**: Enforce RBAC at function/mutation boundaries (never UI-only).
 - [ ] **FE (Owner: FE)**: Role-aware navigation; hide/disable forbidden actions; display “insufficient permissions”.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Integration: RBAC matrix tests for every sensitive mutation.
@@ -122,7 +122,7 @@ Launch is achieved when:
 ## Phase 2 — Convex-native foundation (system tables + reactive baseline)
 
 ### Step 2.1 — System data model (schema/content/media/audit/presence)
-- [ ] **BE (Owner: BE)**: Create system tables to support:
+- [x] **BE (Owner: BE)**: Create system tables to support:
   - canonical schema definitions + schema versions
   - content entries (draft + published states in same collection)
   - version history/time travel events
@@ -135,7 +135,7 @@ Launch is achieved when:
   - **Done**: System model is stable enough to build UI features on top.
 
 ### Step 2.2 — Reactive-by-default query patterns
-- [ ] **BE (Owner: BE)**: Define standard query patterns for list/detail views and permission filtering.
+- [x] **BE (Owner: BE)**: Define standard query patterns for list/detail views and permission filtering.
 - [ ] **FE (Owner: FE)**: Ensure list/detail views are subscription-driven; handle loading and empty states.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: two sessions observe live updates without refresh.
@@ -146,8 +146,8 @@ Launch is achieved when:
 ## Phase 3 — Visual Schema Engine (Marketer Mode) + guardrails + handover
 
 ### Step 3.1 — Canonical schema representation + validation
-- [ ] **BE (Owner: BE)**: Define schema structure (tables, fields, types, constraints, relationships).
-- [ ] **BE (Owner: BE)**: Implement validation that rejects invalid schemas with structured, actionable errors.
+- [x] **BE (Owner: BE)**: Define schema structure (tables, fields, types, constraints, relationships).
+- [x] **BE (Owner: BE)**: Implement validation that rejects invalid schemas with structured, actionable errors.
 - [ ] **FE (Owner: FE)**: Inline validation UX that maps structured errors to the correct controls.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Unit: schema validation good/bad cases.
@@ -155,7 +155,7 @@ Launch is achieved when:
   - **Done**: Invalid schema edits are blocked and explained.
 
 ### Step 3.2 — Drag-and-drop schema builder UX
-- [ ] **BE (Owner: BE)**: Implement mutations to:
+- [x] **BE (Owner: BE)**: Implement mutations to:
   - create/rename/delete tables
   - add/edit/delete fields
   - define relationships/references
@@ -166,8 +166,8 @@ Launch is achieved when:
   - **Done**: Non-technical flow works end-to-end.
 
 ### Step 3.3 — “Lock into code” export + self-hosted apply workflow
-- [ ] **BE (Owner: BE)**: Export schema artifact (machine-readable; deterministic).
-- [ ] **BE (Owner: BE)**: Implement schema apply workflow consistent with self-hosting (status, rollback).
+- [x] **BE (Owner: BE)**: Export schema artifact (machine-readable; deterministic).
+- [x] **BE (Owner: BE)**: Implement schema apply workflow consistent with self-hosting (status, rollback).
 - [ ] **FE (Owner: FE)**: “Export schema” + “Apply schema” UI with progress + failure recovery.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Snapshot/contract: export artifact stable for the same schema.
@@ -179,8 +179,8 @@ Launch is achieved when:
 ## Phase 4 — Content engine (schema-driven CRUD) + core field types
 
 ### Step 4.1 — Schema-driven content CRUD
-- [ ] **BE (Owner: BE)**: CRUD APIs based on canonical schema (list/create/update/read).
-- [ ] **BE (Owner: BE)**: Relationship resolution for reference fields.
+- [x] **BE (Owner: BE)**: CRUD APIs based on canonical schema (list/create/update/read).
+- [x] **BE (Owner: BE)**: Relationship resolution for reference fields.
 - [ ] **FE (Owner: FE)**: Content type switcher; entries list; entry detail editor generated from schema.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Integration: CRUD for multiple types with references.
@@ -188,7 +188,7 @@ Launch is achieved when:
   - **Done**: Generic content management works across types.
 
 ### Step 4.2 — Rich text, images/media, references
-- [ ] **BE (Owner: BE)**: Define rich text storage/validation; media asset metadata model; reference integrity rules.
+- [x] **BE (Owner: BE)**: Define rich text storage/validation; media asset metadata model; reference integrity rules.
 - [ ] **FE (Owner: FE)**: Rich text editor; image picker/uploader; reference picker.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: create entry containing rich text + image + reference; persists and reloads.
@@ -199,8 +199,8 @@ Launch is achieved when:
 ## Phase 5 — Draft/publish lifecycle + preview environments (launch-critical)
 
 ### Step 5.1 — Shadow drafting (draft + published)
-- [ ] **BE (Owner: BE)**: Implement draft/published states in the same collection; prevent leaks.
-- [ ] **BE (Owner: BE)**: Publish mutation is atomic; includes audit event.
+- [x] **BE (Owner: BE)**: Implement draft/published states in the same collection; prevent leaks.
+- [x] **BE (Owner: BE)**: Publish mutation is atomic; includes audit event.
 - [ ] **FE (Owner: FE)**: Draft/published UX (badges, publish button, discard draft).
 - [ ] **TEST (Owner: QA)**:
   - [ ] Integration: publish atomicity and invariants.
@@ -208,14 +208,14 @@ Launch is achieved when:
   - **Done**: Draft safety guaranteed by BE.
 
 ### Step 5.2 — One-click preview URLs
-- [ ] **BE (Owner: BE)**: Preview token/URL generation bound to a draft version; expiry + revocation.
+- [x] **BE (Owner: BE)**: Preview token/URL generation bound to a draft version; expiry + revocation.
 - [ ] **FE (Owner: FE)**: Copy/open preview; regenerate tokens; clear warnings.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: preview shows draft; published view shows published.
   - **Done**: Marketers can verify draft before publish.
 
 ### Step 5.3 — Publish latency instrumentation (<200ms target)
-- [ ] **BE (Owner: BE)**: Add timing instrumentation around publish and subscriber update.
+- [x] **BE (Owner: BE)**: Add timing instrumentation around publish and subscriber update.
 - [ ] **FE (Owner: FE)**: UX handles fast path and slow/failure path gracefully.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Perf: harness measures publish→subscription update latency (p50/p95) in staging-like env.
@@ -226,14 +226,14 @@ Launch is achieved when:
 ## Phase 6 — Time travel (history, compare, revert)
 
 ### Step 6.1 — Version history capture
-- [ ] **BE (Owner: BE)**: Persist qualitative history of changes (who/when/what summary).
+- [x] **BE (Owner: BE)**: Persist qualitative history of changes (who/when/what summary).
 - [ ] **FE (Owner: FE)**: History timeline view for an entry.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Integration: each edit/publish produces expected history event.
   - **Done**: Users can review change history reliably.
 
 ### Step 6.2 — Compare + revert
-- [ ] **BE (Owner: BE)**: Implement compare/diff strategy; revert mutation is atomic + audited.
+- [x] **BE (Owner: BE)**: Implement compare/diff strategy; revert mutation is atomic + audited.
 - [ ] **FE (Owner: FE)**: Side-by-side compare UI; revert flow with confirmations.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: revert restores prior version; audit event created.
@@ -244,21 +244,21 @@ Launch is achieved when:
 ## Phase 7 — Admin experience (navigation, Cmd+K search, feedback)
 
 ### Step 7.1 — Fluid navigation (TanStack Start router)
-- [ ] **BE (Owner: BE)**: Optimize queries for fast list/detail navigation.
+- [x] **BE (Owner: BE)**: Optimize queries for fast list/detail navigation.
 - [ ] **FE (Owner: FE)**: Route structure, breadcrumbs, keyboard-first navigation.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: primary navigation paths; no broken states.
   - **Done**: UI feels fast and coherent.
 
 ### Step 7.2 — Command Center (Cmd+K) global search
-- [ ] **BE (Owner: BE)**: Search APIs across content/schema/media with RBAC filtering + ranking.
+- [x] **BE (Owner: BE)**: Search APIs across content/schema/media with RBAC filtering + ranking.
 - [ ] **FE (Owner: FE)**: Cmd+K palette UI with grouped results and keyboard navigation.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: search finds each entity type; forbidden results never appear.
   - **Done**: Users can jump to anything instantly.
 
 ### Step 7.3 — Presence indicators + toast notifications
-- [ ] **BE (Owner: BE)**: Presence sessions with expiry; standardized event payloads.
+- [x] **BE (Owner: BE)**: Presence sessions with expiry; standardized event payloads.
 - [ ] **FE (Owner: FE)**: Presence UI and toast UX.
 - [ ] **TEST (Owner: QA)**:
   - [ ] E2E: two sessions show presence; disconnect clears.
@@ -269,22 +269,22 @@ Launch is achieved when:
 ## Phase 8 — Launch hardening (security, a11y, ops)
 
 ### Step 8.1 — Security hardening
-- [ ] **BE (Owner: SEC/BE)**: Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
+- [x] **BE (Owner: SEC/BE)**: Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
 - [ ] **FE (Owner: FE)**: Safe error messages; no sensitive data leaks.
 - [ ] **TEST (Owner: QA)**:
   - [ ] Security regression suite: RBAC bypass, expired preview token, replay attempts, injection-style payloads.
   - **Done**: Common abuse paths are tested and mitigated.
 
 ### Step 8.2 — Observability + audit log UI
-- [ ] **BE (Owner: BE/OPS)**: Structured logs; correlation IDs; audit log query APIs.
+- [x] **BE (Owner: BE/OPS)**: Structured logs; correlation IDs; audit log query APIs.
 - [ ] **FE (Owner: FE)**: Audit log viewer (filters, drill-down).
 - [ ] **TEST (Owner: QA)**:
   - [ ] Smoke: audit events appear for schema changes and publish.
   - **Done**: Operators can debug issues.
 
 ### Step 8.3 — Backup/restore + upgrade/migrations (self-hosted requirement)
-- [ ] **BE (Owner: OPS/BE)**: Backup/restore scripts and verified restore drill.
-- [ ] **BE (Owner: BE)**: Migration strategy for schema/content evolution.
+- [x] **BE (Owner: OPS/BE)**: Backup/restore scripts and verified restore drill.
+- [x] **BE (Owner: BE)**: Migration strategy for schema/content evolution.
 - [ ] **FE (Owner: FE)**: Export tools in UI (at least schema + content snapshot exports).
 - [ ] **TEST (Owner: QA)**:
   - [ ] Restore drill: backup → wipe → restore → smoke test passes.

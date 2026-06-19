@@ -1,6 +1,7 @@
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
 import { betterAuth } from "better-auth";
+import { v } from "convex/values";
 import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
@@ -9,8 +10,6 @@ const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
 const googleClientId = process.env.GOOGLE_CLIENT_ID!;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET!;
 
-// The component client has methods needed for integrating Convex with Better Auth,
-// as well as helper methods for general use.
 export const authComponent = createClient<DataModel>(components.betterAuth);
 
 export const createAuth = (
@@ -18,14 +17,11 @@ export const createAuth = (
   { optionsOnly } = { optionsOnly: false },
 ) => {
   return betterAuth({
-    // disable logging when createAuth is called just to generate options.
-    // this is not required, but there's a lot of noise in logs without it.
     logger: {
       disabled: optionsOnly,
     },
     baseURL: siteUrl,
     database: authComponent.adapter(ctx),
-    // Configure simple, non-verified email/password to get started
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false,
@@ -36,18 +32,35 @@ export const createAuth = (
         clientSecret: googleClientSecret,
       },
     },
-    plugins: [
-      // The Convex plugin is required for Convex compatibility
-      convex(),
-    ],
+    plugins: [convex()],
   });
 };
 
-// Example function for getting the current user
-// Feel free to edit, omit, etc.
+const authUserValidator = v.union(
+  v.object({
+    _id: v.string(),
+    userId: v.optional(v.string()),
+    email: v.string(),
+    name: v.optional(v.string()),
+    image: v.optional(v.union(v.string(), v.null())),
+  }),
+  v.null(),
+);
+
 export const getCurrentUser = query({
   args: {},
+  returns: authUserValidator,
   handler: async (ctx) => {
-    return authComponent.getAuthUser(ctx);
+    const user = await authComponent.getAuthUser(ctx);
+    if (!user) {
+      return null;
+    }
+    return {
+      _id: user._id,
+      userId: user.userId ?? undefined,
+      email: user.email,
+      name: user.name ?? undefined,
+      image: user.image ?? undefined,
+    };
   },
 });

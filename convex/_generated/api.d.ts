@@ -8,8 +8,29 @@
  * @module
  */
 
+import type * as auditLog from "../auditLog.js";
 import type * as auth from "../auth.js";
+import type * as cmsUsers from "../cmsUsers.js";
+import type * as crons from "../crons.js";
+import type * as entries from "../entries.js";
+import type * as history from "../history.js";
 import type * as http from "../http.js";
+import type * as internal_maintenance from "../internal/maintenance.js";
+import type * as lib_auth from "../lib/auth.js";
+import type * as lib_config from "../lib/config.js";
+import type * as lib_customFunctions from "../lib/customFunctions.js";
+import type * as lib_entryValidation from "../lib/entryValidation.js";
+import type * as lib_errors from "../lib/errors.js";
+import type * as lib_permissions from "../lib/permissions.js";
+import type * as lib_rateLimit from "../lib/rateLimit.js";
+import type * as lib_schemaDescriptor from "../lib/schemaDescriptor.js";
+import type * as lib_validators from "../lib/validators.js";
+import type * as media from "../media.js";
+import type * as presence from "../presence.js";
+import type * as preview from "../preview.js";
+import type * as publish from "../publish.js";
+import type * as schemas from "../schemas.js";
+import type * as search from "../search.js";
 import type * as users from "../users.js";
 
 import type {
@@ -27,8 +48,29 @@ import type {
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  auditLog: typeof auditLog;
   auth: typeof auth;
+  cmsUsers: typeof cmsUsers;
+  crons: typeof crons;
+  entries: typeof entries;
+  history: typeof history;
   http: typeof http;
+  "internal/maintenance": typeof internal_maintenance;
+  "lib/auth": typeof lib_auth;
+  "lib/config": typeof lib_config;
+  "lib/customFunctions": typeof lib_customFunctions;
+  "lib/entryValidation": typeof lib_entryValidation;
+  "lib/errors": typeof lib_errors;
+  "lib/permissions": typeof lib_permissions;
+  "lib/rateLimit": typeof lib_rateLimit;
+  "lib/schemaDescriptor": typeof lib_schemaDescriptor;
+  "lib/validators": typeof lib_validators;
+  media: typeof media;
+  presence: typeof presence;
+  preview: typeof preview;
+  publish: typeof publish;
+  schemas: typeof schemas;
+  search: typeof search;
   users: typeof users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
