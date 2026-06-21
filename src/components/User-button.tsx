@@ -17,7 +17,12 @@ export function UserButton() {
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
-    return <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse" />;
+    return (
+      <div
+        data-testid="user-button-loading"
+        className="h-10 w-10 rounded-full bg-gray-200 animate-pulse"
+      />
+    );
   }
 
   if (!session) {
@@ -42,7 +47,11 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+        <Button
+          variant="ghost"
+          className="relative h-10 w-10 rounded-full p-0"
+          data-testid="user-menu-trigger"
+        >
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.image ?? ""} alt={user.name ?? "User"} />
             <AvatarFallback>{initials}</AvatarFallback>
@@ -59,6 +68,7 @@ export function UserButton() {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleSignOut}
+          data-testid="user-menu-logout"
           className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"
         >
           <LogOut className="mr-2 h-4 w-4" />

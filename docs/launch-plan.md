@@ -101,20 +101,20 @@ Launch is achieved when:
 - [x] **BE (Owner: BE)**: Implement session creation/validation; integrate with TanStack Start middleware.
 - [x] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
 - [x] **FE (Owner: FE)**: Login/logout flows; session-expired handling; safe redirect behavior.
-- [ ] **TEST (Owner: QA)**:
+- [x] **TEST (Owner: QA)**:
   - [x] Unit: session parsing/validation logic (where applicable).
-  - [ ] E2E: login, logout, session expiry redirect.
+  - [x] E2E: login, logout, session expiry redirect.
   - **Done**: Anonymous users cannot access admin UI routes or mutations.
 
 ### Step 1.2 — RBAC enforced on the server (Admin vs Editor)
-- [ ] **BE (Owner: BE)**: Define roles and permission matrix.
+- [x] **BE (Owner: BE)**: Define roles and permission matrix.
   - Admin: schema changes
   - Editor: content changes
-- [ ] **BE (Owner: BE)**: Enforce RBAC at function/mutation boundaries (never UI-only).
-- [ ] **FE (Owner: FE)**: Role-aware navigation; hide/disable forbidden actions; display “insufficient permissions”.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Integration: RBAC matrix tests for every sensitive mutation.
-  - [ ] E2E: Editor cannot access schema builder routes/actions; Admin can.
+- [x] **BE (Owner: BE)**: Enforce RBAC at function/mutation boundaries (never UI-only).
+- [x] **FE (Owner: FE)**: Role-aware navigation; hide/disable forbidden actions; display “insufficient permissions”.
+- [x] **TEST (Owner: QA)**:
+  - [x] Integration: RBAC matrix tests for every sensitive mutation.
+  - [x] E2E: Editor cannot access schema builder routes/actions; Admin can.
   - **Done**: RBAC bypass attempts fail even if FE is modified.
 
 ---

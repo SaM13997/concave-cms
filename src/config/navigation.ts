@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
-import { Home } from "lucide-react";
+import { FileText, Home, Layers } from "lucide-react";
+import type { Permission } from "../../convex/lib/permissions";
 
 export type BottomNavItem = {
   href: string;
@@ -7,6 +8,7 @@ export type BottomNavItem = {
   label: string;
   color: string;
   darkColor: string;
+  requiredPermission?: Permission;
 };
 
 export const bottomNavItems: BottomNavItem[] = [
@@ -17,4 +19,26 @@ export const bottomNavItems: BottomNavItem[] = [
     color: "bg-cyan-500/10",
     darkColor: "text-cyan-400",
   },
+  {
+    href: "/content",
+    label: "Content",
+    icon: FileText,
+    color: "bg-emerald-500/10",
+    darkColor: "text-emerald-400",
+    requiredPermission: "content:read",
+  },
+  {
+    href: "/schema",
+    label: "Schema",
+    icon: Layers,
+    color: "bg-violet-500/10",
+    darkColor: "text-violet-400",
+    requiredPermission: "schema:read",
+  },
 ] as const;
+
+export function navItemsForPermissions(permissions: readonly Permission[]): BottomNavItem[] {
+  return bottomNavItems.filter(
+    (item) => !item.requiredPermission || permissions.includes(item.requiredPermission),
+  );
+}

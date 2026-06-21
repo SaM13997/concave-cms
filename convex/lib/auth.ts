@@ -1,29 +1,11 @@
 import type { GenericCtx } from "@convex-dev/better-auth";
-import { v } from "convex/values";
 import { customMutation, customQuery } from "convex-helpers/server/customFunctions";
 import type { DataModel } from "../_generated/dataModel";
 import { mutation, query } from "../_generated/server";
 import { authComponent } from "../auth";
+import { type AuthUser, authUserValidator } from "./authValidators";
 
-export const authUserValidator = v.object({
-  _id: v.string(),
-  name: v.string(),
-  email: v.string(),
-  emailVerified: v.boolean(),
-  createdAt: v.number(),
-  updatedAt: v.number(),
-  image: v.optional(v.union(v.string(), v.null())),
-});
-
-export type AuthUser = {
-  _id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  createdAt: number;
-  updatedAt: number;
-  image?: string | null;
-};
+export { authUserValidator, type AuthUser };
 
 export async function requireAuthUser(ctx: GenericCtx<DataModel>): Promise<AuthUser> {
   const user = await authComponent.safeGetAuthUser(ctx);

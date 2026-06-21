@@ -5,7 +5,8 @@ import { getPostLoginPath } from "@/lib/auth-redirect";
 
 const loginSearchSchema = z.object({
   redirect: z.string().optional(),
-  expired: z.string().optional(),
+  expired: z.coerce.string().optional(),
+  mode: z.enum(["signin", "signup"]).optional(),
 });
 
 export const Route = createFileRoute("/login")({
@@ -19,16 +20,19 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const { expired } = Route.useSearch();
+  const { expired, mode } = Route.useSearch();
 
   return (
     <div className="flex flex-col items-center px-4 justify-center h-screen">
       {expired === "1" && (
-        <output className="mb-4 block text-sm text-muted-foreground">
+        <output
+          data-testid="session-expired-message"
+          className="mb-4 block text-sm text-muted-foreground"
+        >
           Your session expired. Please sign in again.
         </output>
       )}
-      <LoginForm />
+      <LoginForm initialMode={mode === "signup" ? "signup" : "signin"} />
     </div>
   );
 }

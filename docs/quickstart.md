@@ -26,6 +26,7 @@ cp .env.example .env.local
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `VITE_CONVEX_URL` | Yes | Convex deployment URL (from `npx convex dev`) |
+| `VITE_CONVEX_SITE_URL` | Yes (Better Auth) | Convex site URL for auth (local dev: convex port + 1) |
 | `BETTER_AUTH_SECRET` | Yes | Random secret, min 16 chars (`openssl rand -base64 32`) |
 | `BETTER_AUTH_URL` | Yes | App origin, e.g. `http://localhost:3000` |
 | `SITE_URL` | Yes | Same as `BETTER_AUTH_URL` for local dev |
@@ -64,6 +65,7 @@ Open [http://localhost:3000](http://localhost:3000). Admin routes require sign-i
 ```bash
 bun run check   # typecheck + lint
 bun run test    # unit tests
+bun run test:e2e  # Playwright E2E (starts Convex + Vite via scripts/e2e-server.sh)
 ```
 
 ## Troubleshooting

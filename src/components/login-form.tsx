@@ -14,9 +14,13 @@ import { authClient } from "@/lib/auth-client";
 import { getPostLoginPath } from "@/lib/auth-redirect";
 import { cn } from "@/lib/utils";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function LoginForm({
+  className,
+  initialMode = "signin",
+  ...props
+}: React.ComponentProps<"div"> & { initialMode?: "signin" | "signup" }) {
   const router = useRouter();
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(initialMode === "signup");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -81,8 +85,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form onSubmit={handleEmailAuth}>
+    <div className={cn("flex flex-col gap-6", className)} data-testid="login-form" {...props}>
+      <form onSubmit={handleEmailAuth} method="post" action="#">
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <a href="/" className="flex flex-col items-center gap-2 font-medium">
@@ -91,13 +95,14 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </div>
               <span className="sr-only">Concave CMS</span>
             </a>
-            <h1 className="text-xl font-bold">
+            <h1 className="text-xl font-bold" data-testid="login-heading">
               {isSignUp ? "Create your account" : "Sign in to Concave"}
             </h1>
             <FieldDescription>
               {isSignUp ? "Already have an account? " : "Don't have an account? "}
               <button
                 type="button"
+                data-testid="login-toggle-mode"
                 className="underline underline-offset-2 hover:text-foreground"
                 onClick={() => {
                   setIsSignUp(!isSignUp);
@@ -109,7 +114,11 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
             </FieldDescription>
           </div>
 
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+          {error && (
+            <p className="text-sm text-red-500 text-center" data-testid="login-error">
+              {error}
+            </p>
+          )}
 
           {isSignUp && (
             <Field>
@@ -118,6 +127,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                 id="name"
                 type="text"
                 name="name"
+                data-testid="login-name"
                 placeholder="Your name"
                 autoComplete="name"
               />
@@ -129,6 +139,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               id="email"
               type="email"
               name="email"
+              data-testid="login-email"
               placeholder="you@example.com"
               required
               autoComplete="email"
@@ -140,13 +151,19 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               id="password"
               type="password"
               name="password"
+              data-testid="login-password"
               placeholder="••••••••"
               required
               autoComplete={isSignUp ? "new-password" : "current-password"}
             />
           </Field>
           <Field>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isLoading}
+              data-testid="login-submit"
+            >
               {isLoading ? "Loading..." : isSignUp ? "Create account" : "Sign in"}
             </Button>
           </Field>

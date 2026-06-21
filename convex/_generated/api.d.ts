@@ -9,7 +9,15 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as cmsUsers from "../cmsUsers.js";
+import type * as content from "../content.js";
 import type * as http from "../http.js";
+import type * as lib_auth from "../lib/auth.js";
+import type * as lib_authValidators from "../lib/authValidators.js";
+import type * as lib_cmsUsers from "../lib/cmsUsers.js";
+import type * as lib_permissions from "../lib/permissions.js";
+import type * as lib_rbac from "../lib/rbac.js";
+import type * as schemaBuilder from "../schemaBuilder.js";
 import type * as users from "../users.js";
 
 import type {
@@ -28,7 +36,15 @@ import type {
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  cmsUsers: typeof cmsUsers;
+  content: typeof content;
   http: typeof http;
+  "lib/auth": typeof lib_auth;
+  "lib/authValidators": typeof lib_authValidators;
+  "lib/cmsUsers": typeof lib_cmsUsers;
+  "lib/permissions": typeof lib_permissions;
+  "lib/rbac": typeof lib_rbac;
+  schemaBuilder: typeof schemaBuilder;
   users: typeof users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;

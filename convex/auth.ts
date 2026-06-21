@@ -6,7 +6,7 @@ import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 
-import { authUserValidator } from "./lib/auth";
+import { authUserValidator } from "./lib/authValidators";
 
 const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
 const googleClientId = process.env.GOOGLE_CLIENT_ID;

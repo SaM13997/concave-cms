@@ -18,7 +18,6 @@ import { getCookie, getRequest } from "@tanstack/react-start/server";
 import type { ConvexReactClient } from "convex/react";
 import type * as React from "react";
 import { authClient } from "@/lib/auth-client";
-import { BottomNav } from "../components/BottomNav";
 import { SessionMonitor } from "../components/session-monitor";
 import appCss from "../styles.css?url";
 
@@ -90,7 +89,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="h-lvh flex flex-col overflow-x-clip w-full">
         <div className="flex-1 flex flex-col">{children}</div>
-        <BottomNav />
         <TanStackDevtools
           config={{
             position: "bottom-right",
