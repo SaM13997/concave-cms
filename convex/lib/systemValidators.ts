@@ -102,6 +102,30 @@ export const contentEntryListItemValidator = v.object({
   updatedAt: v.number(),
 });
 
+export const richTextValueValidator = v.object({
+  format: v.literal("html"),
+  html: v.string(),
+});
+
+export const resolvedReferenceValidator = v.object({
+  _id: v.id("contentEntries"),
+  title: v.string(),
+  contentType: v.string(),
+});
+
+export const resolvedMediaValidator = v.object({
+  _id: v.id("mediaAssets"),
+  filename: v.string(),
+  url: v.union(v.string(), v.null()),
+  alt: v.optional(v.string()),
+});
+
+export const contentTypeDescriptorValidator = v.object({
+  slug: v.string(),
+  name: v.string(),
+  fields: v.array(schemaFieldValidator),
+});
+
 export const contentEntryDetailValidator = v.object({
   _id: v.id("contentEntries"),
   _creationTime: v.number(),
@@ -109,11 +133,31 @@ export const contentEntryDetailValidator = v.object({
   title: v.string(),
   status: entryStatusValidator,
   data: v.any(),
+  schemaFields: v.array(schemaFieldValidator),
+  resolvedReferences: v.record(v.string(), v.union(resolvedReferenceValidator, v.null())),
+  resolvedMedia: v.record(v.string(), v.union(resolvedMediaValidator, v.null())),
   createdBy: v.id("cmsUsers"),
   updatedBy: v.id("cmsUsers"),
   createdAt: v.number(),
   updatedAt: v.number(),
   publishedAt: v.optional(v.number()),
+});
+
+export const referenceOptionValidator = v.object({
+  _id: v.id("contentEntries"),
+  title: v.string(),
+  contentType: v.string(),
+});
+
+export const mediaAssetListItemValidator = v.object({
+  _id: v.id("mediaAssets"),
+  _creationTime: v.number(),
+  filename: v.string(),
+  mimeType: v.string(),
+  sizeBytes: v.number(),
+  alt: v.optional(v.string()),
+  url: v.union(v.string(), v.null()),
+  createdAt: v.number(),
 });
 
 export const schemaListItemValidator = v.object({

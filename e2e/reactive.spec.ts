@@ -54,8 +54,20 @@ test.describe("Reactive subscriptions", () => {
     const pageA = await contextA.newPage();
     const pageB = await contextB.newPage();
 
-    await prepareAuthenticatedPage(pageA);
-    await prepareAuthenticatedPage(pageB);
+    await prepareAuthenticatedPage(pageA, { role: "admin" });
+    await prepareAuthenticatedPage(pageB, { role: "admin" });
+
+    await pageA.getByTestId("nav-schema").waitFor({ timeout: 15_000 });
+    await pageA.getByTestId("nav-schema").click();
+    await pageA.waitForURL("/schema");
+    await pageA.getByTestId("schema-builder").waitFor({ timeout: 15_000 });
+    const postType = `Post${Date.now()}`;
+    await pageA.getByTestId("schema-new-table-input").fill(postType);
+    await pageA.getByTestId("schema-create-table-button").click();
+    const postSlug = postType.toLowerCase();
+    await pageA.getByTestId(`schema-table-${postSlug}`).waitFor();
+    await pageA.getByTestId("schema-apply-button").click();
+    await expect(pageA.getByTestId("schema-apply-success")).toBeVisible({ timeout: 15_000 });
 
     await pageA.goto("/content");
     await pageB.goto("/content");
@@ -64,6 +76,9 @@ test.describe("Reactive subscriptions", () => {
 
     await expect(pageA.getByTestId("content-editor")).toBeVisible({ timeout: 15_000 });
     await expect(pageB.getByTestId("content-editor")).toBeVisible({ timeout: 15_000 });
+
+    await pageA.getByTestId(`content-type-${postSlug}`).click();
+    await pageB.getByTestId(`content-type-${postSlug}`).click();
 
     await expect(pageA.getByTestId("content-entries-empty")).toBeVisible({ timeout: 15_000 });
     await expect(pageB.getByTestId("content-entries-empty")).toBeVisible({ timeout: 15_000 });

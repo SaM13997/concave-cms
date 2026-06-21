@@ -179,19 +179,19 @@ Launch is achieved when:
 ## Phase 4 — Content engine (schema-driven CRUD) + core field types
 
 ### Step 4.1 — Schema-driven content CRUD
-- [ ] **BE (Owner: BE)**: CRUD APIs based on canonical schema (list/create/update/read).
-- [ ] **BE (Owner: BE)**: Relationship resolution for reference fields.
-- [ ] **FE (Owner: FE)**: Content type switcher; entries list; entry detail editor generated from schema.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Integration: CRUD for multiple types with references.
-  - [ ] E2E: create/edit entry; live updates appear without refresh.
+- [x] **BE (Owner: BE)**: CRUD APIs based on canonical schema (list/create/update/read).
+- [x] **BE (Owner: BE)**: Relationship resolution for reference fields.
+- [x] **FE (Owner: FE)**: Content type switcher; entries list; entry detail editor generated from schema.
+- [x] **TEST (Owner: QA)**:
+  - [x] Integration: CRUD for multiple types with references.
+  - [x] E2E: create/edit entry; live updates appear without refresh.
   - **Done**: Generic content management works across types.
 
 ### Step 4.2 — Rich text, images/media, references
-- [ ] **BE (Owner: BE)**: Define rich text storage/validation; media asset metadata model; reference integrity rules.
-- [ ] **FE (Owner: FE)**: Rich text editor; image picker/uploader; reference picker.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: create entry containing rich text + image + reference; persists and reloads.
+- [x] **BE (Owner: BE)**: Define rich text storage/validation; media asset metadata model; reference integrity rules.
+- [x] **FE (Owner: FE)**: Rich text editor; image picker/uploader; reference picker.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: create entry containing rich text + image + reference; persists and reloads.
   - **Done**: Required field types work end-to-end.
 
 ---
