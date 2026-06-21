@@ -19,6 +19,7 @@ import type { ConvexReactClient } from "convex/react";
 import type * as React from "react";
 import { authClient } from "@/lib/auth-client";
 import { BottomNav } from "../components/BottomNav";
+import { SessionMonitor } from "../components/session-monitor";
 import appCss from "../styles.css?url";
 
 // Get auth information for SSR using available cookies
@@ -74,6 +75,7 @@ function RootComponent() {
   return (
     <ConvexBetterAuthProvider client={context.convexClient} authClient={authClient}>
       <RootDocument>
+        <SessionMonitor />
         <Outlet />
       </RootDocument>
     </ConvexBetterAuthProvider>

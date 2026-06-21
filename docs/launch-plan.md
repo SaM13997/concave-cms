@@ -80,8 +80,8 @@ Launch is achieved when:
 ### Step 0.2 — Configuration and environment management (self-hosted)
 - [x] **BE (Owner: BE)**: Define configuration schema (auth secrets, preview secret, Convex config, etc.).
 - [x] **FE (Owner: FE)**: Implement environment-aware config loading; show env banner (dev/staging/prod).
-- [ ] **TEST (Owner: QA)**: Ensure tests do not require manual secrets; use deterministic test secrets.
-- [ ] **OPS (Owner: OPS)**: Provide `.env.example` + quickstart docs.
+- [x] **TEST (Owner: QA)**: Ensure tests do not require manual secrets; use deterministic test secrets.
+- [x] **OPS (Owner: OPS)**: Provide `.env.example` + quickstart docs.
   - **Done**: New user can configure and run without reading code.
 
 ### Step 0.3 — Core product decisions (unblocker ADRs)
@@ -98,11 +98,11 @@ Launch is achieved when:
 ## Phase 1 — Authentication, sessions, RBAC (launch gate)
 
 ### Step 1.1 — Better Auth integration + session handling
-- [ ] **BE (Owner: BE)**: Implement session creation/validation; integrate with TanStack Start middleware.
-- [ ] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
-- [ ] **FE (Owner: FE)**: Login/logout flows; session-expired handling; safe redirect behavior.
+- [x] **BE (Owner: BE)**: Implement session creation/validation; integrate with TanStack Start middleware.
+- [x] **BE (Owner: BE)**: Ensure Convex server-side functions can verify identity and reject anonymous access.
+- [x] **FE (Owner: FE)**: Login/logout flows; session-expired handling; safe redirect behavior.
 - [ ] **TEST (Owner: QA)**:
-  - [ ] Unit: session parsing/validation logic (where applicable).
+  - [x] Unit: session parsing/validation logic (where applicable).
   - [ ] E2E: login, logout, session expiry redirect.
   - **Done**: Anonymous users cannot access admin UI routes or mutations.
 

@@ -1,13 +1,21 @@
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
 import { betterAuth } from "better-auth";
+import { v } from "convex/values";
 import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 
+import { authUserValidator } from "./lib/auth";
+
 const siteUrl = process.env.SITE_URL ?? "http://localhost:3000";
-const googleClientId = process.env.GOOGLE_CLIENT_ID!;
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET!;
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const googleOAuthEnabled =
+  typeof googleClientId === "string" &&
+  googleClientId.length > 0 &&
+  typeof googleClientSecret === "string" &&
+  googleClientSecret.length > 0;
 
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
@@ -30,12 +38,14 @@ export const createAuth = (
       enabled: true,
       requireEmailVerification: false,
     },
-    socialProviders: {
-      google: {
-        clientId: googleClientId,
-        clientSecret: googleClientSecret,
-      },
-    },
+    socialProviders: googleOAuthEnabled
+      ? {
+          google: {
+            clientId: googleClientId,
+            clientSecret: googleClientSecret,
+          },
+        }
+      : {},
     plugins: [
       // The Convex plugin is required for Convex compatibility
       convex(),
@@ -47,7 +57,8 @@ export const createAuth = (
 // Feel free to edit, omit, etc.
 export const getCurrentUser = query({
   args: {},
+  returns: v.union(authUserValidator, v.null()),
   handler: async (ctx) => {
-    return authComponent.getAuthUser(ctx);
+    return await authComponent.safeGetAuthUser(ctx);
   },
 });

@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { getPostLoginPath } from "@/lib/auth-redirect";
 import { cn } from "@/lib/utils";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
@@ -21,16 +22,9 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
   const navigateAfterAuth = () => {
     const search = router.state.location.search as { redirect?: unknown } | undefined;
-    const redirect =
-      typeof search?.redirect === "string" && search.redirect.length > 0
-        ? search.redirect
-        : undefined;
-
-    if (redirect) {
-      router.history.push(redirect);
-    } else {
-      router.navigate({ to: "/" });
-    }
+    const redirect = typeof search?.redirect === "string" ? search.redirect : undefined;
+    const target = getPostLoginPath(redirect);
+    router.navigate({ to: target });
   };
 
   const handleEmailAuth = async (event: FormEvent<HTMLFormElement>) => {

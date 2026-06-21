@@ -36,7 +36,7 @@ export function UserButton() {
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    router.navigate({ to: "/" });
+    router.navigate({ to: "/login" });
   };
 
   return (

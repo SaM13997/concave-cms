@@ -1,11 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
 import { UserButton } from "@/components/User-button";
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/")({
   component: HomePage,
 });
 
@@ -67,32 +65,16 @@ function DashboardCard({
 }
 
 function HomePage() {
-  const { data: sessionData, isPending } = authClient.useSession();
-
-  const user = sessionData?.user ?? null;
-  const isAuthenticated = !!sessionData?.session;
-  const displayName = user?.name?.trim() || user?.email?.split("@")[0] || null;
-
   return (
     <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      {/* Header */}
       <header className="mx-auto flex w-full max-w-3xl items-center justify-between">
         <div>
-          {isPending ? (
-            <div className="h-7 w-48 animate-pulse rounded bg-muted" />
-          ) : (
-            <h1 className="text-xl font-semibold tracking-tight text-foreground">
-              {isAuthenticated && displayName
-                ? `Welcome back, ${displayName}`
-                : "Welcome to Concave"}
-            </h1>
-          )}
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">Concave CMS</h1>
           <p className="mt-1 text-sm text-muted-foreground">Convex-native headless CMS</p>
         </div>
-        {isAuthenticated && <UserButton />}
+        <UserButton />
       </header>
 
-      {/* Dashboard Grid */}
       <main className="mx-auto mt-8 w-full max-w-3xl flex-1">
         <div className="grid gap-3 sm:grid-cols-2">
           {dashboardSections.map((section) => (
@@ -105,18 +87,6 @@ function HomePage() {
           ))}
         </div>
       </main>
-
-      {/* Auth CTA */}
-      {!isPending && !isAuthenticated && (
-        <div className="mx-auto mt-8 w-full max-w-3xl">
-          <div className="rounded-lg border border-border bg-card p-5 text-center">
-            <p className="text-sm text-muted-foreground">Sign in to start managing your content.</p>
-            <Button asChild variant="default" size="sm" className="mt-3">
-              <Link to="/login">Sign in</Link>
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
