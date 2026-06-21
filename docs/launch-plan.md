@@ -89,8 +89,8 @@ Launch is achieved when:
   - Canonical schema representation (stored in Convex).
   - Code schema vs UI schema precedence + conflict handling ("bilingual schema").
   - Schema "apply" strategy for self-hosted (e.g., export/codegen/deploy vs runtime-generic models).
-- [ ] **FE (Owner: FE)**: UX contract for schema changes (draft → validate → apply) and failure/rollback messaging.
-- [ ] **TEST (Owner: QA)**: Contract tests plan for schema export + apply.
+- [x] **FE (Owner: FE)**: UX contract for schema changes (draft → validate → apply) and failure/rollback messaging.
+- [x] **TEST (Owner: QA)**: Contract tests plan for schema export + apply.
   - **Done**: Decisions are documented and used as constraints in later tasks.
 
 ---
@@ -122,23 +122,23 @@ Launch is achieved when:
 ## Phase 2 — Convex-native foundation (system tables + reactive baseline)
 
 ### Step 2.1 — System data model (schema/content/media/audit/presence)
-- [ ] **BE (Owner: BE)**: Create system tables to support:
+- [x] **BE (Owner: BE)**: Create system tables to support:
   - canonical schema definitions + schema versions
   - content entries (draft + published states in same collection)
   - version history/time travel events
   - media assets metadata
   - audit log
   - presence sessions
-- [ ] **FE (Owner: FE)**: Add internal debug pages to view system tables (non-public).
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Integration: schema invariants (required fields, referential integrity rules).
+- [x] **FE (Owner: FE)**: Add internal debug pages to view system tables (non-public).
+- [x] **TEST (Owner: QA)**:
+  - [x] Integration: schema invariants (required fields, referential integrity rules).
   - **Done**: System model is stable enough to build UI features on top.
 
 ### Step 2.2 — Reactive-by-default query patterns
-- [ ] **BE (Owner: BE)**: Define standard query patterns for list/detail views and permission filtering.
-- [ ] **FE (Owner: FE)**: Ensure list/detail views are subscription-driven; handle loading and empty states.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: two sessions observe live updates without refresh.
+- [x] **BE (Owner: BE)**: Define standard query patterns for list/detail views and permission filtering.
+- [x] **FE (Owner: FE)**: Ensure list/detail views are subscription-driven; handle loading and empty states.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: two sessions observe live updates without refresh.
   - **Done**: Demonstrable “no refresh” content updates.
 
 ---

@@ -1,28 +1,8 @@
-import { v } from "convex/values";
-import { adminMutation, adminQuery } from "./lib/rbac";
-
-const schemaDraftValidator = v.object({
-  name: v.string(),
-  updatedAt: v.number(),
-});
-
-export const getSchemaDraft = adminQuery({
-  args: {},
-  returns: v.union(schemaDraftValidator, v.null()),
-  handler: async (): Promise<{ name: string; updatedAt: number } | null> => {
-    return null;
-  },
-});
-
-export const updateSchemaDraft = adminMutation({
-  args: {
-    name: v.string(),
-  },
-  returns: schemaDraftValidator,
-  handler: async (_ctx, args) => {
-    return {
-      name: args.name,
-      updatedAt: Date.now(),
-    };
-  },
-});
+// Backward-compatible API surface; implementation lives in schemas.ts
+export {
+  createSchema,
+  getSchemaBySlug,
+  getSchemaDraft,
+  listSchemas,
+  updateSchemaDraft,
+} from "./schemas";

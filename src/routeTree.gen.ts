@@ -15,6 +15,8 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSchemaRouteImport } from './routes/_authenticated/schema'
 import { Route as AuthenticatedContentRouteImport } from './routes/_authenticated/content'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthenticatedDebugSystemRouteImport } from './routes/_authenticated/debug/system'
+import { Route as AuthenticatedDebugReactiveRouteImport } from './routes/_authenticated/debug/reactive'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -45,12 +47,26 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDebugSystemRoute =
+  AuthenticatedDebugSystemRouteImport.update({
+    id: '/debug/system',
+    path: '/debug/system',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDebugReactiveRoute =
+  AuthenticatedDebugReactiveRouteImport.update({
+    id: '/debug/reactive',
+    path: '/debug/reactive',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/content': typeof AuthenticatedContentRoute
   '/schema': typeof AuthenticatedSchemaRoute
   '/': typeof AuthenticatedIndexRoute
+  '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
+  '/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +74,8 @@ export interface FileRoutesByTo {
   '/content': typeof AuthenticatedContentRoute
   '/schema': typeof AuthenticatedSchemaRoute
   '/': typeof AuthenticatedIndexRoute
+  '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
+  '/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -67,13 +85,29 @@ export interface FileRoutesById {
   '/_authenticated/content': typeof AuthenticatedContentRoute
   '/_authenticated/schema': typeof AuthenticatedSchemaRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/debug/reactive': typeof AuthenticatedDebugReactiveRoute
+  '/_authenticated/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/content' | '/schema' | '/' | '/api/auth/$'
+  fullPaths:
+    | '/login'
+    | '/content'
+    | '/schema'
+    | '/'
+    | '/debug/reactive'
+    | '/debug/system'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/content' | '/schema' | '/' | '/api/auth/$'
+  to:
+    | '/login'
+    | '/content'
+    | '/schema'
+    | '/'
+    | '/debug/reactive'
+    | '/debug/system'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/_authenticated'
@@ -81,6 +115,8 @@ export interface FileRouteTypes {
     | '/_authenticated/content'
     | '/_authenticated/schema'
     | '/_authenticated/'
+    | '/_authenticated/debug/reactive'
+    | '/_authenticated/debug/system'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -134,6 +170,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/debug/system': {
+      id: '/_authenticated/debug/system'
+      path: '/debug/system'
+      fullPath: '/debug/system'
+      preLoaderRoute: typeof AuthenticatedDebugSystemRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/debug/reactive': {
+      id: '/_authenticated/debug/reactive'
+      path: '/debug/reactive'
+      fullPath: '/debug/reactive'
+      preLoaderRoute: typeof AuthenticatedDebugReactiveRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -141,12 +191,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedContentRoute: typeof AuthenticatedContentRoute
   AuthenticatedSchemaRoute: typeof AuthenticatedSchemaRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedDebugReactiveRoute: typeof AuthenticatedDebugReactiveRoute
+  AuthenticatedDebugSystemRoute: typeof AuthenticatedDebugSystemRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedContentRoute: AuthenticatedContentRoute,
   AuthenticatedSchemaRoute: AuthenticatedSchemaRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedDebugReactiveRoute: AuthenticatedDebugReactiveRoute,
+  AuthenticatedDebugSystemRoute: AuthenticatedDebugSystemRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

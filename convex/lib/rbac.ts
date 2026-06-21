@@ -20,7 +20,7 @@ const cmsUserValidator = v.object({
   role: roleValidator,
 });
 
-type AuthedRoleCtx = {
+export type AuthedRoleCtx = {
   user: AuthUser;
   cmsUser: CmsUser;
   role: Role;
