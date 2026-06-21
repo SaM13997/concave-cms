@@ -1,49 +1,44 @@
-export type SchemaField = {
-  slug: string;
-  name: string;
-  type: string;
-  required: boolean;
-  config: Record<string, unknown>;
-};
+import type { SchemaDescriptorInput, SchemaValidationError } from "./schemaTypes";
 
-export type SchemaDescriptorInput = {
-  slug: string;
-  name: string;
-  fields: SchemaField[];
-  status: "draft" | "active" | "archived";
-};
+export type { SchemaDescriptorInput, SchemaValidationError };
 
 const SLUG_PATTERN = /^[a-z][a-z0-9-]*$/;
 
-export type SchemaInvariantError = {
-  code: string;
-  message: string;
-  field?: string;
-};
+const VALID_FIELD_TYPES = new Set([
+  "text",
+  "richtext",
+  "number",
+  "boolean",
+  "image",
+  "reference",
+  "date",
+  "select",
+  "json",
+]);
 
 export function validateSchemaDescriptor(
   descriptor: SchemaDescriptorInput,
   activeSlugs: readonly string[] = [],
-): SchemaInvariantError[] {
-  const errors: SchemaInvariantError[] = [];
+): SchemaValidationError[] {
+  const errors: SchemaValidationError[] = [];
 
   if (!descriptor.slug.trim()) {
-    errors.push({ code: "SLUG_REQUIRED", message: "Schema slug is required", field: "slug" });
+    errors.push({ code: "FIELD_REQUIRED", message: "Schema slug is required", field: "slug" });
   } else if (!SLUG_PATTERN.test(descriptor.slug)) {
     errors.push({
-      code: "INVALID_SLUG",
+      code: "DUPLICATE_SLUG",
       message: "Schema slug must match ^[a-z][a-z0-9-]*$",
       field: "slug",
     });
   }
 
   if (!descriptor.name.trim()) {
-    errors.push({ code: "NAME_REQUIRED", message: "Schema name is required", field: "name" });
+    errors.push({ code: "FIELD_REQUIRED", message: "Schema name is required", field: "name" });
   }
 
   if (descriptor.fields.length === 0 && descriptor.status === "active") {
     errors.push({
-      code: "FIELDS_REQUIRED",
+      code: "FIELD_REQUIRED",
       message: "Active schemas must have at least one field",
       field: "fields",
     });
@@ -53,7 +48,7 @@ export function validateSchemaDescriptor(
   for (const field of descriptor.fields) {
     if (!field.slug.trim()) {
       errors.push({
-        code: "FIELD_SLUG_REQUIRED",
+        code: "FIELD_REQUIRED",
         message: "Field slug is required",
         field: "fields",
       });
@@ -62,15 +57,31 @@ export function validateSchemaDescriptor(
 
     if (!SLUG_PATTERN.test(field.slug)) {
       errors.push({
-        code: "INVALID_FIELD_SLUG",
+        code: "DUPLICATE_SLUG",
         message: `Field slug "${field.slug}" must match ^[a-z][a-z0-9-]*$`,
+        field: field.slug,
+      });
+    }
+
+    if (!VALID_FIELD_TYPES.has(field.type)) {
+      errors.push({
+        code: "INVALID_TYPE",
+        message: `Field "${field.slug}" has invalid type "${field.type}"`,
+        field: field.slug,
+      });
+    }
+
+    if (!field.name.trim()) {
+      errors.push({
+        code: "FIELD_REQUIRED",
+        message: `Field name is required for "${field.slug}"`,
         field: field.slug,
       });
     }
 
     if (fieldSlugs.has(field.slug)) {
       errors.push({
-        code: "DUPLICATE_FIELD_SLUG",
+        code: "DUPLICATE_SLUG",
         message: `Duplicate field slug: ${field.slug}`,
         field: field.slug,
       });
@@ -88,7 +99,7 @@ export function validateSchemaDescriptor(
         });
       } else if (activeSlugs.length > 0 && !activeSlugs.includes(referenceTo)) {
         errors.push({
-          code: "REFERENCE_TARGET_NOT_FOUND",
+          code: "REFERENCE_TARGET_MISSING",
           message: `Reference field "${field.slug}" points to unknown schema "${referenceTo}"`,
           field: field.slug,
         });
@@ -112,10 +123,10 @@ export function assertSchemaInvariants(
 export function validateReferentialIntegrity(
   referenceSlug: string,
   activeSlugs: readonly string[],
-): SchemaInvariantError | null {
+): SchemaValidationError | null {
   if (!activeSlugs.includes(referenceSlug)) {
     return {
-      code: "REFERENCE_TARGET_NOT_FOUND",
+      code: "REFERENCE_TARGET_MISSING",
       message: `Reference target "${referenceSlug}" does not exist among active schemas`,
     };
   }

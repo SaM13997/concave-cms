@@ -16,14 +16,14 @@ describe("validateSchemaDescriptor", () => {
     expect(errors).toEqual([]);
   });
 
-  it("rejects empty slug", () => {
+  it("rejects empty slug with FIELD_REQUIRED", () => {
     const errors = validateSchemaDescriptor({
       slug: "",
       name: "Blog",
       fields: [],
       status: "draft",
     });
-    expect(errors.some((e) => e.code === "SLUG_REQUIRED")).toBe(true);
+    expect(errors.some((e) => e.code === "FIELD_REQUIRED" && e.field === "slug")).toBe(true);
   });
 
   it("rejects invalid slug format", () => {
@@ -33,7 +33,7 @@ describe("validateSchemaDescriptor", () => {
       fields: [],
       status: "draft",
     });
-    expect(errors.some((e) => e.code === "INVALID_SLUG")).toBe(true);
+    expect(errors.some((e) => e.code === "DUPLICATE_SLUG" && e.field === "slug")).toBe(true);
   });
 
   it("requires fields for active schemas", () => {
@@ -43,10 +43,10 @@ describe("validateSchemaDescriptor", () => {
       fields: [],
       status: "active",
     });
-    expect(errors.some((e) => e.code === "FIELDS_REQUIRED")).toBe(true);
+    expect(errors.some((e) => e.code === "FIELD_REQUIRED" && e.field === "fields")).toBe(true);
   });
 
-  it("rejects duplicate field slugs", () => {
+  it("rejects duplicate field slugs with DUPLICATE_SLUG", () => {
     const errors = validateSchemaDescriptor({
       slug: "blog",
       name: "Blog",
@@ -56,7 +56,25 @@ describe("validateSchemaDescriptor", () => {
       ],
       status: "draft",
     });
-    expect(errors.some((e) => e.code === "DUPLICATE_FIELD_SLUG")).toBe(true);
+    expect(errors.some((e) => e.code === "DUPLICATE_SLUG")).toBe(true);
+  });
+
+  it("rejects invalid field type with INVALID_TYPE", () => {
+    const errors = validateSchemaDescriptor({
+      slug: "blog",
+      name: "Blog",
+      fields: [
+        {
+          slug: "bad",
+          name: "Bad",
+          type: "unknown" as "text",
+          required: false,
+          config: {},
+        },
+      ],
+      status: "draft",
+    });
+    expect(errors.some((e) => e.code === "INVALID_TYPE")).toBe(true);
   });
 
   it("requires reference target for reference fields", () => {
@@ -87,7 +105,7 @@ describe("validateSchemaDescriptor", () => {
       },
       ["post"],
     );
-    expect(errors.some((e) => e.code === "REFERENCE_TARGET_NOT_FOUND")).toBe(true);
+    expect(errors.some((e) => e.code === "REFERENCE_TARGET_MISSING")).toBe(true);
   });
 
   it("accepts reference to known active schema", () => {
@@ -132,6 +150,6 @@ describe("validateReferentialIntegrity", () => {
 
   it("returns error when target missing", () => {
     const error = validateReferentialIntegrity("missing", ["post"]);
-    expect(error?.code).toBe("REFERENCE_TARGET_NOT_FOUND");
+    expect(error?.code).toBe("REFERENCE_TARGET_MISSING");
   });
 });

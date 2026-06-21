@@ -24,7 +24,26 @@ export const schemaStatusValidator = v.union(
   v.literal("draft"),
   v.literal("active"),
   v.literal("archived"),
+  v.literal("apply_failed"),
 );
+
+export const schemaValidationErrorValidator = v.object({
+  code: v.string(),
+  message: v.string(),
+  field: v.optional(v.string()),
+});
+
+export const destructiveChangeValidator = v.object({
+  type: v.union(
+    v.literal("delete_field"),
+    v.literal("delete_table"),
+    v.literal("change_field_type"),
+    v.literal("remove_required"),
+  ),
+  target: v.string(),
+  affectedEntryCount: v.number(),
+  message: v.string(),
+});
 
 export const schemaDescriptorValidator = v.object({
   slug: v.string(),

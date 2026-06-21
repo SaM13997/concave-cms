@@ -1,8 +1,20 @@
-// Backward-compatible API surface; implementation lives in schemas.ts
 export {
+  addField,
+  applySchema,
   createSchema,
+  createTable,
+  deleteField,
+  deleteTable,
+  discardSchemaDraft,
+  exportSchemas,
+  getBuilderState,
   getSchemaBySlug,
+  getSchemaDiff,
   getSchemaDraft,
   listSchemas,
+  renameTable,
+  reorderFields,
+  updateField,
   updateSchemaDraft,
+  validateSchema,
 } from "./schemas";

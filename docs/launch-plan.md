@@ -146,32 +146,32 @@ Launch is achieved when:
 ## Phase 3 — Visual Schema Engine (Marketer Mode) + guardrails + handover
 
 ### Step 3.1 — Canonical schema representation + validation
-- [ ] **BE (Owner: BE)**: Define schema structure (tables, fields, types, constraints, relationships).
-- [ ] **BE (Owner: BE)**: Implement validation that rejects invalid schemas with structured, actionable errors.
-- [ ] **FE (Owner: FE)**: Inline validation UX that maps structured errors to the correct controls.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Unit: schema validation good/bad cases.
-  - [ ] Integration: schema mutation atomicity (all-or-nothing).
+- [x] **BE (Owner: BE)**: Define schema structure (tables, fields, types, constraints, relationships).
+- [x] **BE (Owner: BE)**: Implement validation that rejects invalid schemas with structured, actionable errors.
+- [x] **FE (Owner: FE)**: Inline validation UX that maps structured errors to the correct controls.
+- [x] **TEST (Owner: QA)**:
+  - [x] Unit: schema validation good/bad cases.
+  - [x] Integration: schema mutation atomicity (all-or-nothing).
   - **Done**: Invalid schema edits are blocked and explained.
 
 ### Step 3.2 — Drag-and-drop schema builder UX
-- [ ] **BE (Owner: BE)**: Implement mutations to:
+- [x] **BE (Owner: BE)**: Implement mutations to:
   - create/rename/delete tables
   - add/edit/delete fields
   - define relationships/references
   - enforce guardrails for destructive changes
-- [ ] **FE (Owner: FE)**: Implement schema builder UI (drag/drop), relationship picker, confirmation modals.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: build “Blog” schema via UI.
+- [x] **FE (Owner: FE)**: Implement schema builder UI (drag/drop), relationship picker, confirmation modals.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: build “Blog” schema via UI.
   - **Done**: Non-technical flow works end-to-end.
 
 ### Step 3.3 — “Lock into code” export + self-hosted apply workflow
-- [ ] **BE (Owner: BE)**: Export schema artifact (machine-readable; deterministic).
-- [ ] **BE (Owner: BE)**: Implement schema apply workflow consistent with self-hosting (status, rollback).
-- [ ] **FE (Owner: FE)**: “Export schema” + “Apply schema” UI with progress + failure recovery.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Snapshot/contract: export artifact stable for the same schema.
-  - [ ] E2E: apply flow works in a test environment.
+- [x] **BE (Owner: BE)**: Export schema artifact (machine-readable; deterministic).
+- [x] **BE (Owner: BE)**: Implement schema apply workflow consistent with self-hosting (status, rollback).
+- [x] **FE (Owner: FE)**: “Export schema” + “Apply schema” UI with progress + failure recovery.
+- [x] **TEST (Owner: QA)**:
+  - [x] Snapshot/contract: export artifact stable for the same schema.
+  - [x] E2E: apply flow works in a test environment.
   - **Done**: Developer handover is clear and testable.
 
 ---
