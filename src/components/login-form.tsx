@@ -1,5 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
-import { GalleryVerticalEnd } from "lucide-react";
+import { ArrowRight, GalleryVerticalEnd } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -48,13 +48,13 @@ export function LoginForm({
     const password = formData.get("password");
 
     if (typeof email !== "string" || email.length === 0) {
-      setError("Email is required");
+      setError("Email is required.");
       setIsLoading(false);
       return;
     }
 
     if (typeof password !== "string" || password.length === 0) {
-      setError("Password is required");
+      setError("Password is required.");
       setIsLoading(false);
       return;
     }
@@ -92,46 +92,59 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("app-panel rounded-[2rem] px-6 py-6 sm:px-8", className)} {...props}>
       <form onSubmit={handleEmailAuth}>
-        <FieldGroup>
-          <div className="flex flex-col items-center gap-2 text-center">
-            <a href="/" className="flex flex-col items-center gap-2 font-medium">
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-6" />
-              </div>
-              <span className="sr-only">Concave CMS</span>
+        <FieldGroup className="gap-5">
+          <div className="space-y-4 text-left">
+            <a href="/" className="inline-flex items-center gap-3 font-medium text-foreground">
+              <span className="grid size-11 place-items-center rounded-2xl bg-secondary text-secondary-foreground shadow-sm">
+                <GalleryVerticalEnd className="size-5" />
+              </span>
+              <span>
+                <span className="block text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  Concave CMS
+                </span>
+                <span className="block text-lg font-semibold">Content operations</span>
+              </span>
             </a>
-            <h1 className="text-xl font-bold">
-              {isSignUp ? "Create your account" : "Sign in to Concave"}
-            </h1>
-            <FieldDescription>
-              {isSignUp ? "Already have an account? " : "Don't have an account? "}
-              <button
-                type="button"
-                className="underline underline-offset-2 hover:text-foreground"
-                onClick={() => {
-                  setIsSignUp(!isSignUp);
-                  setError(null);
-                }}
-              >
-                {isSignUp ? "Sign in" : "Sign up"}
-              </button>
-            </FieldDescription>
+
+            <div>
+              <h1 className="text-[clamp(2rem,4vw,2.9rem)] font-semibold leading-[0.95] text-foreground">
+                {isSignUp ? "Create your workspace account." : "Sign in to the command surface."}
+              </h1>
+              <FieldDescription className="mt-3 text-sm leading-6">
+                {isSignUp ? "Already have access? " : "Need an account first? "}
+                <button
+                  type="button"
+                  className="font-semibold text-foreground underline underline-offset-4"
+                  onClick={() => {
+                    setIsSignUp(!isSignUp);
+                    setError(null);
+                  }}
+                >
+                  {isSignUp ? "Sign in" : "Create one"}
+                </button>
+              </FieldDescription>
+            </div>
           </div>
 
-          {sessionExpired && (
-            <p
-              className="rounded-md border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-sm text-amber-200 text-center"
-              role="status"
+          {sessionExpired ? (
+            <output
+              aria-live="polite"
+              aria-atomic="true"
+              className="rounded-[1.2rem] border border-[color:color-mix(in_oklch,var(--accent)_60%,var(--border))] bg-accent/70 px-4 py-3 text-sm text-accent-foreground"
             >
-              Your session has expired. Please sign in again.
+              Your session expired. Sign in again to keep editing safely.
+            </output>
+          ) : null}
+
+          {error ? (
+            <p className="rounded-[1.2rem] border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+              {error}
             </p>
-          )}
+          ) : null}
 
-          {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-
-          {isSignUp && (
+          {isSignUp ? (
             <Field>
               <FieldLabel htmlFor="name">Name</FieldLabel>
               <Input
@@ -140,9 +153,11 @@ export function LoginForm({
                 name="name"
                 placeholder="Your name"
                 autoComplete="name"
+                className="h-11 rounded-2xl bg-white/82"
               />
             </Field>
-          )}
+          ) : null}
+
           <Field>
             <FieldLabel htmlFor="email">Email</FieldLabel>
             <Input
@@ -152,6 +167,7 @@ export function LoginForm({
               placeholder="you@example.com"
               required
               autoComplete="email"
+              className="h-11 rounded-2xl bg-white/82"
             />
           </Field>
           <Field>
@@ -160,14 +176,16 @@ export function LoginForm({
               id="password"
               type="password"
               name="password"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               required
               autoComplete={isSignUp ? "new-password" : "current-password"}
+              className="h-11 rounded-2xl bg-white/82"
             />
           </Field>
           <Field>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="h-11 w-full rounded-full" disabled={isLoading}>
               {isLoading ? "Loading..." : isSignUp ? "Create account" : "Sign in"}
+              {!isLoading ? <ArrowRight className="size-4" aria-hidden="true" /> : null}
             </Button>
           </Field>
           <FieldSeparator>Or</FieldSeparator>
@@ -175,7 +193,7 @@ export function LoginForm({
             <Button
               variant="outline"
               type="button"
-              className="w-full"
+              className="h-11 w-full rounded-full bg-white/82"
               onClick={handleGoogleSignIn}
               disabled={isLoading}
             >
@@ -184,6 +202,7 @@ export function LoginForm({
                 viewBox="0 0 24 24"
                 role="img"
                 aria-label="Google"
+                className="size-4"
               >
                 <title>Google</title>
                 <path
@@ -196,8 +215,9 @@ export function LoginForm({
           </Field>
         </FieldGroup>
       </form>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/terms">Terms of Service</a> and{" "}
+
+      <FieldDescription className="mt-5 text-center text-xs leading-6">
+        By continuing, you agree to our <a href="/terms">Terms of Service</a> and{" "}
         <a href="/privacy">Privacy Policy</a>.
       </FieldDescription>
     </div>

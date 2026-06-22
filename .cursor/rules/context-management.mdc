@@ -1,0 +1,18 @@
+---
+description: Proactively manage context near 60% usage (~120k on 200k windows)
+alwaysApply: true
+---
+
+# Context threshold (~60% / ~120k tokens)
+
+When context is getting large (roughly 60% of the model window, ~120k tokens on a 200k window):
+
+1. Stop broad exploration, large file reads, and parallel subagents unless strictly required.
+2. Finish the current atomic task if it is nearly done; otherwise checkpoint progress.
+3. Write a concise handoff summary: goal, completed work, in-progress state, blockers, exact next steps, and key file paths.
+4. Tell the user to either:
+   - start a **new chat** and paste the handoff summary, or
+   - run **`/summarize`** (CLI) if they prefer to stay in the same thread.
+5. Do not silently continue heavy work past this threshold without the checkpoint step.
+
+If Cursor auto-compacts the thread, treat the summary as lossy: re-verify critical facts from the repo before acting.

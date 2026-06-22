@@ -1,6 +1,12 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import type { PresenceUser } from "@/lib/mock/content";
 import { cn } from "@/lib/utils";
+
+type PresenceUser = {
+  id: string;
+  name: string;
+  initials: string;
+  color: string;
+};
 
 type PresenceAvatarsProps = {
   users: PresenceUser[];
@@ -16,8 +22,6 @@ export function PresenceAvatars({ users, className }: PresenceAvatarsProps) {
     <output
       className={cn("flex items-center gap-2", className)}
       aria-label={`${users.length} collaborator${users.length === 1 ? "" : "s"} editing`}
-      data-blocker="BE-008"
-      title="BLOCKER(BE-008): Live presence requires Phase 7 backend"
     >
       <span className="text-xs text-muted-foreground">Also editing</span>
       <div className="flex -space-x-2">

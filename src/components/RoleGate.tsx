@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { authClient } from "@/lib/auth-client";
-import { canManageSchema, getMockRole } from "@/lib/mock/roles";
+import { useUserRole } from "@/components/CmsUserProvider";
+import { canManageSchema } from "@/lib/roles";
 
 type RoleGateProps = {
   children: ReactNode;
@@ -9,8 +9,7 @@ type RoleGateProps = {
 };
 
 export function RoleGate({ children, fallback, requireAdmin = false }: RoleGateProps) {
-  const { data: sessionData } = authClient.useSession();
-  const role = getMockRole(sessionData?.user?.email);
+  const role = useUserRole();
 
   if (requireAdmin && !canManageSchema(role)) {
     return (
@@ -23,9 +22,4 @@ export function RoleGate({ children, fallback, requireAdmin = false }: RoleGateP
   }
 
   return <>{children}</>;
-}
-
-export function useMockRole() {
-  const { data: sessionData } = authClient.useSession();
-  return getMockRole(sessionData?.user?.email);
 }

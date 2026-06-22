@@ -1,12 +1,23 @@
 import { GitCompare, History, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { HistoryEvent } from "@/lib/mock/content";
-import { formatRelativeDate } from "@/lib/mock/content";
+import { formatContentDate } from "@/lib/content/live";
 import { cn } from "@/lib/utils";
+
+type HistoryEvent = {
+  id: string;
+  timestamp: number;
+  action: "created" | "updated" | "published" | "reverted";
+  userName: string;
+  summary: string;
+  version: number;
+};
 
 type HistoryPanelProps = {
   events: HistoryEvent[];
   selectedVersion?: number | null;
+  changedFields?: string[];
+  isComparing?: boolean;
+  isReverting?: boolean;
   onSelectVersion?: (version: number) => void;
   onRevert?: (version: number) => void;
 };
@@ -28,6 +39,9 @@ const actionColors: Record<HistoryEvent["action"], string> = {
 export function HistoryPanel({
   events,
   selectedVersion = null,
+  changedFields = [],
+  isComparing = false,
+  isReverting = false,
   onSelectVersion,
   onRevert,
 }: HistoryPanelProps) {
@@ -35,7 +49,6 @@ export function HistoryPanel({
     <aside
       className="flex h-full flex-col rounded-lg border border-border bg-card"
       aria-label="Version history"
-      data-blocker="BE-006"
     >
       <div className="flex items-center gap-2 border-b border-border px-4 py-3">
         <History className="size-4 text-muted-foreground" aria-hidden />
@@ -76,7 +89,7 @@ export function HistoryPanel({
                   </div>
                   <p className="mt-1 text-sm font-medium leading-snug">{event.summary}</p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
-                    {event.userName} · {formatRelativeDate(event.timestamp)}
+                    {event.userName} / {formatContentDate(event.timestamp)}
                   </p>
                 </button>
                 {index === 0 && events.length > 1 && (
@@ -89,25 +102,32 @@ export function HistoryPanel({
       </div>
 
       {selectedVersion !== null && (
-        <div className="space-y-2 border-t border-border p-3" data-blocker="BE-006">
+        <div className="space-y-2 border-t border-border p-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <GitCompare className="size-3.5" aria-hidden />
-            Compare / revert (placeholder)
+            Compare with current draft
           </div>
-          <p className="text-xs text-muted-foreground">
-            Side-by-side diff UI will render here once BE-006 version APIs are available.
-          </p>
+          {isComparing ? (
+            <p className="text-xs text-muted-foreground">Loading changed fields...</p>
+          ) : changedFields.length > 0 ? (
+            <p className="text-xs text-muted-foreground">
+              Changed fields: {changedFields.join(", ")}
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              No field changes against the current draft.
+            </p>
+          )}
           <Button
             type="button"
             variant="outline"
             size="sm"
             className="w-full"
-            data-blocker="BE-006"
-            title="BLOCKER(BE-006): Revert requires version history backend"
+            disabled={isReverting}
             onClick={() => onRevert?.(selectedVersion)}
           >
             <RotateCcw className="size-3.5" />
-            Revert to v{selectedVersion}
+            {isReverting ? `Reverting v${selectedVersion}...` : `Revert to v${selectedVersion}`}
           </Button>
         </div>
       )}

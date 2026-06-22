@@ -1,28 +1,20 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  type ContentEntry,
   type EntryStatus,
-  formatRelativeDate,
-  getContentType,
-  getEntriesForType,
+  formatContentDate,
   getStatusLabel,
-} from "@/lib/mock/content";
+  mapSchemaToContentType,
+} from "@/lib/content/live";
+import { api, usePaginatedQuery, useQuery } from "@/lib/convex/hooks";
 import { cn } from "@/lib/utils";
 
 type StatusFilter = "all" | EntryStatus;
 
 export const Route = createFileRoute("/_authenticated/content/$type/")({
-  loader: ({ params }) => {
-    const contentType = getContentType(params.type);
-    if (!contentType) {
-      throw notFound();
-    }
-    return { contentType, entries: getEntriesForType(params.type) };
-  },
   component: EntriesListPage,
 });
 
@@ -46,21 +38,70 @@ function StatusBadge({ status }: { status: EntryStatus }) {
 }
 
 function EntriesListPage() {
-  const { contentType, entries } = Route.useLoaderData();
+  const { type } = Route.useParams();
+  const schema = useQuery(api.schemas.getBySlug, { slug: type });
+  const contentType = useMemo(() => (schema ? mapSchemaToContentType(schema) : null), [schema]);
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
+  const entryQuery = usePaginatedQuery(
+    api.entries.listByType,
+    schema?.status === "active" ? { contentType: type } : "skip",
+    { initialNumItems: 25 },
+  );
+
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
-    return entries.filter((entry: ContentEntry) => {
+    return entryQuery.results.filter((entry) => {
+      const status = entry.status;
       const matchesQuery =
         !normalizedQuery ||
         entry.title.toLowerCase().includes(normalizedQuery) ||
-        entry.id.toLowerCase().includes(normalizedQuery);
-      const matchesStatus = statusFilter === "all" || entry.status === statusFilter;
+        entry._id.toLowerCase().includes(normalizedQuery);
+      const matchesStatus = statusFilter === "all" || status === statusFilter;
       return matchesQuery && matchesStatus;
     });
-  }, [entries, query, statusFilter]);
+  }, [entryQuery.results, query, statusFilter]);
+
+  if (schema === undefined) {
+    return (
+      <div className="rounded-lg border border-border bg-card p-8">
+        <p className="text-sm text-muted-foreground">Loading content type...</p>
+      </div>
+    );
+  }
+
+  if (!schema) {
+    return (
+      <div className="rounded-lg border border-dashed border-border p-10 text-center">
+        <p className="text-base font-semibold text-foreground">Content type not found.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This route does not match a live schema yet.
+        </p>
+        <Button asChild size="sm" className="mt-4">
+          <Link to="/content">Back to content</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  if (!contentType) {
+    return null;
+  }
+
+  if (schema.status !== "active") {
+    return (
+      <div className="rounded-lg border border-dashed border-border p-10 text-center">
+        <p className="text-base font-semibold text-foreground">{schema.name} is not active yet.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Apply this schema in the schema builder before creating or editing live entries.
+        </p>
+        <Button asChild size="sm" className="mt-4">
+          <Link to="/schema">Open schema builder</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -74,7 +115,9 @@ function EntriesListPage() {
             <span className="text-foreground">{contentType.name}</span>
           </nav>
           <h1 className="text-2xl font-semibold tracking-tight">{contentType.name}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{contentType.description}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {contentType.description || "No description yet."}
+          </p>
         </div>
         <Button asChild size="sm">
           <Link to="/content/$type/new" params={{ type: contentType.slug }}>
@@ -92,7 +135,7 @@ function EntriesListPage() {
           />
           <Input
             value={query}
-            placeholder="Search entries…"
+            placeholder="Search entries..."
             className="pl-9"
             aria-label="Search entries"
             onChange={(event) => setQuery(event.target.value)}
@@ -121,14 +164,18 @@ function EntriesListPage() {
         </fieldset>
       </div>
 
-      {filtered.length === 0 ? (
+      {entryQuery.isLoading && entryQuery.results.length === 0 ? (
+        <div className="rounded-lg border border-border bg-card p-8">
+          <p className="text-sm text-muted-foreground">Loading entries...</p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-10 text-center">
           <p className="text-sm text-muted-foreground">
-            {entries.length === 0
+            {entryQuery.results.length === 0
               ? "No entries yet. Create your first one."
               : "No entries match your search or filter."}
           </p>
-          {entries.length === 0 && (
+          {entryQuery.results.length === 0 && (
             <Button asChild size="sm" className="mt-4">
               <Link to="/content/$type/new" params={{ type: contentType.slug }}>
                 <Plus className="size-4" />
@@ -139,24 +186,40 @@ function EntriesListPage() {
         </div>
       ) : (
         <ul className="divide-y divide-border rounded-lg border border-border bg-card">
-          {filtered.map((entry: ContentEntry) => (
-            <li key={entry.id}>
-              <Link
-                to="/content/$type/$entryId"
-                params={{ type: contentType.slug, entryId: entry.id }}
-                className="flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{entry.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Updated {formatRelativeDate(entry.updatedAt)}
-                  </p>
-                </div>
-                <StatusBadge status={entry.status} />
-              </Link>
-            </li>
-          ))}
+          {filtered.map((entry) => {
+            const status = entry.status;
+            return (
+              <li key={entry._id}>
+                <Link
+                  to="/content/$type/$entryId"
+                  params={{ type: contentType.slug, entryId: entry._id }}
+                  className="flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{entry.title}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Updated {formatContentDate(entry.updatedAt)}
+                    </p>
+                  </div>
+                  <StatusBadge status={status} />
+                </Link>
+              </li>
+            );
+          })}
         </ul>
+      )}
+
+      {entryQuery.status !== "Exhausted" && (
+        <div className="flex justify-center">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => entryQuery.loadMore(25)}
+            disabled={entryQuery.status !== "CanLoadMore"}
+          >
+            {entryQuery.status === "LoadingMore" ? "Loading more..." : "Load more"}
+          </Button>
+        </div>
       )}
     </div>
   );

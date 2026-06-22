@@ -19,6 +19,7 @@ type PageHeaderProps = {
   breadcrumbs?: PageBreadcrumb[];
   actions?: React.ReactNode;
   className?: string;
+  eyebrow?: string;
 };
 
 export function PageHeader({
@@ -27,12 +28,13 @@ export function PageHeader({
   breadcrumbs,
   actions,
   className,
+  eyebrow,
 }: PageHeaderProps) {
   return (
     <div
-      className={cn("flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between", className)}
+      className={cn("flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between", className)}
     >
-      <div className="space-y-1">
+      <div className="space-y-2">
         {breadcrumbs && breadcrumbs.length > 0 && (
           <Breadcrumb>
             <BreadcrumbList>
@@ -54,11 +56,18 @@ export function PageHeader({
           </Breadcrumb>
         )}
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">{title}</h1>
-          {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
+          {eyebrow ? <p className="app-kicker mb-3">{eyebrow}</p> : null}
+          <h1 className="max-w-4xl text-[clamp(2rem,3vw,3.25rem)] font-semibold leading-[0.95] text-foreground">
+            {title}
+          </h1>
+          {description ? (
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-[0.95rem]">
+              {description}
+            </p>
+          ) : null}
         </div>
       </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+      {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
     </div>
   );
 }

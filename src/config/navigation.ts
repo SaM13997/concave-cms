@@ -8,8 +8,7 @@ import {
   ScrollText,
   Settings,
 } from "lucide-react";
-import type { UserRole } from "@/lib/mock/roles";
-import { isAdminRole } from "@/lib/mock/roles";
+import { isAdminRole, type UserRole } from "@/lib/roles";
 
 export type AdminNavItem = {
   href: string;

@@ -55,7 +55,7 @@ export const globalSearch = authedQuery({
             id: `content-${entry._id}`,
             group: "content",
             title,
-            subtitle: `${entry.contentType} · ${status}`,
+            subtitle: `${entry.contentType} - ${status}`,
             href: `/content/${entry.contentType}/${entry._id}`,
             score,
           });
@@ -73,7 +73,7 @@ export const globalSearch = authedQuery({
             id: `schema-${schema._id}`,
             group: "schema",
             title: schema.name,
-            subtitle: `Table · ${schema.fields.length} fields`,
+            subtitle: `Table - ${schema.fields.length} fields`,
             href: `/schema/${schema.slug}`,
             score,
           });

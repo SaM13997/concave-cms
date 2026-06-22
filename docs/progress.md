@@ -1,6 +1,7 @@
 # Progress Log
 
 ## 2026-06-19
+- Backend launch-plan work is complete and committed; next up is wiring the admin UI to live Convex APIs instead of mocks.
 - Shipped the full Convex backend: auth/RBAC, system tables, schema engine, content CRUD, draft/publish, preview tokens, version history, search, presence, audit APIs, rate limiting, and backup scripts.
 
 ## 2026-06-19 (Phase 0–1)

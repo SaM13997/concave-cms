@@ -99,6 +99,31 @@ export function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+const monthLabels = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+] as const;
+
+export function formatUploadDate(isoTimestamp: string): string {
+  const date = new Date(isoTimestamp);
+
+  if (Number.isNaN(date.getTime())) {
+    return isoTimestamp;
+  }
+
+  return `${monthLabels[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+}
+
 export function filterMediaAssets(
   assets: MediaAsset[],
   query: string,

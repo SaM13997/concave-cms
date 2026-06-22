@@ -1,5 +1,5 @@
 import { AlertTriangle } from "lucide-react";
-import type { FieldValidationError } from "@/lib/mock/schema";
+import type { FieldValidationError } from "@/lib/schema/live";
 import { cn } from "@/lib/utils";
 
 type SchemaValidationBannerProps = {
@@ -28,8 +28,7 @@ export function SchemaValidationBanner({ errors, className }: SchemaValidationBa
         <div>
           <p className="font-medium">Schema validation failed</p>
           <p className="mt-1 text-destructive/90">
-            Fix the issues below before saving. Changes are kept in local state only until backend
-            mutations land.
+            Fix the issues below before saving or applying this schema.
           </p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-destructive/90">
             {uniqueMessages.map((message) => (

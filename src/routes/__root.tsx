@@ -81,11 +81,11 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
-      <body className="h-lvh flex flex-col overflow-x-clip w-full">
+      <body className="flex min-h-dvh w-full flex-col overflow-x-clip">
         <div className="flex-1 flex flex-col">{children}</div>
         <TanStackDevtools
           config={{

@@ -17,7 +17,7 @@ export function UserButton() {
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
-    return <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse" />;
+    return <div className="h-11 w-11 animate-pulse rounded-full bg-muted" />;
   }
 
   if (!session) {
@@ -42,16 +42,25 @@ export function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+        <Button
+          variant="ghost"
+          className="relative h-11 w-11 rounded-full border border-border bg-white/80 p-0 shadow-sm hover:bg-white"
+        >
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.image ?? ""} alt={user.name ?? "User"} />
-            <AvatarFallback>{initials}</AvatarFallback>
+            <AvatarFallback className="bg-secondary text-secondary-foreground">
+              {initials}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent
+        className="w-64 rounded-2xl border-border bg-[linear-gradient(180deg,oklch(1_0_0),oklch(0.985_0.006_120))] p-2"
+        align="end"
+        forceMount
+      >
         <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
+          <div className="flex flex-col space-y-1 rounded-xl bg-white/80 px-3 py-3">
             <p className="text-sm font-medium leading-none">{user.name}</p>
             <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
           </div>
@@ -59,7 +68,7 @@ export function UserButton() {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleSignOut}
-          className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"
+          className="cursor-pointer rounded-xl text-red-600 focus:bg-red-50 focus:text-red-600"
         >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>

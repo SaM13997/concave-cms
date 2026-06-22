@@ -1,14 +1,21 @@
-import { Copy, ExternalLink, RotateCcw, Upload } from "lucide-react";
+import { Copy, ExternalLink, RotateCcw, Save, Sparkles, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { EntryStatus } from "@/lib/mock/content";
+import { canDiscardLiveDraft, type EntryStatus } from "@/lib/content/live";
 import { cn } from "@/lib/utils";
 
 type DraftPublishBarProps = {
   status: EntryStatus;
-  previewUrl: string;
+  previewUrl?: string | null;
+  previewExpiresAt?: string | null;
   isDirty?: boolean;
+  isSaving?: boolean;
+  isPublishing?: boolean;
+  isDiscarding?: boolean;
+  isGeneratingPreview?: boolean;
+  onSaveDraft?: () => void;
   onPublish?: () => void;
   onDiscardDraft?: () => void;
+  onGeneratePreview?: () => void;
   onCopyPreview?: () => void;
 };
 
@@ -40,13 +47,20 @@ function StatusBadge({ status }: { status: EntryStatus }) {
 export function DraftPublishBar({
   status,
   previewUrl,
+  previewExpiresAt,
   isDirty = false,
+  isSaving = false,
+  isPublishing = false,
+  isDiscarding = false,
+  isGeneratingPreview = false,
+  onSaveDraft,
   onPublish,
   onDiscardDraft,
+  onGeneratePreview,
   onCopyPreview,
 }: DraftPublishBarProps) {
   const canPublish = status !== "published" || isDirty;
-  const canDiscard = status === "published_with_draft" || status === "draft";
+  const canDiscard = canDiscardLiveDraft(status);
 
   return (
     <section
@@ -59,49 +73,66 @@ export function DraftPublishBar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <div
-          className="flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 text-xs text-muted-foreground"
-          data-blocker="BE-005"
-          title="BLOCKER(BE-005): Preview token URLs require Phase 5 backend"
-        >
-          <ExternalLink className="size-3.5 shrink-0" aria-hidden />
-          <span className="max-w-[12rem] truncate sm:max-w-xs">{previewUrl}</span>
+        {onSaveDraft && (
           <Button
             type="button"
-            variant="ghost"
-            size="icon-sm"
-            aria-label="Copy preview URL"
-            data-blocker="BE-005"
-            onClick={onCopyPreview}
+            variant="outline"
+            size="sm"
+            disabled={!isDirty || isSaving}
+            onClick={onSaveDraft}
           >
-            <Copy className="size-3.5" />
+            <Save className="size-3.5" />
+            {isSaving ? "Saving..." : "Save draft"}
           </Button>
-        </div>
+        )}
+
+        {previewUrl ? (
+          <div className="flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 text-xs text-muted-foreground">
+            <ExternalLink className="size-3.5 shrink-0" aria-hidden />
+            <span className="max-w-[12rem] truncate sm:max-w-xs">{previewUrl}</span>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              aria-label="Copy preview URL"
+              onClick={onCopyPreview}
+            >
+              <Copy className="size-3.5" />
+            </Button>
+          </div>
+        ) : (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isGeneratingPreview}
+            onClick={onGeneratePreview}
+          >
+            <Sparkles className="size-3.5" />
+            {isGeneratingPreview ? "Generating..." : "Generate preview link"}
+          </Button>
+        )}
+
+        {previewUrl && previewExpiresAt && (
+          <span className="text-xs text-muted-foreground">Expires {previewExpiresAt}</span>
+        )}
 
         {canDiscard && (
           <Button
             type="button"
             variant="outline"
             size="sm"
-            data-blocker="BE-004"
-            title="BLOCKER(BE-004): Discard draft requires atomic publish backend"
+            disabled={isDiscarding}
             onClick={onDiscardDraft}
           >
             <RotateCcw className="size-3.5" />
-            Discard draft
+            {isDiscarding ? "Discarding..." : "Discard draft"}
           </Button>
         )}
 
-        <Button
-          type="button"
-          size="sm"
-          disabled={!canPublish}
-          data-blocker="BE-004"
-          title="BLOCKER(BE-004): Publish requires Convex transactional atomicity"
-          onClick={onPublish}
-        >
+        <Button type="button" size="sm" disabled={!canPublish || isPublishing} onClick={onPublish}>
           <Upload className="size-3.5" />
-          Publish
+          {isPublishing ? "Publishing..." : "Publish"}
         </Button>
       </div>
     </section>
