@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T06:20Z |
+| **Last updated** | 2026-06-22T06:38Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
 | **Orchestration branch** | `cursor/orchestration-agent-system-754e` |
@@ -17,17 +17,18 @@
 ## Agent rules
 
 1. **Model:** Use `composer-2.5` (non-fast) only.
-2. **Read first:** `orchestration.md` → `docs/launch-plan.md` (do not re-read full git history).
+2. **Read first:** `orchestration.md` → `docs/launch-plan.md` → `docs/agent-testing.md` if running E2E (do not re-read full git history).
 3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–8).
 4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
-5. **Push gate:** NEVER mark a phase complete without verifying remote:
+5. **E2E trap (important):** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts` only. See `docs/agent-testing.md`.
+6. **Push gate:** NEVER mark a phase complete without verifying remote:
    ```bash
    git push -u origin cursor/concave-cms-launch-plan-26c1
    git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
    ```
-6. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-754e`).
-7. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
-8. **Commit & push** impl branch after review loop passes.
+7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-754e`).
+8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
+9. **Commit & push** impl branch after review loop passes.
 
 ## Current status
 
@@ -46,15 +47,22 @@
 
 **CI on PR #1:** Green through Phase 8 commit `0718a5c`.
 
-**Verified 2026-06-22T06:20Z:** Impl branch still at `0718a5c`. No Phase 9 commits (no Docker/compose, onboarding flow, or CHANGELOG). Prior Phase 9 agent (spawned 05:48Z on branch b4a1) produced no remote push — respawning.
+**Verified 2026-06-22T06:38Z:** E2E hang fix landed (`f68c123`). Phase 9 still in progress on impl branch.
 
 ## Active agent
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| Phase 9 impl | composer-2.5 | Phase 9.1–9.3 packaging + release | **spawned** (2026-06-22T06:20Z) |
+| Phase 9 impl | composer-2.5 | Phase 9.1–9.3 packaging + release | **in progress** |
 
 ## Completed work (log)
+
+### 2026-06-22T06:38Z — E2E agent hang fix
+
+- **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `f68c123`
+- **Done:** `scripts/e2e-server.sh` now rejects direct execution (exits with instructions); Playwright sets `PLAYWRIGHT_E2E_SERVER=1`; added `docs/agent-testing.md` for safe agent reference; simplified startup via `convex dev --run-sh`.
+- **Why:** Agents were reading/running `e2e-server.sh` and hanging on `wait` (blocks forever by design).
 
 ### 2026-06-22T06:20Z — Orchestration cron (branch 754e)
 
