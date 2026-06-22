@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T02:20Z |
+| **Last updated** | 2026-06-22T02:36Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
 | **Orchestration branch** | `cursor/orchestration-agent-system-b4a1` |
@@ -18,7 +18,7 @@
 
 1. **Model:** Use `composer-2.5` (non-fast) only.
 2. **Read first:** `orchestration.md` → `docs/launch-plan.md` (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–5).
+3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–6).
 4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
 5. **Push gate:** NEVER mark a phase complete without verifying remote:
    ```bash
@@ -40,22 +40,31 @@
 | 3 — Schema engine | ✅ Complete |
 | 4 — Content engine | ✅ Complete |
 | 5 — Draft/publish + preview | ✅ Complete |
-| **6 — Time travel** | 🔄 **IN PROGRESS** (retry #4) |
-| 7 — Admin UX | 🔲 Pending |
+| **6 — Time travel** | ✅ Complete (`3623f93`) |
+| **7 — Admin UX** | 🔲 **NEXT** |
 | 8 — Hardening | 🔲 Pending |
 | 9 — Packaging | 🔲 Pending |
 
-**CI on PR #1:** Green as of impl commit `7b98eac`.
+**CI on PR #1:** Pending re-run after impl commit `3623f93`.
 
-**Verified 2026-06-22T02:20Z:** Impl branch still at `7b98eac`. No `contentHistory.ts`, `ContentHistoryPanel`, or Phase 6 tests on remote. Three prior agents reported Phase 6 complete locally but never pushed.
+**Verified 2026-06-22T02:36Z:** Impl branch pushed to `3623f93`. Remote contains `convex/contentHistory.ts`, `convex/lib/contentHistory.ts`, `ContentHistoryPanel`, and `e2e/content-history.spec.ts`.
 
 ## Active agent
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| Phase 6 impl | composer-2.5 | Phase 6.1 + 6.2 time travel | **spawned** (2026-06-22T02:20Z) |
+| — | — | — | **idle** |
 
 ## Completed work (log)
+
+### 2026-06-22T02:36Z — Phase 6 time travel (history, compare, revert)
+
+- **Agent:** composer-2.5
+- **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `3623f93`
+- **Done:** Full-snapshot version events on create/update/publish/discard; `listEntryHistory`, `compareVersions`, `revertContentEntry` APIs; `ContentHistoryPanel` with timeline, compare, revert confirmation; `content.revert` audit action; launch-plan Phase 6 checked off.
+- **Tests:** `npm run check` ✅ · `npm run test` (96) ✅ · `npm run test:e2e -- e2e/content-history.spec.ts` ✅
+- **Next:** Phase 7.1 — Fluid navigation
 
 ### 2026-06-22T02:20Z — Orchestration cron (branch b4a1)
 
@@ -77,33 +86,30 @@
 - Phase 6 agents reported complete locally but did not push to `cursor/concave-cms-launch-plan-26c1`.
 - Environment outage blocked one resume attempt.
 
-## Next up (after Phase 6 verified on remote)
+## Next up
 
 1. **Phase 7.1** — Fluid navigation (breadcrumbs, keyboard nav)
 2. **Phase 7.2** — Cmd+K global search
 3. **Phase 7.3** — Presence + toasts
 
-## Phase 6 task spec (for implementation agent)
+## Phase 7 task spec (for implementation agent)
 
-Implement **Phase 6 — Time travel** per `docs/launch-plan.md` on branch `cursor/concave-cms-launch-plan-26c1`:
+Implement **Phase 7 — Admin experience** per `docs/launch-plan.md` on branch `cursor/concave-cms-launch-plan-26c1`:
 
-### Step 6.1 — Version history capture
-- **BE:** Persist history events (who/when/what summary) on content edits and publish. Full snapshots on create/update/publish/discard.
-- **FE:** History timeline view on entry detail (`ContentHistoryPanel`).
-- **TEST:** Integration — each edit/publish creates expected history event.
+### Step 7.1 — Fluid navigation
+- **BE:** Optimize queries for fast list/detail navigation.
+- **FE:** Route structure, breadcrumbs, keyboard-first navigation.
+- **TEST:** E2E — primary navigation paths; no broken states.
 
-### Step 6.2 — Compare + revert
-- **BE:** Compare/diff API; atomic revert mutation + audit event.
-- **FE:** Side-by-side compare UI; revert with confirmation.
-- **TEST:** E2E — revert restores prior version; audit event created.
+### Step 7.2 — Command Center (Cmd+K)
+- **BE:** Search APIs across content/schema/media with RBAC filtering.
+- **FE:** Cmd+K palette UI with grouped results.
+- **TEST:** E2E — search finds each entity type; forbidden results never appear.
 
-### Suggested files
-- `convex/lib/contentHistory.ts`, `convex/contentHistory.ts`
-- Enhance `convex/content.ts` to emit version events
-- `src/components/content/ContentHistoryPanel.tsx` (or similar)
-- `convex/lib/contentHistory.test.ts`, `e2e/content-history.spec.ts`
-
-Check off completed items in `docs/launch-plan.md` when done.
+### Step 7.3 — Presence + toasts
+- **BE:** Presence sessions with expiry; standardized event payloads.
+- **FE:** Presence UI and toast UX.
+- **TEST:** E2E — two sessions show presence; disconnect clears.
 
 ## Update template (agents: append after review loop)
 
