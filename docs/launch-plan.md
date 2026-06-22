@@ -57,14 +57,14 @@ Launch is achieved when:
 
 ## Release checklist (per release candidate)
 
-- [ ] **QA**: Full regression run (unit + integration + e2e) green.
-- [ ] **QA**: Publish latency benchmark recorded (p50/p95) and compared to target.
-- [ ] **SEC**: RBAC/security regression suite green.
-- [ ] **OPS**: Self-hosted install verification run in clean environment.
-- [ ] **OPS**: Backup/restore drill run (or last drill date within agreed window).
-- [ ] **FE**: A11y checks green and keyboard-only smoke completed.
-- [ ] **BE/OPS**: Release notes + upgrade notes written (migrations, breaking changes).
-- [ ] **OPS**: Rollback plan validated.
+- [x] **QA**: Full regression run (unit + integration + e2e) green.
+- [x] **QA**: Publish latency benchmark recorded (p50/p95) and compared to target.
+- [x] **SEC**: RBAC/security regression suite green.
+- [x] **OPS**: Self-hosted install verification run in clean environment.
+- [x] **OPS**: Backup/restore drill run (or last drill date within agreed window).
+- [x] **FE**: A11y checks green and keyboard-only smoke completed.
+- [x] **BE/OPS**: Release notes + upgrade notes written (migrations, breaking changes).
+- [x] **OPS**: Rollback plan validated.
 
 ---
 
@@ -302,17 +302,17 @@ Launch is achieved when:
 ## Phase 9 — Self-hosted packaging, docs, and release
 
 ### Step 9.1 — Packaging and install verification
-- [ ] **OPS (Owner: OPS)**: Provide at least one supported install method (Docker/compose or CLI installer) with documented requirements.
-- [ ] **TEST (Owner: QA)**: Clean-environment install smoke test in CI.
+- [x] **OPS (Owner: OPS)**: Provide at least one supported install method (Docker/compose or CLI installer) with documented requirements.
+- [x] **TEST (Owner: QA)**: Clean-environment install smoke test in CI.
   - **Done**: New user can install and run without manual debugging.
 
 ### Step 9.2 — Onboarding flow + docs (meet onboarding speed metric)
-- [ ] **FE (Owner: FE)**: In-product onboarding path to create Blog + publish first post.
-- [ ] **OPS (Owner: OPS)**: Quickstart documentation and troubleshooting.
-- [ ] **TEST (Owner: QA)**: E2E onboarding flow with step/time budget.
+- [x] **FE (Owner: FE)**: In-product onboarding path to create Blog + publish first post.
+- [x] **OPS (Owner: OPS)**: Quickstart documentation and troubleshooting.
+- [x] **TEST (Owner: QA)**: E2E onboarding flow with step/time budget.
   - **Done**: Onboarding metric is reproducible.
 
 ### Step 9.3 — Release checklist + versioning
-- [ ] **OPS (Owner: OPS)**: Versioning (SemVer), changelog, upgrade notes, rollback instructions.
-- [ ] **TEST (Owner: QA)**: Release gates require unit + integration + e2e + perf checks.
+- [x] **OPS (Owner: OPS)**: Versioning (SemVer), changelog, upgrade notes, rollback instructions.
+- [x] **TEST (Owner: QA)**: Release gates require unit + integration + e2e + perf checks.
   - **Done**: “Launch” is a repeatable, gated release.

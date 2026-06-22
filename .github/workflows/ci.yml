@@ -58,6 +58,19 @@ jobs:
       - name: Run tests
         run: bun run --bun test
 
+  install-smoke:
+    name: Install smoke (Phase 9)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Run install smoke test
+        run: bash scripts/install-smoke.sh
+
   e2e:
     name: E2E (Playwright)
     runs-on: ubuntu-latest

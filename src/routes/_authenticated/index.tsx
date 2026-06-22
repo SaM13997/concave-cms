@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
+import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { UserButton } from "@/components/User-button";
 import { cn } from "@/lib/utils";
 
@@ -12,21 +13,25 @@ const dashboardSections = [
     icon: Layers,
     title: "Content Types",
     description: "Define and manage your content schemas",
+    href: "/schema",
   },
   {
     icon: FileText,
     title: "Content Entries",
     description: "Create, edit, and publish content",
+    href: "/content",
   },
   {
     icon: Image,
     title: "Media Library",
     description: "Upload and organize your assets",
+    href: "/media",
   },
   {
     icon: Settings,
     title: "Settings",
     description: "Configure your CMS instance",
+    href: "/settings",
   },
 ] as const;
 
@@ -34,13 +39,16 @@ function DashboardCard({
   icon: Icon,
   title,
   description,
+  href,
 }: {
   icon: LucideIcon;
   title: string;
   description: string;
+  href: string;
 }) {
   return (
-    <div
+    <a
+      href={href}
       className={cn(
         "group relative rounded-lg border border-border bg-card p-5",
         "transition-colors hover:border-muted-foreground/25",
@@ -56,11 +64,8 @@ function DashboardCard({
             <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
           </div>
         </div>
-        <span className="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-          Soon
-        </span>
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -75,7 +80,9 @@ function HomePage() {
         <UserButton />
       </header>
 
-      <main className="mx-auto mt-8 w-full max-w-3xl flex-1">
+      <main className="mx-auto mt-8 w-full max-w-3xl flex-1 space-y-6">
+        <OnboardingWizard />
+
         <div className="grid gap-3 sm:grid-cols-2">
           {dashboardSections.map((section) => (
             <DashboardCard
@@ -83,6 +90,7 @@ function HomePage() {
               icon={section.icon}
               title={section.title}
               description={section.description}
+              href={section.href}
             />
           ))}
         </div>

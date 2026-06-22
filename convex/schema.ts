@@ -17,6 +17,8 @@ export default defineSchema({
     email: v.string(),
     name: v.string(),
     role: roleValidator,
+    onboardingCompletedAt: v.optional(v.number()),
+    onboardingDismissedAt: v.optional(v.number()),
   }).index("by_auth_user_id", ["authUserId"]),
 
   schemas: defineTable({

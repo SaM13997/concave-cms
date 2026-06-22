@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "convex/react";
 import { ChevronDown, ChevronUp, Download, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
+import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
 import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,11 +14,13 @@ import type { Id } from "../../../convex/_generated/dataModel";
 
 type SchemaSearch = {
   table?: string;
+  onboarding?: string;
 };
 
 export const Route = createFileRoute("/_authenticated/schema")({
   validateSearch: (search: Record<string, unknown>): SchemaSearch => ({
     table: typeof search.table === "string" ? search.table : undefined,
+    onboarding: typeof search.onboarding === "string" ? search.onboarding : undefined,
   }),
   component: SchemaBuilderPage,
 });
@@ -322,6 +325,7 @@ function SchemaBuilderPage() {
       </header>
 
       <main data-testid="schema-builder" className="mx-auto mt-8 w-full max-w-5xl flex-1 space-y-6">
+        {search.onboarding === "1" && <OnboardingBanner step="schema" />}
         {selectedTable?.hasUnpublishedChanges && (
           <div
             data-testid="schema-unpublished-banner"

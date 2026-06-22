@@ -2,6 +2,9 @@
 
 Get a local development environment running in a few minutes.
 
+For production self-hosting (Docker Compose), see [self-hosted.md](./self-hosted.md).  
+For common issues, see [troubleshooting.md](./troubleshooting.md).
+
 ## Prerequisites
 
 - [Bun](https://bun.sh) (recommended) or Node.js 20+
@@ -72,10 +75,4 @@ bun run test:e2e  # Playwright E2E (auto-starts servers — do not run scripts/e
 
 ## Troubleshooting
 
-**Invalid environment variables** — Ensure `BETTER_AUTH_SECRET` is at least 16 characters and URLs are valid (`http://` or `https://`).
-
-**Convex connection errors** — Confirm `VITE_CONVEX_URL` matches the URL from `npx convex dev` and that the Convex process is running.
-
-**Google sign-in disabled** — Leave `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` empty; email/password auth still works.
-
-**Session expired** — Sign in again from `/login`; protected routes redirect automatically when the session ends.
+See [troubleshooting.md](./troubleshooting.md) for install, auth, Convex, and E2E issues.

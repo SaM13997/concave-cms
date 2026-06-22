@@ -25,11 +25,14 @@ export async function getOrCreateCmsUser(
     return existing;
   }
 
+  const adminCount = await countAdmins(ctx);
+  const role: Role = adminCount === 0 ? "admin" : defaultRole;
+
   const cmsUserId = await ctx.db.insert("cmsUsers", {
     authUserId: authUser._id,
     email: authUser.email,
     name: authUser.name,
-    role: defaultRole,
+    role,
   });
 
   const cmsUser = await ctx.db.get(cmsUserId);

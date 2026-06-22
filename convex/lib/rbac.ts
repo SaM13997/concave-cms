@@ -18,6 +18,8 @@ const cmsUserValidator = v.object({
   email: v.string(),
   name: v.string(),
   role: roleValidator,
+  onboardingCompletedAt: v.optional(v.number()),
+  onboardingDismissedAt: v.optional(v.number()),
 });
 
 export type AuthedRoleCtx = {

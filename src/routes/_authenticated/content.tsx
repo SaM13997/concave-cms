@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentEntryEditor } from "@/components/content/ContentEntryEditor";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
+import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
 import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,12 +20,14 @@ import type { Id } from "../../../convex/_generated/dataModel";
 type ContentSearch = {
   type?: string;
   entry?: string;
+  onboarding?: string;
 };
 
 export const Route = createFileRoute("/_authenticated/content")({
   validateSearch: (search: Record<string, unknown>): ContentSearch => ({
     type: typeof search.type === "string" ? search.type : undefined,
     entry: typeof search.entry === "string" ? search.entry : undefined,
+    onboarding: typeof search.onboarding === "string" ? search.onboarding : undefined,
   }),
   component: ContentPage,
 });
@@ -328,6 +331,7 @@ function ContentPage() {
       </header>
 
       <main data-testid="content-editor" className="mx-auto mt-8 w-full max-w-4xl flex-1 space-y-4">
+        {search.onboarding === "1" && <OnboardingBanner step="content" />}
         <section data-testid="content-type-switcher">
           <Label className="mb-2 block text-sm font-medium">Content type</Label>
           {contentTypes === undefined ? (
