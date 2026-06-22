@@ -6,29 +6,30 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T05:45Z |
+| **Last updated** | 2026-06-22T09:40Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-b4a1` |
+| **Orchestration branch** | `cursor/orchestration-agent-system-b51a` |
 | **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
-| **Launch plan** | `docs/launch-plan.md` |
+| **Launch plan** | `docs/launch-plan.md` (on impl branch) |
 | **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
 
 ## Agent rules
 
 1. **Model:** Use `composer-2.5` (non-fast) only.
-2. **Read first:** `orchestration.md` → `docs/launch-plan.md` (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–7).
+2. **Read first:** `orchestration.md` → `docs/launch-plan.md` → `docs/agent-testing.md` if running E2E (do not re-read full git history).
+3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (Phases 0–9 complete).
 4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
-5. **Push gate:** NEVER mark a phase complete without verifying remote:
+5. **E2E trap (important):** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts` only. See `docs/agent-testing.md`.
+6. **Push gate:** NEVER mark a phase complete without verifying remote:
    ```bash
    git push -u origin cursor/concave-cms-launch-plan-26c1
    git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
-   git ls-tree -r --name-only origin/cursor/concave-cms-launch-plan-26c1 | rg contentHistory
    ```
-6. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-b4a1`).
-7. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
-8. **Commit & push** impl branch after review loop passes.
+7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-b51a`).
+8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
+9. **Commit & push** impl branch after review loop passes.
+10. **Check off** completed items in `docs/launch-plan.md` on the impl branch.
 
 ## Current status
 
@@ -40,112 +41,65 @@
 | 3 — Schema engine | ✅ Complete |
 | 4 — Content engine | ✅ Complete |
 | 5 — Draft/publish + preview | ✅ Complete |
-| **6 — Time travel** | ✅ Complete (`3623f93`) |
-| **7 — Admin UX** | ✅ Complete (`45c5a8a`) |
-| **8 — Hardening** | ✅ Complete (`0718a5c`) |
-| **9 — Packaging** | 🔄 **IN PROGRESS** |
+| 6 — Time travel | ✅ Complete (`3623f93`) |
+| 7 — Admin UX | ✅ Complete (`45c5a8a`) |
+| 8 — Hardening | ✅ Complete (`0718a5c`) |
+| 9 — Packaging | ✅ Complete (`1a6dd04`) |
 
-**CI on PR #1:** Pending re-run after impl commit `0718a5c`.
+**Impl branch HEAD:** `1a6dd04` (verified on remote)
 
-**Verified 2026-06-22T05:45Z:** Impl branch pushed to `0718a5c`. Remote contains `convex/auditLog.ts`, `convex/exports.ts`, `convex/lib/rateLimit.ts`, `e2e/a11y.spec.ts`, `e2e/security.spec.ts`, `scripts/backup.mjs`, and Phase 8 launch-plan checkboxes.
+**Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (123/123 checked); release checklist fully checked (8/8).
+
+> **Note:** The orchestration branch workspace may show unchecked items in `docs/launch-plan.md` — that file on `master`/orchestration branches is stale. Always verify against `origin/cursor/concave-cms-launch-plan-26c1`.
 
 ## Active agent
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| Phase 9 impl | composer-2.5 | Phase 9.1–9.3 packaging + release | **spawned** (2026-06-22T05:48Z) |
+| — | — | — | **none** |
 
 ## Completed work (log)
 
-### 2026-06-22T05:48Z — Orchestration cron (branch b4a1)
+### 2026-06-22T09:40Z — Orchestration audit (launch complete)
 
-- Verified Phase 8 (`0718a5c`) on remote impl branch.
-- Spawned Phase 9 agent (`composer-2.5`) for final packaging + release + review/fix loop.
+- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-b51a`)
+- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items on impl branch; release checklist 8/8 checked.
+- **Agents:** No implementation agents running.
+- **Action:** No new implementation agent spawned — launch plan fully implemented.
+- **Next:** Post-launch ops (see below).
 
-### 2026-06-22T05:45Z — Phase 8 launch hardening (security, audit, backup, a11y)
+### 2026-06-22T09:30Z — Orchestration audit (launch complete)
+
+- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-94b4`)
+- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present; 0 unchecked launch-plan items.
+- **Action:** No new implementation agent spawned.
+
+### 2026-06-22T07:12Z — Phase 9 packaging + release
 
 - **Agent:** composer-2.5
 - **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `1a6dd04`
+- **Done:** Docker Compose + Dockerfile + Makefile + install-smoke CI; onboarding wizard (Blog → post → publish); CHANGELOG + release/upgrade/rollback/self-hosted/troubleshooting docs; release checklist fully checked.
+- **Tests:** check ✅ · unit 119 ✅ · E2E onboarding 1/1 ✅ (~12s)
+
+### 2026-06-22T05:45Z — Phase 8 launch hardening
+
 - **Commit:** `0718a5c`
-- **Done:** Rate limiting + input validation + safe FE errors; structured logs/correlation IDs; audit log APIs + `/audit` viewer; backup/restore scripts + migration docs + `/settings` exports; axe a11y + keyboard E2E; security regression tests; launch-plan Phase 8 checked off.
-- **Tests:** `npm run check` ✅ · `npm run test` (119) ✅ · `npx playwright test --retries=2` (32/35 passed; 3 flaky content-publish/CE-02 under full-suite load)
-- **Next:** Phase 9.1 — Self-hosted packaging
+- **Done:** Rate limiting, validation, audit viewer, backup/restore, a11y CI, security regression tests.
 
-### 2026-06-22T03:30Z — Orchestration cron (branch b4a1)
+### 2026-06-22T03:28Z — Phase 7 admin experience
 
-- Verified Phase 6 (`3623f93`) and Phase 7 (`45c5a8a`) on remote impl branch.
-- Spawned Phase 8 agent (`composer-2.5`) for launch hardening + review/fix loop.
-
-### 2026-06-22T03:28Z — Phase 7 admin experience (navigation, Cmd+K, presence, toasts)
-
-- **Agent:** composer-2.5
-- **Branch:** cursor/concave-cms-launch-plan-26c1
 - **Commit:** `45c5a8a`
-- **Done:** `globalSearch` API with RBAC + ranking; presence heartbeat/disconnect with expiry; `getContentEntryNavSummary`; AdminChrome with breadcrumbs, Cmd+K palette, presence avatars, toast notifications; URL-driven content/schema routing; media library route; launch-plan Phase 7 checked off.
-- **Tests:** `npm run check` ✅ · `npm run test` (101) ✅ · `npm run test:e2e -- e2e/navigation.spec.ts e2e/command-search.spec.ts e2e/presence.spec.ts` (6) ✅
-- **Next:** Phase 8.1 — Security hardening
+- **Done:** Global search, presence, breadcrumbs, Cmd+K, toasts, URL routing.
 
-### 2026-06-22T02:36Z — Phase 6 time travel (history, compare, revert)
+### 2026-06-22T02:36Z — Phase 6 time travel
 
-- **Agent:** composer-2.5
-- **Branch:** cursor/concave-cms-launch-plan-26c1
 - **Commit:** `3623f93`
-- **Done:** Full-snapshot version events on create/update/publish/discard; `listEntryHistory`, `compareVersions`, `revertContentEntry` APIs; `ContentHistoryPanel` with timeline, compare, revert confirmation; `content.revert` audit action; launch-plan Phase 6 checked off.
-- **Tests:** `npm run check` ✅ · `npm run test` (96) ✅ · `npm run test:e2e -- e2e/content-history.spec.ts` ✅
-- **Next:** Phase 7.1 — Fluid navigation
+- **Done:** History capture, compare, revert APIs + ContentHistoryPanel.
 
-### 2026-06-22T02:20Z — Orchestration cron (branch b4a1)
+## Next up (post-launch — not launch-plan scope)
 
-- Environment healthy; no implementation agents running.
-- Verified remote impl branch unchanged (`7b98eac`); Phase 6 files absent.
-- Created/updated `orchestration.md` on `cursor/orchestration-agent-system-b4a1`.
-- Spawned Phase 6 agent (`composer-2.5`) with review/fix loop + push verification gate.
-
-### 2026-06-22T01:50Z — Orchestration cron (branch 6598)
-
-- Environment healthy; no implementation agents running.
-- Verified remote impl branch unchanged (`7b98eac`); Phase 6 files absent.
-- Created/updated `orchestration.md` on `cursor/orchestration-agent-system-6598`.
-- Spawned Phase 6 agent (`composer-2.5`) with review/fix loop + push verification gate.
-
-### 2026-06-22 — Prior sessions
-
-- Phases 0–5 verified on impl branch.
-- Phase 6 agents reported complete locally but did not push to `cursor/concave-cms-launch-plan-26c1`.
-- Environment outage blocked one resume attempt.
-
-## Next up
-
-1. **Phase 9.1** — Packaging and install verification (Docker/compose or CLI installer)
-2. **Phase 9.2** — Onboarding flow + quickstart docs
-3. **Phase 9.3** — Release checklist + versioning
-
-## Phase 9 task spec (for implementation agent)
-
-Implement **Phase 9 — Self-hosted packaging, docs, and release** per `docs/launch-plan.md`:
-
-### Step 9.1 — Packaging and install verification
-- **OPS:** Docker/compose or CLI installer with documented requirements
-- **TEST:** Clean-environment install smoke test in CI
-
-### Step 9.2 — Onboarding flow + docs
-- **FE:** In-product onboarding path (Blog + publish first post)
-- **OPS:** Quickstart documentation and troubleshooting
-- **TEST:** E2E onboarding flow with step/time budget
-
-### Step 9.3 — Release checklist + versioning
-- **OPS:** SemVer, changelog, upgrade notes, rollback instructions
-- **TEST:** Release gates require unit + integration + e2e + perf checks
-- Complete release checklist at top of `docs/launch-plan.md` when all gates pass
-
-## Update template (agents: append after review loop)
-
-```markdown
-### YYYY-MM-DD — <short title>
-- **Agent:** composer-2.5
-- **Branch:** cursor/concave-cms-launch-plan-26c1
-- **Commit:** <sha after push verified>
-- **Done:** ...
-- **Tests:** ...
-- **Next:** ...
-```
+1. **Merge PR #1** — `cursor/concave-cms-launch-plan-26c1` → master
+2. **Tag v1.0.0** per `docs/release.md`
+3. **Deploy** and measure live publish p50/p95 from `publishMetrics`
+4. **Staging backup/restore drill** in production-like environment
