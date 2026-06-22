@@ -6,10 +6,10 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T09:00Z |
+| **Last updated** | 2026-06-22T08:00Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-0b5e` |
+| **Orchestration branch** | `cursor/orchestration-agent-system-185e` |
 | **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
 | **Launch plan** | `docs/launch-plan.md` |
 | **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
@@ -26,7 +26,7 @@
    git push -u origin cursor/concave-cms-launch-plan-26c1
    git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
    ```
-7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-0b5e`).
+7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-185e`).
 8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
 9. **Commit & push** impl branch after review loop passes.
 10. **Check off** completed items in `docs/launch-plan.md` on the impl branch.
@@ -48,7 +48,7 @@
 
 **Impl branch HEAD:** `1a6dd04` (verified on remote)
 
-**Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (123/123 checked); release checklist fully checked (8/8).
+**Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (95/95 checked); release checklist fully checked.
 
 ## Active agent
 
@@ -58,13 +58,19 @@
 
 ## Completed work (log)
 
-### 2026-06-22T09:00Z — Orchestration audit (launch complete)
+### 2026-06-22T08:00Z — Orchestration audit (launch complete)
 
-- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-0b5e`)
-- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items (123/123 checked); release checklist 8/8 checked.
+- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-185e`)
+- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items (95/95 checked).
 - **Agents:** No implementation agents running.
 - **Action:** No new implementation agent spawned — launch plan fully implemented.
 - **Next:** Post-launch ops (see below).
+
+### 2026-06-22T07:50Z — Orchestration audit (launch complete)
+
+- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-3caa`)
+- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present; 0 unchecked launch-plan items.
+- **Action:** No new implementation agent spawned.
 
 ### 2026-06-22T07:12Z — Phase 9 packaging + release
 
@@ -73,6 +79,12 @@
 - **Commit:** `1a6dd04`
 - **Done:** Docker Compose + Dockerfile + Makefile + install-smoke CI; onboarding wizard (Blog → post → publish); CHANGELOG + release/upgrade/rollback/self-hosted/troubleshooting docs; release checklist fully checked.
 - **Tests:** check ✅ · unit 119 ✅ · E2E onboarding 1/1 ✅ (~12s)
+- **Next:** Merge PR #1; tag v1.0.0; deploy.
+
+### 2026-06-22T06:38Z — E2E agent hang fix
+
+- **Commit:** `f68c123`
+- **Done:** `scripts/e2e-server.sh` rejects direct execution; added `docs/agent-testing.md`.
 
 ### 2026-06-22T05:45Z — Phase 8 launch hardening
 
