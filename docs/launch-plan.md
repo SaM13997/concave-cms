@@ -244,24 +244,24 @@ Launch is achieved when:
 ## Phase 7 — Admin experience (navigation, Cmd+K search, feedback)
 
 ### Step 7.1 — Fluid navigation (TanStack Start router)
-- [ ] **BE (Owner: BE)**: Optimize queries for fast list/detail navigation.
-- [ ] **FE (Owner: FE)**: Route structure, breadcrumbs, keyboard-first navigation.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: primary navigation paths; no broken states.
+- [x] **BE (Owner: BE)**: Optimize queries for fast list/detail navigation.
+- [x] **FE (Owner: FE)**: Route structure, breadcrumbs, keyboard-first navigation.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: primary navigation paths; no broken states.
   - **Done**: UI feels fast and coherent.
 
 ### Step 7.2 — Command Center (Cmd+K) global search
-- [ ] **BE (Owner: BE)**: Search APIs across content/schema/media with RBAC filtering + ranking.
-- [ ] **FE (Owner: FE)**: Cmd+K palette UI with grouped results and keyboard navigation.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: search finds each entity type; forbidden results never appear.
+- [x] **BE (Owner: BE)**: Search APIs across content/schema/media with RBAC filtering + ranking.
+- [x] **FE (Owner: FE)**: Cmd+K palette UI with grouped results and keyboard navigation.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: search finds each entity type; forbidden results never appear.
   - **Done**: Users can jump to anything instantly.
 
 ### Step 7.3 — Presence indicators + toast notifications
-- [ ] **BE (Owner: BE)**: Presence sessions with expiry; standardized event payloads.
-- [ ] **FE (Owner: FE)**: Presence UI and toast UX.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: two sessions show presence; disconnect clears.
+- [x] **BE (Owner: BE)**: Presence sessions with expiry; standardized event payloads.
+- [x] **FE (Owner: FE)**: Presence UI and toast UX.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: two sessions show presence; disconnect clears.
   - **Done**: Collaboration signals are reliable.
 
 ---

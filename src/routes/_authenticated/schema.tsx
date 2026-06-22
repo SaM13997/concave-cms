@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { ChevronDown, ChevronUp, Download, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -10,7 +10,14 @@ import { useMyRole } from "@/hooks/use-my-role";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
+type SchemaSearch = {
+  table?: string;
+};
+
 export const Route = createFileRoute("/_authenticated/schema")({
+  validateSearch: (search: Record<string, unknown>): SchemaSearch => ({
+    table: typeof search.table === "string" ? search.table : undefined,
+  }),
   component: SchemaBuilderPage,
 });
 
@@ -52,6 +59,8 @@ const FIELD_TYPES: FieldType[] = [
 ];
 
 function SchemaBuilderPage() {
+  const navigate = useNavigate({ from: Route.fullPath });
+  const search = Route.useSearch();
   const { hasPermission, isLoading: roleLoading } = useMyRole();
   const builderState = useQuery(api.schemaBuilder.getBuilderState);
   const createTable = useMutation(api.schemaBuilder.createTable);
@@ -84,10 +93,30 @@ function SchemaBuilderPage() {
   );
 
   useEffect(() => {
+    if (search.table && tables.length > 0) {
+      const match = tables.find((table) => table.slug === search.table);
+      if (match) {
+        setSelectedTableId(match._id);
+        return;
+      }
+    }
     if (!selectedTableId && tables.length > 0) {
       setSelectedTableId(tables[0]._id);
     }
-  }, [tables, selectedTableId]);
+  }, [tables, selectedTableId, search.table]);
+
+  const selectTable = useCallback(
+    (tableId: Id<"schemas">, slug: string) => {
+      setSelectedTableId(tableId);
+      void navigate({
+        search: (prev) => ({
+          ...prev,
+          table: slug,
+        }),
+      });
+    },
+    [navigate],
+  );
 
   const validateTable = useQuery(
     api.schemaBuilder.validateSchema,
@@ -104,12 +133,12 @@ function SchemaBuilderPage() {
     setErrorMessage(null);
     try {
       const result = await createTable({ name: newTableName || "Untitled" });
-      setSelectedTableId(result._id);
+      selectTable(result._id, result.slug);
       setNewTableName("");
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : "Failed to create table");
     }
-  }, [createTable, newTableName]);
+  }, [createTable, newTableName, selectTable]);
 
   const handleAddField = useCallback(async () => {
     if (!selectedTable) return;
@@ -307,7 +336,7 @@ function SchemaBuilderPage() {
               data-testid={`schema-table-${table.slug}`}
               variant={selectedTable?._id === table._id ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedTableId(table._id)}
+              onClick={() => selectTable(table._id, table.slug)}
               type="button"
             >
               {table.name}

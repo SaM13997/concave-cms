@@ -248,3 +248,56 @@ export const debugCounterItemValidator = v.object({
   value: v.number(),
   updatedAt: v.number(),
 });
+
+export const searchEntityTypeValidator = v.union(
+  v.literal("content"),
+  v.literal("schema"),
+  v.literal("media"),
+);
+
+export const searchResultValidator = v.object({
+  id: v.string(),
+  entityType: searchEntityTypeValidator,
+  title: v.string(),
+  subtitle: v.optional(v.string()),
+  href: v.string(),
+  score: v.number(),
+});
+
+export const searchGroupValidator = v.object({
+  entityType: searchEntityTypeValidator,
+  label: v.string(),
+  results: v.array(searchResultValidator),
+});
+
+export const globalSearchResultValidator = v.object({
+  groups: v.array(searchGroupValidator),
+});
+
+export const presenceUserValidator = v.object({
+  userId: v.id("cmsUsers"),
+  name: v.string(),
+  email: v.string(),
+  lastSeenAt: v.number(),
+});
+
+export const contentEntryNavSummaryValidator = v.object({
+  _id: v.id("contentEntries"),
+  title: v.string(),
+  contentType: v.string(),
+  contentTypeName: v.string(),
+  status: entryStatusValidator,
+});
+
+export const toastEventTypeValidator = v.union(
+  v.literal("success"),
+  v.literal("error"),
+  v.literal("info"),
+);
+
+export const toastEventPayloadValidator = v.object({
+  type: toastEventTypeValidator,
+  title: v.string(),
+  message: v.optional(v.string()),
+  durationMs: v.optional(v.number()),
+});

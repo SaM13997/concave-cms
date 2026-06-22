@@ -15,6 +15,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as PreviewTokenRouteImport } from './routes/preview.$token'
 import { Route as PEntryIdRouteImport } from './routes/p.$entryId'
 import { Route as AuthenticatedSchemaRouteImport } from './routes/_authenticated/schema'
+import { Route as AuthenticatedMediaRouteImport } from './routes/_authenticated/media'
 import { Route as AuthenticatedContentRouteImport } from './routes/_authenticated/content'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedDebugSystemRouteImport } from './routes/_authenticated/debug/system'
@@ -49,6 +50,11 @@ const AuthenticatedSchemaRoute = AuthenticatedSchemaRouteImport.update({
   path: '/schema',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedMediaRoute = AuthenticatedMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedContentRoute = AuthenticatedContentRouteImport.update({
   id: '/content',
   path: '/content',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/content': typeof AuthenticatedContentRoute
+  '/media': typeof AuthenticatedMediaRoute
   '/schema': typeof AuthenticatedSchemaRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/content': typeof AuthenticatedContentRoute
+  '/media': typeof AuthenticatedMediaRoute
   '/schema': typeof AuthenticatedSchemaRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/content': typeof AuthenticatedContentRoute
+  '/_authenticated/media': typeof AuthenticatedMediaRoute
   '/_authenticated/schema': typeof AuthenticatedSchemaRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/content'
+    | '/media'
     | '/schema'
     | '/p/$entryId'
     | '/preview/$token'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
   to:
     | '/login'
     | '/content'
+    | '/media'
     | '/schema'
     | '/p/$entryId'
     | '/preview/$token'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/_authenticated/content'
+    | '/_authenticated/media'
     | '/_authenticated/schema'
     | '/p/$entryId'
     | '/preview/$token'
@@ -196,6 +208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSchemaRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/media': {
+      id: '/_authenticated/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof AuthenticatedMediaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/content': {
       id: '/_authenticated/content'
       path: '/content'
@@ -229,6 +248,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedContentRoute: typeof AuthenticatedContentRoute
+  AuthenticatedMediaRoute: typeof AuthenticatedMediaRoute
   AuthenticatedSchemaRoute: typeof AuthenticatedSchemaRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedDebugReactiveRoute: typeof AuthenticatedDebugReactiveRoute
@@ -237,6 +257,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedContentRoute: AuthenticatedContentRoute,
+  AuthenticatedMediaRoute: AuthenticatedMediaRoute,
   AuthenticatedSchemaRoute: AuthenticatedSchemaRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedDebugReactiveRoute: AuthenticatedDebugReactiveRoute,

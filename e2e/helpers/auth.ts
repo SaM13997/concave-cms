@@ -82,6 +82,45 @@ export async function assignRole(page: Page, role: Role): Promise<void> {
   });
 }
 
+export async function disconnectPresence(page: Page): Promise<void> {
+  const token = await getConvexAuthToken(page);
+  const client = new ConvexHttpClient(getConvexUrlFromEnvFile());
+  client.setAuth(token);
+  await client.mutation(api.presence.disconnect, {});
+}
+
+export async function createTestMediaAsset(
+  page: Page,
+  filename: string,
+): Promise<void> {
+  const token = await getConvexAuthToken(page);
+  const client = new ConvexHttpClient(getConvexUrlFromEnvFile());
+  client.setAuth(token);
+
+  const uploadUrl = await client.mutation(api.media.generateUploadUrl, {});
+  const tinyPng = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+    "base64",
+  );
+
+  const uploadResponse = await fetch(uploadUrl, {
+    method: "POST",
+    headers: { "Content-Type": "image/png" },
+    body: tinyPng,
+  });
+  if (!uploadResponse.ok) {
+    throw new Error(`Failed to upload test media asset: ${uploadResponse.status}`);
+  }
+
+  const { storageId } = (await uploadResponse.json()) as { storageId: string };
+  await client.mutation(api.media.createMediaAsset, {
+    storageId,
+    filename,
+    mimeType: "image/png",
+    sizeBytes: tinyPng.length,
+  });
+}
+
 async function getConvexAuthToken(page: Page): Promise<string> {
   const token = await page.evaluate(async () => {
     const response = await fetch("/api/auth/convex/token", { credentials: "include" });

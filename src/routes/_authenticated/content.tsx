@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentEntryEditor } from "@/components/content/ContentEntryEditor";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
@@ -8,12 +8,23 @@ import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useListKeyboardNavigation } from "@/hooks/use-keyboard-navigation";
 import { useMyRole } from "@/hooks/use-my-role";
+import { useToast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
+type ContentSearch = {
+  type?: string;
+  entry?: string;
+};
+
 export const Route = createFileRoute("/_authenticated/content")({
+  validateSearch: (search: Record<string, unknown>): ContentSearch => ({
+    type: typeof search.type === "string" ? search.type : undefined,
+    entry: typeof search.entry === "string" ? search.entry : undefined,
+  }),
   component: ContentPage,
 });
 
@@ -59,25 +70,65 @@ function StatusBadge({
 }
 
 function ContentPage() {
+  const navigate = useNavigate({ from: Route.fullPath });
+  const search = Route.useSearch();
+  const { showToast } = useToast();
   const { hasPermission, isLoading: roleLoading } = useMyRole();
   const canQuery = !roleLoading && hasPermission("content:read");
   const canWrite = !roleLoading && hasPermission("content:write");
 
   const contentTypes = useQuery(api.content.listContentTypes, canQuery ? {} : "skip");
-  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const selectedType = search.type ?? null;
+  const selectedId = (search.entry as Id<"contentEntries"> | undefined) ?? null;
+
+  const setSelectedType = useCallback(
+    (type: string | null) => {
+      void navigate({
+        search: (prev) => ({
+          ...prev,
+          type: type ?? undefined,
+          entry: undefined,
+        }),
+      });
+    },
+    [navigate],
+  );
+
+  const setSelectedId = useCallback(
+    (entryId: Id<"contentEntries"> | null) => {
+      void navigate({
+        search: (prev) => ({
+          ...prev,
+          entry: entryId ?? undefined,
+        }),
+      });
+    },
+    [navigate],
+  );
 
   useEffect(() => {
     if (contentTypes && contentTypes.length > 0 && !selectedType) {
       setSelectedType(contentTypes[0]?.slug ?? null);
     }
-  }, [contentTypes, selectedType]);
+  }, [contentTypes, selectedType, setSelectedType]);
 
   const entries = useQuery(
     api.content.listContentEntries,
     canQuery && selectedType ? { contentType: selectedType } : "skip",
   );
 
-  const [selectedId, setSelectedId] = useState<Id<"contentEntries"> | null>(null);
+  const entryNavItems = useMemo(
+    () => (entries ?? []).map((entry) => ({ id: entry._id })),
+    [entries],
+  );
+
+  useListKeyboardNavigation(
+    entryNavItems,
+    selectedId,
+    (id) => setSelectedId(id as Id<"contentEntries">),
+    Boolean(selectedType && entries && entries.length > 0),
+  );
+
   const selectedEntry = useQuery(
     api.content.getContentEntry,
     canQuery && selectedId ? { entryId: selectedId } : "skip",
@@ -138,8 +189,14 @@ function ContentPage() {
       setTitle("");
       setSelectedId(created._id);
       resetPublishPreviewState();
+      showToast({ type: "success", title: "Entry created", message: created.title });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create entry");
+      showToast({
+        type: "error",
+        title: "Create failed",
+        message: err instanceof Error ? err.message : undefined,
+      });
     }
   };
 
@@ -154,12 +211,18 @@ function ContentPage() {
         data: editData,
       });
       setSaveStatus("saved");
+      showToast({ type: "success", title: "Saved", message: editTitle });
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (err) {
       setSaveStatus("idle");
       setError(err instanceof Error ? err.message : "Failed to save entry");
+      showToast({
+        type: "error",
+        title: "Save failed",
+        message: err instanceof Error ? err.message : undefined,
+      });
     }
-  }, [selectedId, editTitle, editData, updateEntry]);
+  }, [selectedId, editTitle, editData, updateEntry, showToast]);
 
   const handlePublish = async () => {
     if (!selectedId) return;
@@ -176,9 +239,15 @@ function ContentPage() {
       if (durationMs < 200) {
         setPublishStatus("fast");
         setPublishMessage(`Published in ${durationMs}ms`);
+        showToast({ type: "success", title: "Published", message: `Completed in ${durationMs}ms` });
       } else {
         setPublishStatus("slow");
         setPublishMessage(`Published in ${durationMs}ms (slower than 200ms target)`);
+        showToast({
+          type: "info",
+          title: "Published",
+          message: `Completed in ${durationMs}ms (above 200ms target)`,
+        });
       }
 
       setTimeout(() => {
@@ -189,6 +258,11 @@ function ContentPage() {
       setPublishStatus("error");
       setPublishMessage(err instanceof Error ? err.message : "Publish failed");
       setError(err instanceof Error ? err.message : "Publish failed");
+      showToast({
+        type: "error",
+        title: "Publish failed",
+        message: err instanceof Error ? err.message : undefined,
+      });
     }
   };
 
@@ -270,7 +344,6 @@ function ContentPage() {
                   data-testid={`content-type-${type.slug}`}
                   onClick={() => {
                     setSelectedType(type.slug);
-                    setSelectedId(null);
                     resetPublishPreviewState();
                   }}
                   className={cn(
