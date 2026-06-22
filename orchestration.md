@@ -6,12 +6,12 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T08:20Z |
+| **Last updated** | 2026-06-22T10:10Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-07e2` |
+| **Orchestration branch** | `cursor/orchestration-agent-system-08fb` |
 | **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
-| **Launch plan** | `docs/launch-plan.md` |
+| **Launch plan** | `docs/launch-plan.md` (on impl branch — fully checked) |
 | **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
 
 ## Agent rules
@@ -26,7 +26,7 @@
    git push -u origin cursor/concave-cms-launch-plan-26c1
    git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
    ```
-7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-07e2`).
+7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-08fb`).
 8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
 9. **Commit & push** impl branch after review loop passes.
 10. **Check off** completed items in `docs/launch-plan.md` on the impl branch.
@@ -50,6 +50,8 @@
 
 **Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (123/123 checked); release checklist fully checked.
 
+> **Note:** The orchestration branch (`master` base) still shows unchecked items in `docs/launch-plan.md`. Implementation truth lives on `cursor/concave-cms-launch-plan-26c1`.
+
 ## Active agent
 
 | Agent | Model | Task | Status |
@@ -58,19 +60,13 @@
 
 ## Completed work (log)
 
-### 2026-06-22T08:20Z — Orchestration audit (launch complete)
+### 2026-06-22T10:10Z — Orchestration audit (launch complete)
 
-- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-07e2`)
-- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items (123/123 checked); release checklist 8/8 checked.
+- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-08fb`)
+- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items on impl branch; release checklist fully checked.
 - **Agents:** No implementation agents running.
 - **Action:** No new implementation agent spawned — launch plan fully implemented.
 - **Next:** Post-launch ops (see below).
-
-### 2026-06-22T07:50Z — Orchestration audit (launch complete)
-
-- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-3caa`)
-- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present; 0 unchecked launch-plan items.
-- **Action:** No new implementation agent spawned.
 
 ### 2026-06-22T07:12Z — Phase 9 packaging + release
 
