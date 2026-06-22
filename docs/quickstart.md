@@ -65,8 +65,10 @@ Open [http://localhost:3000](http://localhost:3000). Admin routes require sign-i
 ```bash
 bun run check   # typecheck + lint
 bun run test    # unit tests
-bun run test:e2e  # Playwright E2E (starts Convex + Vite via scripts/e2e-server.sh)
+bun run test:e2e  # Playwright E2E (auto-starts servers — do not run scripts/e2e-server.sh manually)
 ```
+
+> **Cloud agents:** Read [`docs/agent-testing.md`](./agent-testing.md) — never run `scripts/e2e-server.sh` directly (it blocks forever).
 
 ## Troubleshooting
 

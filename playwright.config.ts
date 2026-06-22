@@ -21,6 +21,7 @@ export default defineConfig({
     reuseExistingServer: false,
     timeout: 300_000,
     env: {
+      PLAYWRIGHT_E2E_SERVER: "1",
       CONVEX_AGENT_MODE: "anonymous",
       E2E_TEST_SECRET,
       BETTER_AUTH_SECRET: "test-better-auth-secret-value-32c",

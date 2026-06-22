@@ -1,6 +1,26 @@
 #!/usr/bin/env bash
-# Starts Convex dev + Vite for Playwright E2E tests.
+# Playwright webServer entrypoint — blocks forever by design (keeps Convex + Vite alive).
+#
+# AGENTS: Do NOT run or deeply inspect this script. It will hang your session.
+#   • E2E docs (read this instead): docs/agent-testing.md
+#   • Run E2E: npm run test:e2e -- e2e/<spec>.spec.ts
+#   • Review loop: npm run check && npm run test
 set -euo pipefail
+
+if [[ "${PLAYWRIGHT_E2E_SERVER:-}" != "1" ]]; then
+  cat >&2 <<'EOF'
+ERROR: scripts/e2e-server.sh must not be run directly — it starts long-running servers and blocks forever.
+
+Agents should read docs/agent-testing.md instead of this script.
+
+Run E2E via Playwright:
+  npm run test:e2e -- e2e/navigation.spec.ts
+
+Validate without E2E (preferred for review loops):
+  npm run check && npm run test
+EOF
+  exit 1
+fi
 
 export CONVEX_AGENT_MODE="${CONVEX_AGENT_MODE:-anonymous}"
 export E2E_TEST_SECRET="${E2E_TEST_SECRET:-e2e-test-secret-value-32chars}"
@@ -10,12 +30,8 @@ export SITE_URL="${SITE_URL:-http://localhost:3000}"
 export VITE_APP_ENV="${VITE_APP_ENV:-development}"
 
 cleanup() {
-  if [[ -n "${CONVEX_PID:-}" ]]; then
-    kill "$CONVEX_PID" 2>/dev/null || true
-  fi
-  if [[ -n "${VITE_PID:-}" ]]; then
-    kill "$VITE_PID" 2>/dev/null || true
-  fi
+  pkill -f "convex dev" 2>/dev/null || true
+  pkill -f "vite dev --port 3000" 2>/dev/null || true
 }
 trap cleanup EXIT INT TERM
 
@@ -31,59 +47,9 @@ SITE_URL=${SITE_URL}
 VITE_APP_ENV=${VITE_APP_ENV}
 EOF
 
-CONVEX_LOG="$(mktemp)"
-npx convex dev >"$CONVEX_LOG" 2>&1 &
-CONVEX_PID=$!
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export E2E_TEST_SECRET BETTER_AUTH_SECRET BETTER_AUTH_URL SITE_URL VITE_APP_ENV
 
-echo "Waiting for Convex dev..."
-for _ in $(seq 1 120); do
-  if grep -q "Convex functions ready" "$CONVEX_LOG" 2>/dev/null; then
-    echo "Convex is ready"
-    npx convex env set E2E_TEST_SECRET "${E2E_TEST_SECRET}" >/dev/null 2>&1 || true
-    break
-  fi
-  if ! kill -0 "$CONVEX_PID" 2>/dev/null; then
-    echo "Convex dev exited unexpectedly:"
-    cat "$CONVEX_LOG"
-    exit 1
-  fi
-  sleep 1
-done
-
-if [[ ! -f .env.local ]]; then
-  echo "Missing .env.local after convex dev"
-  cat "$CONVEX_LOG"
-  exit 1
-fi
-
-set -a
-# shellcheck disable=SC1091
-source .env.local
-set +a
-
-if [[ -z "${VITE_CONVEX_SITE_URL:-}" && "${VITE_CONVEX_URL:-}" =~ :([0-9]+)$ ]]; then
-  CONVEX_PORT="${BASH_REMATCH[1]}"
-  VITE_CONVEX_SITE_URL="${VITE_CONVEX_URL%:*}:$((CONVEX_PORT + 1))"
-  export VITE_CONVEX_SITE_URL
-fi
-
-export E2E_TEST_SECRET BETTER_AUTH_SECRET BETTER_AUTH_URL SITE_URL VITE_APP_ENV VITE_CONVEX_URL VITE_CONVEX_SITE_URL
-
-npm run dev >"${CONVEX_LOG}.vite" 2>&1 &
-VITE_PID=$!
-
-echo "Waiting for app at http://localhost:3000..."
-for _ in $(seq 1 120); do
-  if curl -sf "http://localhost:3000/login" >/dev/null 2>&1; then
-    echo "App is ready at http://localhost:3000 (Convex: ${VITE_CONVEX_URL})"
-    break
-  fi
-  if ! kill -0 "$VITE_PID" 2>/dev/null; then
-    echo "Vite exited unexpectedly:"
-    cat "${CONVEX_LOG}.vite"
-    exit 1
-  fi
-  sleep 1
-done
-
-wait "$VITE_PID"
+# Convex starts the frontend via --run-sh once the backend push succeeds.
+# Playwright polls http://localhost:3000/login until ready (see playwright.config.ts).
+exec npx convex dev --run-sh "bash ${ROOT_DIR}/scripts/e2e-start-frontend.sh"
