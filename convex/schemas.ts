@@ -3,6 +3,8 @@ import { v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { writeAuditLog } from "./lib/audit";
+import { createCorrelationId, logStructured } from "./lib/logging";
+import { enforceRateLimit } from "./lib/rateLimit";
 import { type AuthedRoleCtx, adminMutation, adminQuery } from "./lib/rbac";
 import { planSchemaApply } from "./lib/schemaApply";
 import { countEntriesWithField } from "./lib/schemaDestructive";
@@ -656,6 +658,15 @@ export const applySchema = adminMutation({
   ),
   handler: async (ctx, args) => {
     const roleCtx = ctx as typeof ctx & AuthedRoleCtx;
+    const correlationId = createCorrelationId();
+    await enforceRateLimit(ctx, "schema_apply", roleCtx.cmsUser._id);
+
+    logStructured("info", "schema.apply.start", {
+      correlationId,
+      schemaId: args.schemaId,
+      actorId: roleCtx.cmsUser._id,
+    });
+
     const schema = await getSchemaOrThrow(ctx, args.schemaId);
     const now = Date.now();
     const activeSlugs = await getActiveSchemaSlugs(ctx);
@@ -750,7 +761,14 @@ export const applySchema = adminMutation({
       resourceType: "schema",
       resourceId: schema.slug,
       actorId: roleCtx.cmsUser._id,
+      correlationId,
       metadata: { version: newVersion },
+    });
+
+    logStructured("info", "schema.apply.complete", {
+      correlationId,
+      schemaId: schema._id,
+      version: newVersion,
     });
 
     return { success: true as const, version: newVersion };

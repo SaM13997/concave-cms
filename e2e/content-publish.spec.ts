@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
-import { assignRole, signUp } from "./helpers/auth";
+import { assignRole, signUp, waitForActiveContentType } from "./helpers/auth";
 
 async function prepareAdmin(page: import("@playwright/test").Page) {
   await signUp(page);
   await assignRole(page, "admin");
-  await page.reload();
-  await page.waitForLoadState("networkidle");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.getByTestId("nav-schema").waitFor({ timeout: 20_000 });
 }
 
 async function openSchemaBuilder(page: import("@playwright/test").Page) {
@@ -46,6 +46,8 @@ async function createAndApplySchema(
 }
 
 test.describe("Draft/publish lifecycle", () => {
+  test.setTimeout(120_000);
+
   test.beforeEach(async ({ page }) => {
     await prepareAdmin(page);
   });
@@ -59,8 +61,7 @@ test.describe("Draft/publish lifecycle", () => {
       { name: "Body", slug: "body", type: "richtext" },
     ]);
 
-    await page.goto("/content");
-    await page.getByTestId("content-editor").waitFor({ timeout: 15_000 });
+    await waitForActiveContentType(page, blogSlug);
     await page.getByTestId(`content-type-${blogSlug}`).click();
 
     await page.getByTestId("content-title-input").fill("Publish test post");

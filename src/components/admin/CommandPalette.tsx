@@ -68,6 +68,40 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
   useEffect(() => {
     if (!open) {
+      return;
+    }
+
+    const dialog = document.querySelector('[data-testid="command-palette"] [role="dialog"]');
+    if (!(dialog instanceof HTMLElement)) {
+      return;
+    }
+
+    const focusable = dialog.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+    );
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    const onDialogKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || focusable.length === 0) {
+        return;
+      }
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+
+    dialog.addEventListener("keydown", onDialogKeyDown);
+    return () => dialog.removeEventListener("keydown", onDialogKeyDown);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) {
       setQuery("");
       setActiveIndex(0);
     }

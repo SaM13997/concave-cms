@@ -5,6 +5,7 @@ import {
   isPreviewTokenExpired,
   isPreviewTokenRevoked,
 } from "./lib/previewToken";
+import { enforceRateLimit } from "./lib/rateLimit";
 import { type AuthedRoleCtx, editorMutation, editorQuery } from "./lib/rbac";
 import { previewTokenListItemValidator } from "./lib/systemValidators";
 
@@ -52,6 +53,8 @@ export const generatePreviewToken = editorMutation({
   }),
   handler: async (ctx, args) => {
     const roleCtx = ctx as typeof ctx & AuthedRoleCtx;
+    await enforceRateLimit(ctx, "preview_token", roleCtx.cmsUser._id);
+
     const entry = await ctx.db.get(args.entryId);
     if (!entry) {
       throw new Error("Content entry not found");

@@ -146,6 +146,12 @@ export default defineSchema({
     value: v.number(),
     updatedAt: v.number(),
   }).index("by_label", ["label"]),
+
+  rateLimitEvents: defineTable({
+    key: v.string(),
+    windowStart: v.number(),
+    count: v.number(),
+  }).index("by_key", ["key"]),
 });
 
 // Re-export field type for use elsewhere

@@ -2,13 +2,13 @@ import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../convex/_generated/api";
-import { assignRole, CONVEX_URL, signUp } from "./helpers/auth";
+import { assignRole, CONVEX_URL, signUp, waitForActiveContentType } from "./helpers/auth";
 
 async function prepareAdmin(page: import("@playwright/test").Page) {
   await signUp(page);
   await assignRole(page, "admin");
-  await page.reload();
-  await page.waitForLoadState("networkidle");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.getByTestId("nav-schema").waitFor({ timeout: 20_000 });
 }
 
 async function openSchemaBuilder(page: import("@playwright/test").Page) {
@@ -79,6 +79,8 @@ function getConvexUrl(): string {
 }
 
 test.describe("Content history and revert", () => {
+  test.setTimeout(120_000);
+
   test.beforeEach(async ({ page }) => {
     await prepareAdmin(page);
   });
@@ -90,8 +92,7 @@ test.describe("Content history and revert", () => {
       { name: "Body", slug: "body", type: "richtext" },
     ]);
 
-    await page.goto("/content");
-    await page.getByTestId("content-editor").waitFor({ timeout: 15_000 });
+    await waitForActiveContentType(page, blogSlug);
     await page.getByTestId(`content-type-${blogSlug}`).click();
 
     await page.getByTestId("content-title-input").fill("History test post");

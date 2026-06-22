@@ -7,6 +7,7 @@ import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMyRole } from "@/hooks/use-my-role";
+import { toSafeErrorMessage } from "@/lib/safe-error";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -62,7 +63,8 @@ function SchemaBuilderPage() {
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
   const { hasPermission, isLoading: roleLoading } = useMyRole();
-  const builderState = useQuery(api.schemaBuilder.getBuilderState);
+  const canReadSchema = !roleLoading && hasPermission("schema:read");
+  const builderState = useQuery(api.schemaBuilder.getBuilderState, canReadSchema ? {} : "skip");
   const createTable = useMutation(api.schemaBuilder.createTable);
   const addField = useMutation(api.schemaBuilder.addField);
   const updateField = useMutation(api.schemaBuilder.updateField);
@@ -70,7 +72,7 @@ function SchemaBuilderPage() {
   const reorderFields = useMutation(api.schemaBuilder.reorderFields);
   const applySchema = useMutation(api.schemaBuilder.applySchema);
   const discardDraft = useMutation(api.schemaBuilder.discardSchemaDraft);
-  const exportData = useQuery(api.schemaBuilder.exportSchemas, {});
+  const exportData = useQuery(api.schemaBuilder.exportSchemas, canReadSchema ? {} : "skip");
 
   const [selectedTableId, setSelectedTableId] = useState<Id<"schemas"> | null>(null);
   const [newTableName, setNewTableName] = useState("");
@@ -136,7 +138,7 @@ function SchemaBuilderPage() {
       selectTable(result._id, result.slug);
       setNewTableName("");
     } catch (err) {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to create table");
+      setErrorMessage(toSafeErrorMessage(err, "Failed to create table"));
     }
   }, [createTable, newTableName, selectTable]);
 
@@ -150,7 +152,7 @@ function SchemaBuilderPage() {
         field: { slug, name: "New Field", type: "text", required: false, config: {} },
       });
     } catch (err) {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to add field");
+      setErrorMessage(toSafeErrorMessage(err, "Failed to add field"));
     }
   }, [addField, selectedTable]);
 
@@ -167,7 +169,7 @@ function SchemaBuilderPage() {
           field: updated,
         });
       } catch (err) {
-        setErrorMessage(err instanceof Error ? err.message : "Failed to update field");
+        setErrorMessage(toSafeErrorMessage(err, "Failed to update field"));
       }
     },
     [updateField, selectedTable],
@@ -183,7 +185,7 @@ function SchemaBuilderPage() {
           confirmDestructive,
         });
       } catch (err) {
-        const msg = err instanceof Error ? err.message : "Failed to delete field";
+        const msg = toSafeErrorMessage(err, "Failed to delete field");
         if (msg.includes("Confirm destructive")) {
           setDestructiveChanges([{ message: msg, affectedEntryCount: 0 }]);
           setShowDestructiveModal(true);
@@ -245,7 +247,7 @@ function SchemaBuilderPage() {
         }
       } catch (err) {
         setApplyProgress(null);
-        setErrorMessage(err instanceof Error ? err.message : "Apply interrupted");
+        setErrorMessage(toSafeErrorMessage(err, "Apply interrupted"));
       }
     },
     [applySchema, selectedTable],
@@ -258,7 +260,7 @@ function SchemaBuilderPage() {
       setValidationErrors([]);
       setErrorMessage(null);
     } catch (err) {
-      setErrorMessage(err instanceof Error ? err.message : "Failed to discard draft");
+      setErrorMessage(toSafeErrorMessage(err, "Failed to discard draft"));
     }
   }, [discardDraft, selectedTable]);
 

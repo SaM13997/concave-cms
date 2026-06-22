@@ -20,12 +20,24 @@ export const Route = createFileRoute("/_authenticated")({
 function AuthenticatedLayout() {
   return (
     <ToastProvider>
-      <RoleBootstrap />
-      <PresenceTracker />
-      <AdminChrome>
-        <Outlet />
-      </AdminChrome>
-      <BottomNav />
+      <button
+        type="button"
+        onClick={() => {
+          document.getElementById("main-content")?.focus();
+        }}
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:shadow-lg"
+      >
+        Skip to main content
+      </button>
+      <RoleBootstrap>
+        <PresenceTracker />
+        <AdminChrome>
+          <main id="main-content" tabIndex={-1}>
+            <Outlet />
+          </main>
+        </AdminChrome>
+        <BottomNav />
+      </RoleBootstrap>
     </ToastProvider>
   );
 }

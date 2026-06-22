@@ -269,32 +269,32 @@ Launch is achieved when:
 ## Phase 8 — Launch hardening (security, a11y, ops)
 
 ### Step 8.1 — Security hardening
-- [ ] **BE (Owner: SEC/BE)**: Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
-- [ ] **FE (Owner: FE)**: Safe error messages; no sensitive data leaks.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Security regression suite: RBAC bypass, expired preview token, replay attempts, injection-style payloads.
+- [x] **BE (Owner: SEC/BE)**: Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
+- [x] **FE (Owner: FE)**: Safe error messages; no sensitive data leaks.
+- [x] **TEST (Owner: QA)**:
+  - [x] Security regression suite: RBAC bypass, expired preview token, replay attempts, injection-style payloads.
   - **Done**: Common abuse paths are tested and mitigated.
 
 ### Step 8.2 — Observability + audit log UI
-- [ ] **BE (Owner: BE/OPS)**: Structured logs; correlation IDs; audit log query APIs.
-- [ ] **FE (Owner: FE)**: Audit log viewer (filters, drill-down).
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Smoke: audit events appear for schema changes and publish.
+- [x] **BE (Owner: BE/OPS)**: Structured logs; correlation IDs; audit log query APIs.
+- [x] **FE (Owner: FE)**: Audit log viewer (filters, drill-down).
+- [x] **TEST (Owner: QA)**:
+  - [x] Smoke: audit events appear for schema changes and publish.
   - **Done**: Operators can debug issues.
 
 ### Step 8.3 — Backup/restore + upgrade/migrations (self-hosted requirement)
-- [ ] **BE (Owner: OPS/BE)**: Backup/restore scripts and verified restore drill.
-- [ ] **BE (Owner: BE)**: Migration strategy for schema/content evolution.
-- [ ] **FE (Owner: FE)**: Export tools in UI (at least schema + content snapshot exports).
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Restore drill: backup → wipe → restore → smoke test passes.
+- [x] **BE (Owner: OPS/BE)**: Backup/restore scripts and verified restore drill.
+- [x] **BE (Owner: BE)**: Migration strategy for schema/content evolution.
+- [x] **FE (Owner: FE)**: Export tools in UI (at least schema + content snapshot exports).
+- [x] **TEST (Owner: QA)**:
+  - [x] Restore drill: backup → wipe → restore → smoke test passes.
   - **Done**: Users can recover and upgrade safely.
 
 ### Step 8.4 — Accessibility baseline
-- [ ] **FE (Owner: FE)**: Keyboard nav, focus management, semantics, contrast, empty/loading/error states.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Automated a11y checks on core routes.
-  - [ ] Keyboard-only E2E for Cmd+K + schema builder.
+- [x] **FE (Owner: FE)**: Keyboard nav, focus management, semantics, contrast, empty/loading/error states.
+- [x] **TEST (Owner: QA)**:
+  - [x] Automated a11y checks on core routes.
+  - [x] Keyboard-only E2E for Cmd+K + schema builder.
   - **Done**: Admin UI meets baseline accessibility expectations.
 
 ---

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useListKeyboardNavigation } from "@/hooks/use-keyboard-navigation";
 import { useMyRole } from "@/hooks/use-my-role";
+import { toSafeErrorMessage } from "@/lib/safe-error";
 import { useToast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { api } from "../../../convex/_generated/api";
@@ -191,11 +192,11 @@ function ContentPage() {
       resetPublishPreviewState();
       showToast({ type: "success", title: "Entry created", message: created.title });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create entry");
+      setError(toSafeErrorMessage(err, "Failed to create entry"));
       showToast({
         type: "error",
         title: "Create failed",
-        message: err instanceof Error ? err.message : undefined,
+        message: toSafeErrorMessage(err),
       });
     }
   };
@@ -215,11 +216,11 @@ function ContentPage() {
       setTimeout(() => setSaveStatus("idle"), 2000);
     } catch (err) {
       setSaveStatus("idle");
-      setError(err instanceof Error ? err.message : "Failed to save entry");
+      setError(toSafeErrorMessage(err, "Failed to save entry"));
       showToast({
         type: "error",
         title: "Save failed",
-        message: err instanceof Error ? err.message : undefined,
+        message: toSafeErrorMessage(err),
       });
     }
   }, [selectedId, editTitle, editData, updateEntry, showToast]);
@@ -256,12 +257,12 @@ function ContentPage() {
       }, 4000);
     } catch (err) {
       setPublishStatus("error");
-      setPublishMessage(err instanceof Error ? err.message : "Publish failed");
-      setError(err instanceof Error ? err.message : "Publish failed");
+      setPublishMessage(toSafeErrorMessage(err, "Publish failed"));
+      setError(toSafeErrorMessage(err, "Publish failed"));
       showToast({
         type: "error",
         title: "Publish failed",
-        message: err instanceof Error ? err.message : undefined,
+        message: toSafeErrorMessage(err),
       });
     }
   };
@@ -272,7 +273,7 @@ function ContentPage() {
     try {
       await discardDraftMutation({ entryId: selectedId });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to discard draft");
+      setError(toSafeErrorMessage(err, "Failed to discard draft"));
     }
   };
 
@@ -288,7 +289,7 @@ function ContentPage() {
       setPreviewUrl(url);
       setPreviewCopied(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate preview link");
+      setError(toSafeErrorMessage(err, "Failed to generate preview link"));
     }
   };
 
@@ -304,7 +305,7 @@ function ContentPage() {
     try {
       await revokePreviewToken({ tokenId });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to revoke preview token");
+      setError(toSafeErrorMessage(err, "Failed to revoke preview token"));
     }
   };
 

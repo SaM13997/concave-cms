@@ -1,4 +1,5 @@
 import { v } from "convex/values";
+import { sanitizeSearchQuery } from "./lib/inputValidation";
 import { roleHasPermission } from "./lib/permissions";
 import { type AuthedRoleCtx, authedQueryWithRole } from "./lib/rbac";
 import { rankSearchMatch, sortByScore } from "./lib/searchRanking";
@@ -14,7 +15,7 @@ export const globalSearch = authedQueryWithRole({
   returns: globalSearchResultValidator,
   handler: async (ctx, args) => {
     const roleCtx = ctx as typeof ctx & AuthedRoleCtx;
-    const query = args.query.trim();
+    const query = sanitizeSearchQuery(args.query);
     const limit = Math.min(args.limitPerGroup ?? DEFAULT_LIMIT_PER_GROUP, 20);
 
     if (query.length < 1) {

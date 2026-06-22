@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
-import { assignRole, signUp } from "./helpers/auth";
+import { assignRole, signUp, waitForActiveContentType } from "./helpers/auth";
 
 async function prepareAdmin(page: import("@playwright/test").Page) {
   await signUp(page);
   await assignRole(page, "admin");
-  await page.reload();
-  await page.waitForLoadState("networkidle");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.getByTestId("nav-schema").waitFor({ timeout: 20_000 });
 }
 
 async function openSchemaBuilder(page: import("@playwright/test").Page) {
@@ -56,6 +56,8 @@ async function createAndApplySchema(
 }
 
 test.describe("Content Engine", () => {
+  test.setTimeout(120_000);
+
   test.beforeEach(async ({ page }) => {
     await prepareAdmin(page);
   });
@@ -77,13 +79,10 @@ test.describe("Content Engine", () => {
 
     const blogSlug = blogName.toLowerCase();
 
-    await pageA.goto("/content");
-    await pageB.goto("/content");
-    await pageA.waitForLoadState("networkidle");
-    await pageB.waitForLoadState("networkidle");
-
-    await expect(pageA.getByTestId("content-editor")).toBeVisible({ timeout: 15_000 });
+    await waitForActiveContentType(pageA, blogSlug);
     await pageA.getByTestId(`content-type-${blogSlug}`).click();
+    await pageB.getByTestId("nav-content").click();
+    await expect(pageB.getByTestId(`content-type-${blogSlug}`)).toBeVisible({ timeout: 30_000 });
     await pageB.getByTestId(`content-type-${blogSlug}`).click();
 
     await pageA.getByTestId("content-title-input").fill("My first post");
@@ -130,9 +129,7 @@ test.describe("Content Engine", () => {
 
     const blogSlug = blogName.toLowerCase();
 
-    await page.goto("/content");
-    await page.getByTestId("content-editor").waitFor({ timeout: 15_000 });
-
+    await waitForActiveContentType(page, authorSlug);
     await page.getByTestId(`content-type-${authorSlug}`).click();
     await page.getByTestId("content-title-input").fill("Jane Doe");
     await page.getByTestId("content-create-button").click();

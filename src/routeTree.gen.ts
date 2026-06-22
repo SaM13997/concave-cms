@@ -14,9 +14,11 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as PreviewTokenRouteImport } from './routes/preview.$token'
 import { Route as PEntryIdRouteImport } from './routes/p.$entryId'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSchemaRouteImport } from './routes/_authenticated/schema'
 import { Route as AuthenticatedMediaRouteImport } from './routes/_authenticated/media'
 import { Route as AuthenticatedContentRouteImport } from './routes/_authenticated/content'
+import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedDebugSystemRouteImport } from './routes/_authenticated/debug/system'
 import { Route as AuthenticatedDebugReactiveRouteImport } from './routes/_authenticated/debug/reactive'
@@ -45,6 +47,11 @@ const PEntryIdRoute = PEntryIdRouteImport.update({
   path: '/p/$entryId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedSchemaRoute = AuthenticatedSchemaRouteImport.update({
   id: '/schema',
   path: '/schema',
@@ -58,6 +65,11 @@ const AuthenticatedMediaRoute = AuthenticatedMediaRouteImport.update({
 const AuthenticatedContentRoute = AuthenticatedContentRouteImport.update({
   id: '/content',
   path: '/content',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -81,9 +93,11 @@ const AuthenticatedDebugReactiveRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
+  '/audit': typeof AuthenticatedAuditRoute
   '/content': typeof AuthenticatedContentRoute
   '/media': typeof AuthenticatedMediaRoute
   '/schema': typeof AuthenticatedSchemaRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
   '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
@@ -92,9 +106,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/audit': typeof AuthenticatedAuditRoute
   '/content': typeof AuthenticatedContentRoute
   '/media': typeof AuthenticatedMediaRoute
   '/schema': typeof AuthenticatedSchemaRoute
+  '/settings': typeof AuthenticatedSettingsRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
   '/': typeof AuthenticatedIndexRoute
@@ -106,9 +122,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/content': typeof AuthenticatedContentRoute
   '/_authenticated/media': typeof AuthenticatedMediaRoute
   '/_authenticated/schema': typeof AuthenticatedSchemaRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
@@ -121,9 +139,11 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/audit'
     | '/content'
     | '/media'
     | '/schema'
+    | '/settings'
     | '/p/$entryId'
     | '/preview/$token'
     | '/debug/reactive'
@@ -132,9 +152,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/audit'
     | '/content'
     | '/media'
     | '/schema'
+    | '/settings'
     | '/p/$entryId'
     | '/preview/$token'
     | '/'
@@ -145,9 +167,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/audit'
     | '/_authenticated/content'
     | '/_authenticated/media'
     | '/_authenticated/schema'
+    | '/_authenticated/settings'
     | '/p/$entryId'
     | '/preview/$token'
     | '/_authenticated/'
@@ -201,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PEntryIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/schema': {
       id: '/_authenticated/schema'
       path: '/schema'
@@ -220,6 +251,13 @@ declare module '@tanstack/react-router' {
       path: '/content'
       fullPath: '/content'
       preLoaderRoute: typeof AuthenticatedContentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/api/auth/$': {
@@ -247,18 +285,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
   AuthenticatedContentRoute: typeof AuthenticatedContentRoute
   AuthenticatedMediaRoute: typeof AuthenticatedMediaRoute
   AuthenticatedSchemaRoute: typeof AuthenticatedSchemaRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedDebugReactiveRoute: typeof AuthenticatedDebugReactiveRoute
   AuthenticatedDebugSystemRoute: typeof AuthenticatedDebugSystemRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
   AuthenticatedContentRoute: AuthenticatedContentRoute,
   AuthenticatedMediaRoute: AuthenticatedMediaRoute,
   AuthenticatedSchemaRoute: AuthenticatedSchemaRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedDebugReactiveRoute: AuthenticatedDebugReactiveRoute,
   AuthenticatedDebugSystemRoute: AuthenticatedDebugSystemRoute,

@@ -8,11 +8,13 @@
  * @module
  */
 
+import type * as auditLog from "../auditLog.js";
 import type * as auth from "../auth.js";
 import type * as cmsUsers from "../cmsUsers.js";
 import type * as content from "../content.js";
 import type * as contentHistory from "../contentHistory.js";
 import type * as debugReactive from "../debugReactive.js";
+import type * as exports from "../exports.js";
 import type * as http from "../http.js";
 import type * as lib_audit from "../lib/audit.js";
 import type * as lib_auth from "../lib/auth.js";
@@ -23,10 +25,14 @@ import type * as lib_contentPublish from "../lib/contentPublish.js";
 import type * as lib_contentSchemas from "../lib/contentSchemas.js";
 import type * as lib_contentValidation from "../lib/contentValidation.js";
 import type * as lib_eventPayloads from "../lib/eventPayloads.js";
+import type * as lib_inputValidation from "../lib/inputValidation.js";
+import type * as lib_logging from "../lib/logging.js";
 import type * as lib_permissions from "../lib/permissions.js";
 import type * as lib_presenceConstants from "../lib/presenceConstants.js";
 import type * as lib_previewToken from "../lib/previewToken.js";
+import type * as lib_rateLimit from "../lib/rateLimit.js";
 import type * as lib_rbac from "../lib/rbac.js";
+import type * as lib_restoreDrill from "../lib/restoreDrill.js";
 import type * as lib_schemaApply from "../lib/schemaApply.js";
 import type * as lib_schemaDestructive from "../lib/schemaDestructive.js";
 import type * as lib_schemaDiff from "../lib/schemaDiff.js";
@@ -53,11 +59,13 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  auditLog: typeof auditLog;
   auth: typeof auth;
   cmsUsers: typeof cmsUsers;
   content: typeof content;
   contentHistory: typeof contentHistory;
   debugReactive: typeof debugReactive;
+  exports: typeof exports;
   http: typeof http;
   "lib/audit": typeof lib_audit;
   "lib/auth": typeof lib_auth;
@@ -68,10 +76,14 @@ declare const fullApi: ApiFromModules<{
   "lib/contentSchemas": typeof lib_contentSchemas;
   "lib/contentValidation": typeof lib_contentValidation;
   "lib/eventPayloads": typeof lib_eventPayloads;
+  "lib/inputValidation": typeof lib_inputValidation;
+  "lib/logging": typeof lib_logging;
   "lib/permissions": typeof lib_permissions;
   "lib/presenceConstants": typeof lib_presenceConstants;
   "lib/previewToken": typeof lib_previewToken;
+  "lib/rateLimit": typeof lib_rateLimit;
   "lib/rbac": typeof lib_rbac;
+  "lib/restoreDrill": typeof lib_restoreDrill;
   "lib/schemaApply": typeof lib_schemaApply;
   "lib/schemaDestructive": typeof lib_schemaDestructive;
   "lib/schemaDiff": typeof lib_schemaDiff;

@@ -16,6 +16,9 @@ import {
 } from "./lib/contentPublish";
 import { getActiveSchemaBySlug, getSchemaFields } from "./lib/contentSchemas";
 import { assertEntryData } from "./lib/contentValidation";
+import { assertValidTitle } from "./lib/inputValidation";
+import { createCorrelationId, logStructured } from "./lib/logging";
+import { enforceRateLimit } from "./lib/rateLimit";
 import { type AuthedRoleCtx, editorMutation, editorQuery } from "./lib/rbac";
 import {
   contentEntryDetailValidator,
@@ -265,21 +268,18 @@ export const createContentEntry = editorMutation({
 
     const fields = getSchemaFields(schema);
     const data = args.data ?? {};
-    await validateEntryDataWithContext(ctx, fields, data, args.title.trim());
-
-    if (!args.title.trim()) {
-      throw new Error("Title is required");
-    }
+    const title = assertValidTitle(args.title);
+    await validateEntryDataWithContext(ctx, fields, data, title);
 
     const now = Date.now();
     const entryData = { ...data };
     if (fields.some((f) => f.slug === "title")) {
-      entryData.title = args.title.trim();
+      entryData.title = title;
     }
 
     const entryId = await ctx.db.insert("contentEntries", {
       contentType: args.contentType,
-      title: args.title.trim(),
+      title,
       status: "draft",
       data: entryData,
       draftRevision: 1,
@@ -295,7 +295,7 @@ export const createContentEntry = editorMutation({
       resourceType: "contentEntry",
       resourceId: entryId,
       actorId: roleCtx.cmsUser._id,
-      metadata: { title: args.title, contentType: args.contentType },
+      metadata: { title, contentType: args.contentType },
     });
 
     const entry = await ctx.db.get(entryId);
@@ -306,7 +306,7 @@ export const createContentEntry = editorMutation({
     await recordContentHistoryEvent(ctx, {
       entryId,
       eventType: "created",
-      summary: buildHistorySummary("created", args.title.trim()),
+      summary: buildHistorySummary("created", title),
       actorId: roleCtx.cmsUser._id,
       snapshot: buildEntrySnapshot(entry),
       timestamp: now,
@@ -338,12 +338,8 @@ export const updateContentEntry = editorMutation({
     const fields = getSchemaFields(schema);
     const mergedData =
       args.data !== undefined ? args.data : (entry.data as Record<string, unknown>);
-    const title = args.title !== undefined ? args.title.trim() : entry.title;
+    const title = args.title !== undefined ? assertValidTitle(args.title) : entry.title;
     await validateEntryDataWithContext(ctx, fields, mergedData, title);
-
-    if (!title) {
-      throw new Error("Title is required");
-    }
 
     const now = Date.now();
     const entryData = { ...mergedData };
@@ -389,6 +385,15 @@ export const publishContentEntry = editorMutation({
   returns: publishResultValidator,
   handler: async (ctx, args) => {
     const roleCtx = ctx as typeof ctx & AuthedRoleCtx;
+    const correlationId = createCorrelationId();
+    await enforceRateLimit(ctx, "publish", roleCtx.cmsUser._id);
+
+    logStructured("info", "content.publish.start", {
+      correlationId,
+      entryId: args.entryId,
+      actorId: roleCtx.cmsUser._id,
+    });
+
     const startedAt = Date.now();
 
     const entry = await ctx.db.get(args.entryId);
@@ -415,11 +420,18 @@ export const publishContentEntry = editorMutation({
       resourceType: "contentEntry",
       resourceId: args.entryId,
       actorId: roleCtx.cmsUser._id,
+      correlationId,
       metadata: {
         title: entry.title,
         draftRevision: entry.draftRevision,
         publishedRevision: publishPatch.publishedRevision,
       },
+    });
+
+    logStructured("info", "content.publish.complete", {
+      correlationId,
+      entryId: args.entryId,
+      publishDurationMs: Date.now() - startedAt,
     });
 
     const publishDurationMs = Date.now() - startedAt;

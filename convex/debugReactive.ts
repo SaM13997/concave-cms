@@ -28,6 +28,50 @@ export const getReactiveCounter = editorQuery({
   },
 });
 
+export const resetReactiveCounter = editorMutation({
+  args: { label: v.optional(v.string()) },
+  returns: debugCounterItemValidator,
+  handler: async (ctx, args) => {
+    const label = args.label ?? REACTIVE_COUNTER_LABEL;
+    const now = Date.now();
+
+    const existing = await ctx.db
+      .query("debugCounters")
+      .withIndex("by_label", (q) => q.eq("label", label))
+      .unique();
+
+    if (existing) {
+      await ctx.db.patch(existing._id, { value: 0, updatedAt: now });
+      return {
+        _id: existing._id,
+        _creationTime: existing._creationTime,
+        label: existing.label,
+        value: 0,
+        updatedAt: now,
+      };
+    }
+
+    const counterId = await ctx.db.insert("debugCounters", {
+      label,
+      value: 0,
+      updatedAt: now,
+    });
+
+    const counter = await ctx.db.get(counterId);
+    if (!counter) {
+      throw new Error("Failed to create counter");
+    }
+
+    return {
+      _id: counter._id,
+      _creationTime: counter._creationTime,
+      label: counter.label,
+      value: counter.value,
+      updatedAt: counter.updatedAt,
+    };
+  },
+});
+
 export const incrementReactiveCounter = editorMutation({
   args: { label: v.optional(v.string()) },
   returns: debugCounterItemValidator,

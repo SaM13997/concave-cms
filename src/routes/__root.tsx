@@ -44,6 +44,9 @@ export const Route = createRootRouteWithContext<{
         charSet: "utf-8",
       },
       {
+        title: "Concave CMS",
+      },
+      {
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },

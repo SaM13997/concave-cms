@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Bug, FileText, Home, Layers, Radio } from "lucide-react";
+import { Bug, ClipboardList, FileText, Home, Layers, Radio, Settings } from "lucide-react";
 import type { Permission } from "../../convex/lib/permissions";
 
 export type BottomNavItem = {
@@ -33,6 +33,22 @@ export const bottomNavItems: BottomNavItem[] = [
     icon: Layers,
     color: "bg-violet-500/10",
     darkColor: "text-violet-400",
+    requiredPermission: "schema:read",
+  },
+  {
+    href: "/audit",
+    label: "Audit",
+    icon: ClipboardList,
+    color: "bg-sky-500/10",
+    darkColor: "text-sky-400",
+    requiredPermission: "schema:read",
+  },
+  {
+    href: "/settings",
+    label: "Settings",
+    icon: Settings,
+    color: "bg-slate-500/10",
+    darkColor: "text-slate-400",
     requiredPermission: "schema:read",
   },
   {

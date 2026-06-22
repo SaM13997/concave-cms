@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { ConvexHttpClient } from "convex/browser";
 import type { Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { api } from "../../convex/_generated/api";
 import type { Role } from "../../convex/lib/permissions";
 
@@ -24,6 +25,17 @@ function uniqueEmail(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@e2e.test`;
 }
 
+export async function waitForAuth(page: Page): Promise<void> {
+  await page.waitForFunction(async () => {
+    const response = await fetch("/api/auth/convex/token", { credentials: "include" });
+    if (!response.ok) {
+      return false;
+    }
+    const data = (await response.json()) as { token?: string };
+    return Boolean(data.token);
+  });
+}
+
 export async function signUp(
   page: Page,
   options?: { email?: string; password?: string; name?: string },
@@ -42,6 +54,7 @@ export async function signUp(
   await page.getByTestId("login-password").fill(password);
   await page.getByTestId("login-submit").click();
   await page.waitForURL("/", { timeout: 30_000 });
+  await waitForAuth(page);
 
   return { email, password };
 }
@@ -136,6 +149,14 @@ async function getConvexAuthToken(page: Page): Promise<string> {
   }
 
   return token;
+}
+
+export async function waitForActiveContentType(page: Page, slug: string): Promise<void> {
+  await page.getByTestId("nav-content").click();
+  await page.waitForURL("/content**");
+  const typeButton = page.getByTestId(`content-type-${slug}`);
+  await expect(typeButton).toBeAttached({ timeout: 60_000 });
+  await typeButton.scrollIntoViewIfNeeded();
 }
 
 export { uniqueEmail };

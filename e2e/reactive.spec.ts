@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
+import { ConvexHttpClient } from "convex/browser";
+import { readFileSync } from "node:fs";
 import { assignRole, signUp } from "./helpers/auth";
+import { api } from "../convex/_generated/api";
+
+function getConvexUrl(): string {
+  try {
+    const env = readFileSync(".env.local", "utf8");
+    const match = env.match(/^VITE_CONVEX_URL=(.+)$/m);
+    if (match?.[1]) {
+      return match[1].trim();
+    }
+  } catch {
+    // fall through
+  }
+  return process.env.VITE_CONVEX_URL ?? "http://127.0.0.1:3210";
+}
+
+async function resetReactiveCounter(page: import("@playwright/test").Page): Promise<void> {
+  const token = await page.evaluate(async () => {
+    const response = await fetch("/api/auth/convex/token", { credentials: "include" });
+    if (!response.ok) return null;
+    const data = (await response.json()) as { token?: string };
+    return data.token ?? null;
+  });
+  if (!token) return;
+  const client = new ConvexHttpClient(getConvexUrl());
+  client.setAuth(token);
+  await client.mutation(api.debugReactive.resetReactiveCounter, {});
+}
 
 async function prepareAuthenticatedPage(
   page: import("@playwright/test").Page,
@@ -22,6 +51,7 @@ test.describe("Reactive subscriptions", () => {
 
     await prepareAuthenticatedPage(pageA, { role: "admin" });
     await prepareAuthenticatedPage(pageB, { role: "admin" });
+    await resetReactiveCounter(pageA);
 
     await pageA.goto("/debug/reactive");
     await pageB.goto("/debug/reactive");

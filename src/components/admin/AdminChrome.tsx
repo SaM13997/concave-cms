@@ -6,6 +6,7 @@ import { type BreadcrumbItem, Breadcrumbs } from "@/components/admin/Breadcrumbs
 import { CommandPalette, useCommandPalette } from "@/components/admin/CommandPalette";
 import { PresenceIndicator } from "@/components/admin/PresenceIndicator";
 import { useGlobalKeyboardShortcuts } from "@/hooks/use-keyboard-navigation";
+import { authClient } from "@/lib/auth-client";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -19,10 +20,11 @@ function useBreadcrumbItems(): BreadcrumbItem[] {
     typeof search.entry === "string" ? (search.entry as Id<"contentEntries">) : undefined;
   const contentType = typeof search.type === "string" ? search.type : undefined;
   const schemaTable = typeof search.table === "string" ? search.table : undefined;
+  const { data: session } = authClient.useSession();
 
   const entrySummary = useQuery(
     api.navigation.getContentEntryNavSummary,
-    entryId ? { entryId } : "skip",
+    entryId && session?.session ? { entryId } : "skip",
   );
 
   const items: BreadcrumbItem[] = [{ label: "Home", href: "/" }];
@@ -45,6 +47,10 @@ function useBreadcrumbItems(): BreadcrumbItem[] {
     }
   } else if (pathname === "/media") {
     items.push({ label: "Media" });
+  } else if (pathname === "/audit") {
+    items.push({ label: "Audit" });
+  } else if (pathname === "/settings") {
+    items.push({ label: "Settings" });
   } else if (pathname.startsWith("/debug")) {
     items.push({ label: "Debug", href: "/debug/system" });
     if (pathname.includes("reactive")) {

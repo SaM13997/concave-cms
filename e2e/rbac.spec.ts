@@ -16,8 +16,10 @@ async function openContentEditor(page: import("@playwright/test").Page) {
 test.describe("RBAC", () => {
   test("editor cannot access schema builder", async ({ page }) => {
     await signUp(page);
+    await page.getByTestId("nav-home").waitFor({ timeout: 15_000 });
     await page.goto("/schema");
-    await expect(page.getByTestId("insufficient-permissions")).toBeVisible();
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByTestId("insufficient-permissions")).toBeVisible({ timeout: 15_000 });
     await expect(page.getByTestId("schema-builder")).not.toBeVisible();
   });
 

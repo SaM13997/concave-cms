@@ -13,14 +13,20 @@ export async function writeAuditLog(
     resourceId: string;
     actorId: Id<"cmsUsers">;
     metadata?: Record<string, unknown>;
+    correlationId?: string;
   },
 ): Promise<void> {
+  const metadata = {
+    ...(args.metadata ?? {}),
+    ...(args.correlationId ? { correlationId: args.correlationId } : {}),
+  };
+
   await ctx.db.insert("auditLog", {
     action: args.action,
     resourceType: args.resourceType,
     resourceId: args.resourceId,
     actorId: args.actorId,
     timestamp: Date.now(),
-    metadata: args.metadata ?? {},
+    metadata,
   });
 }
