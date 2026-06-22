@@ -1,59 +1,109 @@
-# Concave CMS — Launch Orchestration
+# Concave CMS — Orchestration Log
 
-> **MANDATORY for all spawned implementation agents:** Read this file FIRST before any other work. It is the single source of truth for status, branch assignments, and next steps.
+> **MANDATORY for all spawned agents:** Read this file FIRST before any other work. It is the single source of truth for project status, branch assignments, and next steps. Do not re-read the full git history or re-audit completed phases unless this file directs you to.
 
-## Orchestration metadata
+## Agent requirements
 
-| Field | Value |
-|-------|-------|
-| **Last updated** | 2026-06-22T10:35Z |
-| **Orchestration branch** | `cursor/orchestration-agent-system-d113` |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` @ `9045ee3` |
-| **Launch plan** | `docs/launch-plan.md` (on impl branch) |
-| **Model (impl agents)** | `composer-2.5` (non-fast) |
-| **Active agents** | none |
+| Setting | Value |
+|---------|-------|
+| **Model** | `composer-2.5` (non-fast) — required for all implementation and review agents |
+| **Impl branch** | `cursor/concave-cms-launch-plan-26c1` |
+| **Orchestration branch** | `cursor/orchestration-agent-system-d4b0` (this file lives here) |
+| **Launch plan** | `docs/launch-plan.md` on the **impl branch** (not master) |
+| **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
 
-## Current status
+### Spawned agent workflow
 
-- **Progress:** 95 / 95 checklist items complete (100%)
-- **Phases complete:** 0–9 + release checklist (all checked on impl branch)
-- **CI baseline:** `npm run check` + `npm run test` green (122 tests)
-- **Impl PR:** https://github.com/SaM13997/concave-cms/pull/11
+1. **Read `orchestration.md` first** (this file).
+2. Checkout `cursor/concave-cms-launch-plan-26c1`.
+3. Implement the assigned phase/step from `docs/launch-plan.md`.
+4. Run `npm run check && npm run test` (and targeted E2E for the phase).
+5. Commit + push to impl branch; verify with `git ls-remote`.
+6. **Spawn a review/fix loop** (also `composer-2.5`): review changes, fix all feedback, re-run tests until green.
+7. Update this file with what was done and what's next.
+8. Post a summary to Slack #concave-cms.
 
-### Launch complete
+### E2E rules
 
-All items in `docs/launch-plan.md` on `cursor/concave-cms-launch-plan-26c1` are checked (0 unchecked). No further implementation agents needed unless regressions are found.
+- **Never** run `bash scripts/e2e-server.sh` directly — it blocks forever.
+- Use: `npm run test:e2e -- e2e/<spec>.spec.ts`
+- Kill stale port if needed: `fuser -k 3210/tcp`
 
-### Post-launch (NEXT — optional ops)
-1. Merge PR #11 → `master`
-2. Tag v1.0.0 per `docs/release.md`
-3. Live publish p50/p95 measurement + staging backup drill
+---
 
-## Agent instructions (implementation)
+## Current status (2026-06-22T10:20Z)
 
-1. **Read this file first** — do not re-scan the whole repo for context.
-2. **Branch:** `cursor/concave-cms-launch-plan-26c1`
-3. **Model:** `composer-2.5` (non-fast)
-4. **If launch is complete:** do not start new work unless orchestrator assigns a regression fix.
-5. **Quality loop (mandatory):** review sub-agent → fix feedback → `npm run check && npm run test` green.
-6. **Do NOT** run `bash scripts/e2e-server.sh` directly (blocks forever).
-7. **Do NOT** edit `orchestration.md` — the orchestration agent updates it.
+| Item | Status |
+|------|--------|
+| **Launch plan** | ✅ **COMPLETE** — Phases 0–9 + release checklist |
+| **Unchecked items** | 0 / 123 on impl branch |
+| **Impl commit** | `1a6dd04` — `feat(phase-9): self-hosted packaging, onboarding, release docs` |
+| **Active agents** | None |
+| **Action** | No new agent needed — launch plan fully implemented |
 
-## Agent instructions (orchestration — this agent only)
+---
 
-- Do not implement features; only coordinate, update this file, spawn/nudge agents, Slack updates.
-- Cron every 10 min: check agent status, nudge if stuck, spawn if idle, update this file.
+## Phase completion summary
 
-## Session log
+| Phase | Description | Commit | Status |
+|-------|-------------|--------|--------|
+| 0 | Bootstrap foundations | early | ✅ |
+| 1 | Auth + RBAC | — | ✅ |
+| 2 | Schema builder | — | ✅ |
+| 3 | Content editing | — | ✅ |
+| 4 | Draft/publish + preview | — | ✅ |
+| 5 | Search + presence | — | ✅ |
+| 6 | Time travel (history/compare/revert) | `3623f93` | ✅ |
+| 7 | Admin UX (nav, Cmd+K, toasts) | `45c5a8a` | ✅ |
+| 8 | Launch hardening (security, audit, backup, a11y) | `0718a5c` | ✅ |
+| 9 | Self-hosted packaging, onboarding, release docs | `1a6dd04` | ✅ |
 
-### 2026-06-22T10:30Z — Orchestration cron
-- **Status check:** No implementation agents were running. Launch plan 7/95 on `master` scaffold branch.
-- **Action:** Created `orchestration.md`. Spawned implementation agent (`composer-2.5`) to finish Phase 0 and begin Phase 1.
+### Phase 9 deliverables (verified on impl branch)
 
-### 2026-06-22T10:35Z — Implementation agent completed
-- **Agent:** `composer-2.5` on `cursor/concave-cms-launch-plan-26c1`
-- **Result:** Verified 95/95 items checked, 0 unchecked @ `9045ee3`
-- **Tests:** `npm run check` + `npm run test` green (122 tests)
-- **Review loop:** 1 round pass (added `src/test/fixtures/env.test.ts`)
-- **PR:** #11 opened
-- **Next:** No impl agents needed. Post-launch merge/tag/benchmark optional.
+- `Dockerfile`, `docker-compose.yml`, `Makefile`
+- `CHANGELOG.md`, release/upgrade/rollback docs
+- `convex/onboarding.ts`, `OnboardingWizard.tsx`, `e2e/onboarding.spec.ts`
+- Clean-environment install smoke test in CI
+- Release checklist: all 8 items checked
+
+### Test baseline at launch
+
+- `npm run check` — pass
+- `npm run test` — 119/119 pass
+- `npm run test:e2e -- e2e/onboarding.spec.ts` — 1/1 pass
+
+---
+
+## What's next (post-launch)
+
+No implementation work remains on `docs/launch-plan.md`. Optional post-launch steps:
+
+1. **Merge PR #1** → `master`
+2. **Tag v1.0.0** per `docs/release.md` on impl branch
+3. **Deploy** to staging/production
+4. **Measure live publish p50/p95** from `publishMetrics` (staging drill)
+5. **Run staging backup/restore drill** (scripts on impl branch)
+
+If new scope is added to the launch plan or a regression is found, the orchestrator will spawn a `composer-2.5` agent with a specific assignment below.
+
+### Next agent assignment (if spawned)
+
+> _None — launch plan complete. Await new scope or merge/tag/deploy instructions._
+
+---
+
+## Orchestration cron log
+
+| Timestamp (UTC) | Branch | Action |
+|---------------|--------|--------|
+| 2026-06-22T10:20Z | `cursor/orchestration-agent-system-d4b0` | Status check: launch complete, 0 unchecked, no agents running. Created/updated `orchestration.md`. No spawn. |
+| 2026-06-22T10:10Z | `cursor/orchestration-agent-system-08fb` | Same — launch complete, no spawn. |
+| 2026-06-22T06:50Z | `cursor/orchestration-agent-system-f88e` | Spawned Phase 9 agent (composer-2.5). |
+| 2026-06-22T07:10Z | — | Phase 9 complete at `1a6dd04`. |
+
+---
+
+## Slack
+
+- Channel: **#concave-cms** (`C0BC5L329EV`)
+- Implementation thread: `1782091709.754369`
