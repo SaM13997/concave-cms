@@ -43,7 +43,7 @@
 | **6 — Time travel** | ✅ Complete (`3623f93`) |
 | **7 — Admin UX** | ✅ Complete (`45c5a8a`) |
 | **8 — Hardening** | ✅ Complete (`0718a5c`) |
-| **9 — Packaging** | 🔄 **NEXT** |
+| **9 — Packaging** | 🔄 **IN PROGRESS** |
 
 **CI on PR #1:** Pending re-run after impl commit `0718a5c`.
 
@@ -53,9 +53,14 @@
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| — | — | — | idle |
+| Phase 9 impl | composer-2.5 | Phase 9.1–9.3 packaging + release | **spawned** (2026-06-22T05:48Z) |
 
 ## Completed work (log)
+
+### 2026-06-22T05:48Z — Orchestration cron (branch b4a1)
+
+- Verified Phase 8 (`0718a5c`) on remote impl branch.
+- Spawned Phase 9 agent (`composer-2.5`) for final packaging + release + review/fix loop.
 
 ### 2026-06-22T05:45Z — Phase 8 launch hardening (security, audit, backup, a11y)
 
@@ -114,6 +119,24 @@
 1. **Phase 9.1** — Packaging and install verification (Docker/compose or CLI installer)
 2. **Phase 9.2** — Onboarding flow + quickstart docs
 3. **Phase 9.3** — Release checklist + versioning
+
+## Phase 9 task spec (for implementation agent)
+
+Implement **Phase 9 — Self-hosted packaging, docs, and release** per `docs/launch-plan.md`:
+
+### Step 9.1 — Packaging and install verification
+- **OPS:** Docker/compose or CLI installer with documented requirements
+- **TEST:** Clean-environment install smoke test in CI
+
+### Step 9.2 — Onboarding flow + docs
+- **FE:** In-product onboarding path (Blog + publish first post)
+- **OPS:** Quickstart documentation and troubleshooting
+- **TEST:** E2E onboarding flow with step/time budget
+
+### Step 9.3 — Release checklist + versioning
+- **OPS:** SemVer, changelog, upgrade notes, rollback instructions
+- **TEST:** Release gates require unit + integration + e2e + perf checks
+- Complete release checklist at top of `docs/launch-plan.md` when all gates pass
 
 ## Update template (agents: append after review loop)
 
