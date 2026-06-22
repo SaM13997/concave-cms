@@ -294,4 +294,4 @@ export function ContentEntryEditor({ fields, data, onChange }: ContentEntryEdito
   );
 }
 
-export type { SchemaField, RichTextValue };
+export type { RichTextValue, SchemaField };

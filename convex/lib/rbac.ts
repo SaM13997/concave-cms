@@ -86,6 +86,5 @@ export const editorMutation = customMutation(authedMutationWithRole, {
   },
 });
 
-export { cmsUserValidator, permissionValidator };
-
 export type { Permission };
+export { cmsUserValidator, permissionValidator };

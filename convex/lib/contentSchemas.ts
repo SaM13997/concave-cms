@@ -11,7 +11,7 @@ export async function getActiveSchemaBySlug(
     .withIndex("by_slug", (q) => q.eq("slug", slug))
     .unique();
 
-  if (!schema || schema.status !== "active") {
+  if (schema?.status !== "active") {
     return null;
   }
 

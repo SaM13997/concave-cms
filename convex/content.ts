@@ -3,6 +3,11 @@ import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { writeAuditLog } from "./lib/audit";
 import {
+  buildEntrySnapshot,
+  buildHistorySummary,
+  recordContentHistoryEvent,
+} from "./lib/contentHistory";
+import {
   buildDiscardPatch,
   buildDraftUpdatePatch,
   buildPublishPatch,
@@ -285,16 +290,6 @@ export const createContentEntry = editorMutation({
       updatedAt: now,
     });
 
-    await ctx.db.insert("versionEvents", {
-      entityType: "entry",
-      entityId: entryId,
-      eventType: "created",
-      summary: `Created "${args.title}"`,
-      actorId: roleCtx.cmsUser._id,
-      timestamp: now,
-      payload: { title: args.title, contentType: args.contentType },
-    });
-
     await writeAuditLog(ctx, {
       action: "content.create",
       resourceType: "contentEntry",
@@ -307,6 +302,15 @@ export const createContentEntry = editorMutation({
     if (!entry) {
       throw new Error("Failed to create content entry");
     }
+
+    await recordContentHistoryEvent(ctx, {
+      entryId,
+      eventType: "created",
+      summary: buildHistorySummary("created", args.title.trim()),
+      actorId: roleCtx.cmsUser._id,
+      snapshot: buildEntrySnapshot(entry),
+      timestamp: now,
+    });
 
     return toListItem(entry);
   },
@@ -354,16 +358,6 @@ export const updateContentEntry = editorMutation({
       updatedBy: roleCtx.cmsUser._id,
     });
 
-    await ctx.db.insert("versionEvents", {
-      entityType: "entry",
-      entityId: args.entryId,
-      eventType: "updated",
-      summary: `Updated "${title}"`,
-      actorId: roleCtx.cmsUser._id,
-      timestamp: now,
-      payload: { title },
-    });
-
     await writeAuditLog(ctx, {
       action: "content.update",
       resourceType: "contentEntry",
@@ -376,6 +370,15 @@ export const updateContentEntry = editorMutation({
     if (!updated) {
       throw new Error("Content entry not found after update");
     }
+
+    await recordContentHistoryEvent(ctx, {
+      entryId: args.entryId,
+      eventType: "updated",
+      summary: buildHistorySummary("updated", title),
+      actorId: roleCtx.cmsUser._id,
+      snapshot: buildEntrySnapshot(updated),
+      timestamp: now,
+    });
 
     return toListItem(updated);
   },
@@ -407,20 +410,6 @@ export const publishContentEntry = editorMutation({
       updatedAt: now,
     });
 
-    await ctx.db.insert("versionEvents", {
-      entityType: "entry",
-      entityId: args.entryId,
-      eventType: "published",
-      summary: `Published "${entry.title}"`,
-      actorId: roleCtx.cmsUser._id,
-      timestamp: now,
-      payload: {
-        title: entry.title,
-        draftRevision: entry.draftRevision,
-        publishedRevision: publishPatch.publishedRevision,
-      },
-    });
-
     await writeAuditLog(ctx, {
       action: "content.publish",
       resourceType: "contentEntry",
@@ -446,6 +435,15 @@ export const publishContentEntry = editorMutation({
     if (!updated) {
       throw new Error("Content entry not found after publish");
     }
+
+    await recordContentHistoryEvent(ctx, {
+      entryId: args.entryId,
+      eventType: "published",
+      summary: buildHistorySummary("published", updated.title),
+      actorId: roleCtx.cmsUser._id,
+      snapshot: buildEntrySnapshot(updated),
+      timestamp: now,
+    });
 
     return {
       entry: toListItem(updated),
@@ -478,16 +476,6 @@ export const discardDraft = editorMutation({
       updatedAt: now,
     });
 
-    await ctx.db.insert("versionEvents", {
-      entityType: "entry",
-      entityId: args.entryId,
-      eventType: "updated",
-      summary: `Discarded draft changes for "${discardPatch.title}"`,
-      actorId: roleCtx.cmsUser._id,
-      timestamp: now,
-      payload: { action: "discard_draft" },
-    });
-
     await writeAuditLog(ctx, {
       action: "content.update",
       resourceType: "contentEntry",
@@ -500,6 +488,16 @@ export const discardDraft = editorMutation({
     if (!updated) {
       throw new Error("Content entry not found after discard");
     }
+
+    await recordContentHistoryEvent(ctx, {
+      entryId: args.entryId,
+      eventType: "updated",
+      summary: buildHistorySummary("updated", updated.title, { action: "discard_draft" }),
+      actorId: roleCtx.cmsUser._id,
+      snapshot: buildEntrySnapshot(updated),
+      timestamp: now,
+      extraPayload: { action: "discard_draft" },
+    });
 
     return toListItem(updated);
   },

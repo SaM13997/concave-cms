@@ -226,17 +226,17 @@ Launch is achieved when:
 ## Phase 6 — Time travel (history, compare, revert)
 
 ### Step 6.1 — Version history capture
-- [ ] **BE (Owner: BE)**: Persist qualitative history of changes (who/when/what summary).
-- [ ] **FE (Owner: FE)**: History timeline view for an entry.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Integration: each edit/publish produces expected history event.
+- [x] **BE (Owner: BE)**: Persist qualitative history of changes (who/when/what summary).
+- [x] **FE (Owner: FE)**: History timeline view for an entry.
+- [x] **TEST (Owner: QA)**:
+  - [x] Integration: each edit/publish produces expected history event.
   - **Done**: Users can review change history reliably.
 
 ### Step 6.2 — Compare + revert
-- [ ] **BE (Owner: BE)**: Implement compare/diff strategy; revert mutation is atomic + audited.
-- [ ] **FE (Owner: FE)**: Side-by-side compare UI; revert flow with confirmations.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: revert restores prior version; audit event created.
+- [x] **BE (Owner: BE)**: Implement compare/diff strategy; revert mutation is atomic + audited.
+- [x] **FE (Owner: FE)**: Side-by-side compare UI; revert flow with confirmations.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: revert restores prior version; audit event created.
   - **Done**: Mistakes are recoverable.
 
 ---

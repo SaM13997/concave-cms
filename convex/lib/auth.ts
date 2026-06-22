@@ -5,7 +5,7 @@ import { mutation, query } from "../_generated/server";
 import { authComponent } from "../auth";
 import { type AuthUser, authUserValidator } from "./authValidators";
 
-export { authUserValidator, type AuthUser };
+export { type AuthUser, authUserValidator };
 
 export async function requireAuthUser(ctx: GenericCtx<DataModel>): Promise<AuthUser> {
   const user = await authComponent.safeGetAuthUser(ctx);

@@ -45,6 +45,22 @@ const schemaVersionItemValidator = v.object({
   createdAt: v.number(),
 });
 
+const paginatedAuditLogValidator = v.object({
+  page: v.array(auditLogItemValidator),
+  isDone: v.boolean(),
+  continueCursor: v.union(v.string(), v.null()),
+  pageStatus: v.optional(v.union(v.string(), v.null())),
+  splitCursor: v.optional(v.union(v.string(), v.null())),
+});
+
+const paginatedVersionEventsValidator = v.object({
+  page: v.array(versionEventItemValidator),
+  isDone: v.boolean(),
+  continueCursor: v.union(v.string(), v.null()),
+  pageStatus: v.optional(v.union(v.string(), v.null())),
+  splitCursor: v.optional(v.union(v.string(), v.null())),
+});
+
 export const getSystemSummary = adminQuery({
   args: {},
   returns: systemTableSummaryValidator,
@@ -87,11 +103,7 @@ export const getSystemSummary = adminQuery({
 
 export const listRecentAuditLog = adminQuery({
   args: { paginationOpts: paginationOptsValidator },
-  returns: v.object({
-    page: v.array(auditLogItemValidator),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-  }),
+  returns: paginatedAuditLogValidator,
   handler: async (ctx, args) => {
     const results = await ctx.db
       .query("auditLog")
@@ -115,11 +127,7 @@ export const listRecentAuditLog = adminQuery({
 
 export const listRecentVersionEvents = adminQuery({
   args: { paginationOpts: paginationOptsValidator },
-  returns: v.object({
-    page: v.array(versionEventItemValidator),
-    isDone: v.boolean(),
-    continueCursor: v.union(v.string(), v.null()),
-  }),
+  returns: paginatedVersionEventsValidator,
   handler: async (ctx, args) => {
     const results = await ctx.db
       .query("versionEvents")

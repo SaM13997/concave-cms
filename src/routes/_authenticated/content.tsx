@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useCallback, useEffect, useState } from "react";
 import { ContentEntryEditor } from "@/components/content/ContentEntryEditor";
+import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
@@ -536,6 +537,8 @@ function ContentPage() {
                       )}
                     </section>
                   )}
+
+                  {selectedId && <ContentHistoryPanel entryId={selectedId} canWrite={canWrite} />}
 
                   {selectedEntry.resolvedReferences &&
                     Object.entries(selectedEntry.resolvedReferences).map(([slug, ref]) =>

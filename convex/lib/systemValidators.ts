@@ -79,9 +79,46 @@ export const auditActionValidator = v.union(
   v.literal("content.create"),
   v.literal("content.update"),
   v.literal("content.publish"),
+  v.literal("content.revert"),
   v.literal("media.upload"),
   v.literal("presence.heartbeat"),
 );
+
+export const contentEntrySnapshotValidator = v.object({
+  title: v.string(),
+  data: v.any(),
+  status: entryStatusValidator,
+  draftRevision: v.number(),
+  publishedRevision: v.optional(v.number()),
+  publishedTitle: v.optional(v.string()),
+  publishedData: v.optional(v.any()),
+  hasUnpublishedChanges: v.boolean(),
+});
+
+export const contentDiffEntryValidator = v.object({
+  path: v.string(),
+  kind: v.union(v.literal("added"), v.literal("removed"), v.literal("changed")),
+  before: v.optional(v.any()),
+  after: v.optional(v.any()),
+});
+
+export const contentHistoryItemValidator = v.object({
+  _id: v.id("versionEvents"),
+  eventType: versionEventTypeValidator,
+  summary: v.string(),
+  actorId: v.id("cmsUsers"),
+  actorName: v.string(),
+  timestamp: v.number(),
+  snapshot: contentEntrySnapshotValidator,
+});
+
+export const contentCompareResultValidator = v.object({
+  leftEventId: v.id("versionEvents"),
+  rightEventId: v.id("versionEvents"),
+  leftSummary: v.string(),
+  rightSummary: v.string(),
+  diffs: v.array(contentDiffEntryValidator),
+});
 
 export const systemTableSummaryValidator = v.object({
   schemas: v.number(),

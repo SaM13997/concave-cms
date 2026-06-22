@@ -73,12 +73,12 @@ const AuthenticatedDebugReactiveRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
   '/content': typeof AuthenticatedContentRoute
   '/schema': typeof AuthenticatedSchemaRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
-  '/': typeof AuthenticatedIndexRoute
   '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
   '/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -110,12 +110,12 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
     | '/content'
     | '/schema'
     | '/p/$entryId'
     | '/preview/$token'
-    | '/'
     | '/debug/reactive'
     | '/debug/system'
     | '/api/auth/$'
@@ -164,7 +164,7 @@ declare module '@tanstack/react-router' {
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }

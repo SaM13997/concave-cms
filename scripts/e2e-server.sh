@@ -69,7 +69,7 @@ fi
 
 export E2E_TEST_SECRET BETTER_AUTH_SECRET BETTER_AUTH_URL SITE_URL VITE_APP_ENV VITE_CONVEX_URL VITE_CONVEX_SITE_URL
 
-bun run dev >"${CONVEX_LOG}.vite" 2>&1 &
+npm run dev >"${CONVEX_LOG}.vite" 2>&1 &
 VITE_PID=$!
 
 echo "Waiting for app at http://localhost:3000..."
