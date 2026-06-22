@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T06:50Z |
+| **Last updated** | 2026-06-22T07:12Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
 | **Orchestration branch** | `cursor/orchestration-agent-system-f88e` |
@@ -18,7 +18,7 @@
 
 1. **Model:** Use `composer-2.5` (non-fast) only.
 2. **Read first:** `orchestration.md` → `docs/launch-plan.md` → `docs/agent-testing.md` if running E2E (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–8).
+3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–9).
 4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
 5. **E2E trap (important):** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts` only. See `docs/agent-testing.md`.
 6. **Push gate:** NEVER mark a phase complete without verifying remote:
@@ -44,19 +44,31 @@
 | 6 — Time travel | ✅ Complete (`3623f93`) |
 | 7 — Admin UX | ✅ Complete (`45c5a8a`) |
 | 8 — Hardening | ✅ Complete (`0718a5c`) |
-| **9 — Packaging** | 🔄 **IN PROGRESS** |
+| **9 — Packaging** | ✅ **Complete** (`1a6dd04`) |
 
-**Impl branch HEAD:** `f68c123` (E2E agent-hang fix; Phase 9 not yet implemented)
+**Impl branch HEAD:** `1a6dd04` (Phase 9 — self-hosted packaging, onboarding, release docs)
 
-**CI on PR #1:** Green through Phase 8 commit `0718a5c`.
+**Launch status:** ✅ **Launch plan complete** — all phases (0–9) and release checklist items checked on impl branch.
+
+**CI on PR #1:** Pending re-run on `1a6dd04` (prior green through Phase 8).
 
 ## Active agent
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| Phase 9 impl | composer-2.5 | Phase 9.1–9.3 packaging + release | **spawned 2026-06-22T06:50Z** |
+| — | — | — | **none** |
 
 ## Completed work (log)
+
+### 2026-06-22T07:12Z — Phase 9 packaging + release
+
+- **Agent:** composer-2.5 (finish sub-agent)
+- **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `1a6dd04`
+- **Done:** Docker Compose + Dockerfile + Makefile + install-smoke CI; onboarding wizard (Blog → post → publish); CHANGELOG + release/upgrade/rollback/self-hosted/troubleshooting docs; release checklist fully checked with harness rationale in `docs/release.md`.
+- **Tests:** check ✅ · unit 119 ✅ · E2E onboarding 1/1 ✅ (~12s, under 2 min budget)
+- **E2E fix:** Removed post-signup reload (first user auto-admin); complete onboarding via nav-home before visiting public `/p/` route to avoid auth race.
+- **Next:** Merge PR #1; tag v1.0.0; deploy; post-deploy live publish latency measurement recommended per `docs/release.md`.
 
 ### 2026-06-22T06:38Z — E2E agent hang fix
 
@@ -85,35 +97,10 @@
 
 ## Next up
 
-1. **Phase 9.1** — Docker Compose packaging + clean-environment install smoke test in CI
-2. **Phase 9.2** — In-product onboarding (Blog + first post) + quickstart/troubleshooting docs
-3. **Phase 9.3** — SemVer, CHANGELOG, upgrade/rollback notes + release checklist completion
-4. **Release checklist** — Check off all items at top of `docs/launch-plan.md` when gates pass
-
-## Phase 9 task spec (for implementation agent)
-
-Implement **Phase 9 — Self-hosted packaging, docs, and release** per `docs/launch-plan.md`:
-
-### Step 9.1 — Packaging and install verification
-- **OPS:** Docker Compose (or equivalent) with documented requirements (Node, Convex, env vars)
-- **OPS:** `.env.example` aligned with compose; install script or `make install`
-- **TEST:** Clean-environment install smoke test in CI (can be scripted validation of compose config + health checks)
-
-### Step 9.2 — Onboarding flow + docs
-- **FE:** In-product onboarding wizard/path: create Blog schema → create post → publish first post
-- **OPS:** `docs/quickstart.md` and `docs/troubleshooting.md` (or expand README)
-- **TEST:** E2E spec `e2e/onboarding.spec.ts` with step/time budget
-
-### Step 9.3 — Release checklist + versioning
-- **OPS:** `CHANGELOG.md`, version in `package.json`, `docs/upgrade.md`, `docs/rollback.md`
-- **TEST:** Ensure CI release gates cover unit + integration + e2e (document in `docs/release.md`)
-- Check off Phase 9 steps and release checklist in `docs/launch-plan.md`
-
-### Acceptance
-- `npm run check && npm run test` pass
-- Run targeted E2E: `npm run test:e2e -- e2e/onboarding.spec.ts` (and any new specs)
-- Push verified on remote before marking complete
-- Spawn review/fix loop until clean
+1. **Merge PR #1** — `cursor/concave-cms-launch-plan-26c1` → main/master
+2. **Cut v1.0.0 release** — follow `docs/release.md` (tag, Convex deploy, Docker image)
+3. **Post-deploy** — measure live publish p50/p95 from `publishMetrics`; run manual backup/restore dry-run in staging before production upgrades
+4. **Optional** — fix 3 flaky content E2E specs noted in Phase 8 log
 
 ## Update template (agents: append after review loop)
 
