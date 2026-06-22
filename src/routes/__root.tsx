@@ -18,7 +18,7 @@ import { getCookie, getRequest } from "@tanstack/react-start/server";
 import type { ConvexReactClient } from "convex/react";
 import type * as React from "react";
 import { authClient } from "@/lib/auth-client";
-import { BottomNav } from "../components/BottomNav";
+import { SessionMonitor } from "../components/session-monitor";
 import appCss from "../styles.css?url";
 
 // Get auth information for SSR using available cookies
@@ -42,6 +42,9 @@ export const Route = createRootRouteWithContext<{
     meta: [
       {
         charSet: "utf-8",
+      },
+      {
+        title: "Concave CMS",
       },
       {
         name: "viewport",
@@ -74,6 +77,7 @@ function RootComponent() {
   return (
     <ConvexBetterAuthProvider client={context.convexClient} authClient={authClient}>
       <RootDocument>
+        <SessionMonitor />
         <Outlet />
       </RootDocument>
     </ConvexBetterAuthProvider>
@@ -88,7 +92,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="h-lvh flex flex-col overflow-x-clip w-full">
         <div className="flex-1 flex flex-col">{children}</div>
-        <BottomNav />
         <TanStackDevtools
           config={{
             position: "bottom-right",

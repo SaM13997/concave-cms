@@ -10,52 +10,181 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as PreviewTokenRouteImport } from './routes/preview.$token'
+import { Route as PEntryIdRouteImport } from './routes/p.$entryId'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedSchemaRouteImport } from './routes/_authenticated/schema'
+import { Route as AuthenticatedMediaRouteImport } from './routes/_authenticated/media'
+import { Route as AuthenticatedContentRouteImport } from './routes/_authenticated/content'
+import { Route as AuthenticatedAuditRouteImport } from './routes/_authenticated/audit'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthenticatedDebugSystemRouteImport } from './routes/_authenticated/debug/system'
+import { Route as AuthenticatedDebugReactiveRouteImport } from './routes/_authenticated/debug/reactive'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const PreviewTokenRoute = PreviewTokenRouteImport.update({
+  id: '/preview/$token',
+  path: '/preview/$token',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PEntryIdRoute = PEntryIdRouteImport.update({
+  id: '/p/$entryId',
+  path: '/p/$entryId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSchemaRoute = AuthenticatedSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMediaRoute = AuthenticatedMediaRouteImport.update({
+  id: '/media',
+  path: '/media',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedContentRoute = AuthenticatedContentRouteImport.update({
+  id: '/content',
+  path: '/content',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAuditRoute = AuthenticatedAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDebugSystemRoute =
+  AuthenticatedDebugSystemRouteImport.update({
+    id: '/debug/system',
+    path: '/debug/system',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDebugReactiveRoute =
+  AuthenticatedDebugReactiveRouteImport.update({
+    id: '/debug/reactive',
+    path: '/debug/reactive',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/content': typeof AuthenticatedContentRoute
+  '/media': typeof AuthenticatedMediaRoute
+  '/schema': typeof AuthenticatedSchemaRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/p/$entryId': typeof PEntryIdRoute
+  '/preview/$token': typeof PreviewTokenRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
+  '/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/audit': typeof AuthenticatedAuditRoute
+  '/content': typeof AuthenticatedContentRoute
+  '/media': typeof AuthenticatedMediaRoute
+  '/schema': typeof AuthenticatedSchemaRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/p/$entryId': typeof PEntryIdRoute
+  '/preview/$token': typeof PreviewTokenRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
+  '/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/audit': typeof AuthenticatedAuditRoute
+  '/_authenticated/content': typeof AuthenticatedContentRoute
+  '/_authenticated/media': typeof AuthenticatedMediaRoute
+  '/_authenticated/schema': typeof AuthenticatedSchemaRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/p/$entryId': typeof PEntryIdRoute
+  '/preview/$token': typeof PreviewTokenRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/debug/reactive': typeof AuthenticatedDebugReactiveRoute
+  '/_authenticated/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/api/auth/$'
+  fullPaths:
+    | '/login'
+    | '/audit'
+    | '/content'
+    | '/media'
+    | '/schema'
+    | '/settings'
+    | '/p/$entryId'
+    | '/preview/$token'
+    | '/'
+    | '/debug/reactive'
+    | '/debug/system'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/api/auth/$'
-  id: '__root__' | '/' | '/login' | '/api/auth/$'
+  to:
+    | '/login'
+    | '/audit'
+    | '/content'
+    | '/media'
+    | '/schema'
+    | '/settings'
+    | '/p/$entryId'
+    | '/preview/$token'
+    | '/'
+    | '/debug/reactive'
+    | '/debug/system'
+    | '/api/auth/$'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/login'
+    | '/_authenticated/audit'
+    | '/_authenticated/content'
+    | '/_authenticated/media'
+    | '/_authenticated/schema'
+    | '/_authenticated/settings'
+    | '/p/$entryId'
+    | '/preview/$token'
+    | '/_authenticated/'
+    | '/_authenticated/debug/reactive'
+    | '/_authenticated/debug/system'
+    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PEntryIdRoute: typeof PEntryIdRoute
+  PreviewTokenRoute: typeof PreviewTokenRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -68,12 +197,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/preview/$token': {
+      id: '/preview/$token'
+      path: '/preview/$token'
+      fullPath: '/preview/$token'
+      preLoaderRoute: typeof PreviewTokenRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/p/$entryId': {
+      id: '/p/$entryId'
+      path: '/p/$entryId'
+      fullPath: '/p/$entryId'
+      preLoaderRoute: typeof PEntryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/schema': {
+      id: '/_authenticated/schema'
+      path: '/schema'
+      fullPath: '/schema'
+      preLoaderRoute: typeof AuthenticatedSchemaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/media': {
+      id: '/_authenticated/media'
+      path: '/media'
+      fullPath: '/media'
+      preLoaderRoute: typeof AuthenticatedMediaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/content': {
+      id: '/_authenticated/content'
+      path: '/content'
+      fullPath: '/content'
+      preLoaderRoute: typeof AuthenticatedContentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/audit': {
+      id: '/_authenticated/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AuthenticatedAuditRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -82,12 +267,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/debug/system': {
+      id: '/_authenticated/debug/system'
+      path: '/debug/system'
+      fullPath: '/debug/system'
+      preLoaderRoute: typeof AuthenticatedDebugSystemRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/debug/reactive': {
+      id: '/_authenticated/debug/reactive'
+      path: '/debug/reactive'
+      fullPath: '/debug/reactive'
+      preLoaderRoute: typeof AuthenticatedDebugReactiveRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAuditRoute: typeof AuthenticatedAuditRoute
+  AuthenticatedContentRoute: typeof AuthenticatedContentRoute
+  AuthenticatedMediaRoute: typeof AuthenticatedMediaRoute
+  AuthenticatedSchemaRoute: typeof AuthenticatedSchemaRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedDebugReactiveRoute: typeof AuthenticatedDebugReactiveRoute
+  AuthenticatedDebugSystemRoute: typeof AuthenticatedDebugSystemRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAuditRoute: AuthenticatedAuditRoute,
+  AuthenticatedContentRoute: AuthenticatedContentRoute,
+  AuthenticatedMediaRoute: AuthenticatedMediaRoute,
+  AuthenticatedSchemaRoute: AuthenticatedSchemaRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedDebugReactiveRoute: AuthenticatedDebugReactiveRoute,
+  AuthenticatedDebugSystemRoute: AuthenticatedDebugSystemRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  PEntryIdRoute: PEntryIdRoute,
+  PreviewTokenRoute: PreviewTokenRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

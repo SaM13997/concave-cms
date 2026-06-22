@@ -1,29 +1,28 @@
-Welcome to your new TanStack app! 
+Welcome to Concave CMS — a Convex-native headless CMS.
 
-# Getting Started
+## Quickstart
 
-To run this application:
+See [docs/quickstart.md](./docs/quickstart.md) for environment setup, Convex, and local development.
 
-```bash
-bun install
-bun --bun run start
-```
-
-# Building For Production
-
-To build this application for production:
+**Self-hosted:** [docs/self-hosted.md](./docs/self-hosted.md) (Docker Compose) · [docs/troubleshooting.md](./docs/troubleshooting.md)
 
 ```bash
-bun --bun run build
+make install                 # or: bun install && cp .env.example .env.local
+npx convex dev               # terminal 1
+bun run dev                  # terminal 2
 ```
 
-## Testing
+## Scripts
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
-
-```bash
-bun --bun run test
-```
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start Vite dev server (port 3000) |
+| `bun run build` | Production build |
+| `bun run start` | Run production server (`.output/server`) |
+| `bun run check` | Typecheck + lint |
+| `bun run test` | Run Vitest unit tests |
+| `make install-smoke` | Clean-environment packaging smoke test |
+| `bun run lint` | Biome lint |
 
 ## Styling
 
