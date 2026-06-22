@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T03:28Z |
+| **Last updated** | 2026-06-22T03:30Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
 | **Orchestration branch** | `cursor/orchestration-agent-system-b4a1` |
@@ -42,7 +42,7 @@
 | 5 — Draft/publish + preview | ✅ Complete |
 | **6 — Time travel** | ✅ Complete (`3623f93`) |
 | **7 — Admin UX** | ✅ Complete (`45c5a8a`) |
-| **8 — Hardening** | 🔲 **NEXT** |
+| **8 — Hardening** | 🔄 **IN PROGRESS** |
 | 9 — Packaging | 🔲 Pending |
 
 **CI on PR #1:** Pending re-run after impl commit `45c5a8a`.
@@ -53,9 +53,14 @@
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| — | — | — | **idle** |
+| Phase 8 impl | composer-2.5 | Phase 8.1–8.4 launch hardening | **spawned** (2026-06-22T03:30Z) |
 
 ## Completed work (log)
+
+### 2026-06-22T03:30Z — Orchestration cron (branch b4a1)
+
+- Verified Phase 6 (`3623f93`) and Phase 7 (`45c5a8a`) on remote impl branch.
+- Spawned Phase 8 agent (`composer-2.5`) for launch hardening + review/fix loop.
 
 ### 2026-06-22T03:28Z — Phase 7 admin experience (navigation, Cmd+K, presence, toasts)
 
@@ -108,16 +113,21 @@ Implement **Phase 8 — Launch hardening** per `docs/launch-plan.md` on branch `
 ### Step 8.1 — Security hardening
 - **BE:** Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
 - **FE:** Safe error messages; no sensitive data leaks.
-- **TEST:** Security regression suite.
+- **TEST:** Security regression suite (RBAC bypass, expired preview token, replay, injection payloads).
 
 ### Step 8.2 — Observability + audit log UI
 - **BE:** Structured logs; correlation IDs; audit log query APIs.
-- **FE:** Audit log viewer in admin UI.
-- **TEST:** E2E audit log visibility.
+- **FE:** Audit log viewer (filters, drill-down).
+- **TEST:** Smoke — audit events appear for schema changes and publish.
 
-### Step 8.3 — Accessibility baseline
-- **FE:** Keyboard navigation, focus management, axe checks on core routes.
-- **TEST:** Automated a11y checks in CI.
+### Step 8.3 — Backup/restore + upgrade/migrations
+- **BE:** Backup/restore scripts; migration strategy for schema/content evolution.
+- **FE:** Export tools in UI (schema + content snapshot exports).
+- **TEST:** Restore drill — backup → wipe → restore → smoke test passes.
+
+### Step 8.4 — Accessibility baseline
+- **FE:** Keyboard nav, focus management, semantics, contrast, empty/loading/error states.
+- **TEST:** Automated a11y checks on core routes; keyboard-only E2E for Cmd+K + schema builder.
 
 ## Update template (agents: append after review loop)
 
