@@ -32,6 +32,20 @@ Common issues when installing, developing, or operating Concave CMS.
 - Clear site cookies for your domain.
 - Confirm `SITE_URL` matches the browser address bar.
 
+### `Failed to decrypt private private key` (Better Auth)
+
+This means `BETTER_AUTH_SECRET` on your **Convex deployment** no longer matches the secret used when JWKS keys were created (common after E2E runs, copying `.env` from another machine, or changing secrets without syncing).
+
+1. Use one `BETTER_AUTH_SECRET` in both `.env` and Convex (`npx convex env list` / `npx convex env set BETTER_AUTH_SECRET ...`).
+2. Set `SITE_URL` and `BETTER_AUTH_URL` to the URL in your browser (including port). Convex functions read these from the deployment env, not only from local `.env`.
+3. Clear stale JWKS, then restart `npx convex dev`:
+   ```bash
+   npx convex run authMaintenance:clearJwks
+   ```
+4. Clear site cookies and sign in again.
+
+Downstream `Not authenticated` errors on queries like `presence:listPresenceForRoute` usually clear once `/api/auth/convex/token` succeeds.
+
 ### Google sign-in disabled
 
 Leave `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` empty. Email/password auth remains available.
