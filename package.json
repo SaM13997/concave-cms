@@ -12,7 +12,8 @@
     "lint": "biome check src/ convex/",
     "lint:fix": "biome check --write src/ convex/",
     "format": "biome format --write src/ convex/",
-    "check": "tsc --noEmit && biome check src/ convex/"
+    "check": "tsc --noEmit && biome check src/ convex/",
+    "verify": "bun run build && bun run check && bun run test"
   },
   "dependencies": {
     "@convex-dev/better-auth": "^0.9.6",
