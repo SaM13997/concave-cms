@@ -1,90 +1,97 @@
-# Concave CMS — Launch Orchestration
+# Concave CMS — Orchestration Log
 
-> **Read this file first** before doing any implementation work. It is the single source of truth for orchestration state so agents can catch up without re-reading the full change history.
+> **MANDATORY for all spawned agents:** Read this file first before any other project files. It is the single source of truth for current progress and next actions.
 
-## Current status (2026-06-22T12:20Z)
+## Session
 
-| Item | Value |
-|------|-------|
-| **Launch plan** | **COMPLETE** — 123/123 checked on impl branch |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` @ `9045ee3` |
-| **Implementation PR** | https://github.com/SaM13997/concave-cms/pull/1 |
-| **Orchestration branch** | `cursor/orchestration-agent-system-0aae` |
-| **Scaffold branch progress** | 7/123 (expected — impl lives on separate branch) |
-| **Active implementation agents** | none |
-| **Phases** | 0–9 complete |
+| Field | Value |
+|-------|-------|
+| **Last updated** | 2026-06-22T09:00Z |
+| **Orchestrator** | Cursor Automation (cron) |
+| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
+| **Orchestration branch** | `cursor/orchestration-agent-system-0b5e` |
+| **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
+| **Launch plan** | `docs/launch-plan.md` |
+| **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
 
-## What was done (implementation branch)
+## Agent rules
 
-Phases 0–9 of `docs/launch-plan.md` are fully implemented and checked off on `cursor/concave-cms-launch-plan-26c1`:
+1. **Model:** Use `composer-2.5` (non-fast) only.
+2. **Read first:** `orchestration.md` → `docs/launch-plan.md` → `docs/agent-testing.md` if running E2E (do not re-read full git history).
+3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (Phases 0–9 complete).
+4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
+5. **E2E trap (important):** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts` only. See `docs/agent-testing.md`.
+6. **Push gate:** NEVER mark a phase complete without verifying remote:
+   ```bash
+   git push -u origin cursor/concave-cms-launch-plan-26c1
+   git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
+   ```
+7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-0b5e`).
+8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
+9. **Commit & push** impl branch after review loop passes.
+10. **Check off** completed items in `docs/launch-plan.md` on the impl branch.
 
-- **Phase 0** — Bootstrap: test env fixtures, `.env.example`, quickstart, schema UX contract, contract test plan
-- **Phase 1** — Auth/RBAC: sessions, roles, server-side enforcement
-- **Phase 2** — Schema builder: canonical schema, bilingual strategy, apply workflow
-- **Phase 3** — Content editing: draft/publish, preview tokens
-- **Phase 4** — Version history: compare/revert
-- **Phase 5** — Global search (Cmd+K)
-- **Phase 6** — Presence indicators
-- **Phase 7** — Publish latency benchmarks
-- **Phase 8** — Accessibility baseline
-- **Phase 9** — Self-hosted packaging: Docker, docker-compose, onboarding E2E, CHANGELOG, release docs
+## Current status
 
-Release checklist (8 items) is also fully checked on the impl branch.
+| Phase | Status |
+|-------|--------|
+| 0 — Bootstrap | ✅ Complete |
+| 1 — Auth + RBAC | ✅ Complete |
+| 2 — Convex foundation | ✅ Complete |
+| 3 — Schema engine | ✅ Complete |
+| 4 — Content engine | ✅ Complete |
+| 5 — Draft/publish + preview | ✅ Complete |
+| 6 — Time travel | ✅ Complete (`3623f93`) |
+| 7 — Admin UX | ✅ Complete (`45c5a8a`) |
+| 8 — Hardening | ✅ Complete (`0718a5c`) |
+| 9 — Packaging | ✅ Complete (`1a6dd04`) |
 
-Verified artifacts on impl branch: `CHANGELOG.md`, `docs/release.md`, `Dockerfile`, `docker-compose.yml`, `e2e/onboarding.spec.ts`.
+**Impl branch HEAD:** `1a6dd04` (verified on remote)
 
-Last implementation commit: `9045ee3` — `test(phase-0): add unit tests for deterministic test env fixtures`.
+**Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (123/123 checked); release checklist fully checked (8/8).
 
-## What's next (post-launch)
+## Active agent
 
-No further implementation agents are needed for `docs/launch-plan.md`. Optional human/OPS steps:
+| Agent | Model | Task | Status |
+|-------|-------|------|--------|
+| — | — | — | **none** |
 
-1. **Merge** PR #1 (`cursor/concave-cms-launch-plan-26c1` → `master`)
-2. **Tag** v1.0.0 per `docs/release.md` on impl branch
-3. **Run** live publish latency benchmark (p50/p95) in staging
-4. **Run** staging backup/restore drill
+## Completed work (log)
 
-## Orchestrator instructions
+### 2026-06-22T09:00Z — Orchestration audit (launch complete)
 
-This agent **does not implement code**. It monitors implementation agents and coordinates work until `docs/launch-plan.md` is complete.
+- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-0b5e`)
+- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items (123/123 checked); release checklist 8/8 checked.
+- **Agents:** No implementation agents running.
+- **Action:** No new implementation agent spawned — launch plan fully implemented.
+- **Next:** Post-launch ops (see below).
 
-### Each cron turn
+### 2026-06-22T07:12Z — Phase 9 packaging + release
 
-1. Read this file (`orchestration.md`) for current state.
-2. Check whether any implementation agents are running (terminals, Slack, branch activity).
-3. Verify impl branch `cursor/concave-cms-launch-plan-26c1` launch-plan checkbox counts remotely.
-4. If no agents running and launch plan incomplete → spawn one (see below).
-5. If agent appears stuck → nudge via Slack with specific next step from launch plan.
-6. If agent finished + review loop passed → update this file and post Slack summary.
-7. Commit and push this file on the orchestration branch.
+- **Agent:** composer-2.5
+- **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `1a6dd04`
+- **Done:** Docker Compose + Dockerfile + Makefile + install-smoke CI; onboarding wizard (Blog → post → publish); CHANGELOG + release/upgrade/rollback/self-hosted/troubleshooting docs; release checklist fully checked.
+- **Tests:** check ✅ · unit 119 ✅ · E2E onboarding 1/1 ✅ (~12s)
 
-### Spawning an implementation agent
+### 2026-06-22T05:45Z — Phase 8 launch hardening
 
-Use model **`composer-2.5`** (not fast).
+- **Commit:** `0718a5c`
+- **Done:** Rate limiting, validation, audit viewer, backup/restore, a11y CI, security regression tests.
 
-**Branch:** `cursor/concave-cms-launch-plan-26c1` (create from `master` if missing).
+### 2026-06-22T03:28Z — Phase 7 admin experience
 
-**Prompt must include:**
+- **Commit:** `45c5a8a`
+- **Done:** Global search, presence, breadcrumbs, Cmd+K, toasts, URL routing.
 
-1. Read `orchestration.md` first for context.
-2. Read `docs/launch-plan.md` and find the first unchecked items.
-3. Implement the next phase/step on the impl branch.
-4. Run `npm run check && npm run test` before finishing.
-5. Spawn a **review/fix loop**: review work against launch plan + `docs/requirements.md`; fix all feedback; repeat until clean.
-6. Check off completed items in `docs/launch-plan.md`.
-7. Commit, push, and post completion summary to Slack #concave-cms.
+### 2026-06-22T02:36Z — Phase 6 time travel
 
-### Agent rules
+- **Commit:** `3623f93`
+- **Done:** History capture, compare, revert APIs + ContentHistoryPanel.
 
-- **E2E:** Never run `bash scripts/e2e-server.sh` directly (blocks forever). Use `npm run test:e2e -- e2e/<spec>.spec.ts`.
-- **Convex dev:** Use `CONVEX_AGENT_MODE=anonymous npx convex dev` in cloud agent environments.
-- **Review loop:** Mandatory before marking a phase done. At least one review round; more if issues found.
+## Next up (post-launch — not launch-plan scope)
 
-## Session log
-
-### 2026-06-22T12:20Z — Orchestration cron (`cursor/orchestration-agent-system-0aae`)
-
-- **Checked:** No implementation agents running.
-- **Verified:** Impl branch `9045ee3` — 123/123 launch-plan items checked; 0 unchecked; Phase 9 artifacts present.
-- **Action:** Created `orchestration.md`. No agent spawned — launch plan fully implemented.
-- **Slack:** Status update posted.
+1. **Merge PR #1** — `cursor/concave-cms-launch-plan-26c1` → master
+2. **Tag v1.0.0** per `docs/release.md`
+3. **Deploy** and measure live publish p50/p95 from `publishMetrics`
+4. **Staging backup/restore drill** in production-like environment
