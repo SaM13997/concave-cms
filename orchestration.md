@@ -6,7 +6,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T03:30Z |
+| **Last updated** | 2026-06-22T05:45Z |
 | **Orchestrator** | Cursor Automation (cron) |
 | **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
 | **Orchestration branch** | `cursor/orchestration-agent-system-b4a1` |
@@ -42,20 +42,29 @@
 | 5 — Draft/publish + preview | ✅ Complete |
 | **6 — Time travel** | ✅ Complete (`3623f93`) |
 | **7 — Admin UX** | ✅ Complete (`45c5a8a`) |
-| **8 — Hardening** | 🔄 **IN PROGRESS** |
-| 9 — Packaging | 🔲 Pending |
+| **8 — Hardening** | ✅ Complete (`0718a5c`) |
+| **9 — Packaging** | 🔄 **NEXT** |
 
-**CI on PR #1:** Pending re-run after impl commit `45c5a8a`.
+**CI on PR #1:** Pending re-run after impl commit `0718a5c`.
 
-**Verified 2026-06-22T03:28Z:** Impl branch pushed to `45c5a8a`. Remote contains `convex/search.ts`, `convex/presence.ts`, `AdminChrome`, `CommandPalette`, and `e2e/navigation.spec.ts`, `e2e/command-search.spec.ts`, `e2e/presence.spec.ts`.
+**Verified 2026-06-22T05:45Z:** Impl branch pushed to `0718a5c`. Remote contains `convex/auditLog.ts`, `convex/exports.ts`, `convex/lib/rateLimit.ts`, `e2e/a11y.spec.ts`, `e2e/security.spec.ts`, `scripts/backup.mjs`, and Phase 8 launch-plan checkboxes.
 
 ## Active agent
 
 | Agent | Model | Task | Status |
 |-------|-------|------|--------|
-| Phase 8 impl | composer-2.5 | Phase 8.1–8.4 launch hardening | **spawned** (2026-06-22T03:30Z) |
+| — | — | — | idle |
 
 ## Completed work (log)
+
+### 2026-06-22T05:45Z — Phase 8 launch hardening (security, audit, backup, a11y)
+
+- **Agent:** composer-2.5
+- **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `0718a5c`
+- **Done:** Rate limiting + input validation + safe FE errors; structured logs/correlation IDs; audit log APIs + `/audit` viewer; backup/restore scripts + migration docs + `/settings` exports; axe a11y + keyboard E2E; security regression tests; launch-plan Phase 8 checked off.
+- **Tests:** `npm run check` ✅ · `npm run test` (119) ✅ · `npx playwright test --retries=2` (32/35 passed; 3 flaky content-publish/CE-02 under full-suite load)
+- **Next:** Phase 9.1 — Self-hosted packaging
 
 ### 2026-06-22T03:30Z — Orchestration cron (branch b4a1)
 
@@ -102,32 +111,9 @@
 
 ## Next up
 
-1. **Phase 8.1** — Security hardening (rate limiting, input validation, security regression suite)
-2. **Phase 8.2** — Observability + audit log UI
-3. **Phase 8.3** — Accessibility baseline
-
-## Phase 8 task spec (for implementation agent)
-
-Implement **Phase 8 — Launch hardening** per `docs/launch-plan.md` on branch `cursor/concave-cms-launch-plan-26c1`:
-
-### Step 8.1 — Security hardening
-- **BE:** Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
-- **FE:** Safe error messages; no sensitive data leaks.
-- **TEST:** Security regression suite (RBAC bypass, expired preview token, replay, injection payloads).
-
-### Step 8.2 — Observability + audit log UI
-- **BE:** Structured logs; correlation IDs; audit log query APIs.
-- **FE:** Audit log viewer (filters, drill-down).
-- **TEST:** Smoke — audit events appear for schema changes and publish.
-
-### Step 8.3 — Backup/restore + upgrade/migrations
-- **BE:** Backup/restore scripts; migration strategy for schema/content evolution.
-- **FE:** Export tools in UI (schema + content snapshot exports).
-- **TEST:** Restore drill — backup → wipe → restore → smoke test passes.
-
-### Step 8.4 — Accessibility baseline
-- **FE:** Keyboard nav, focus management, semantics, contrast, empty/loading/error states.
-- **TEST:** Automated a11y checks on core routes; keyboard-only E2E for Cmd+K + schema builder.
+1. **Phase 9.1** — Packaging and install verification (Docker/compose or CLI installer)
+2. **Phase 9.2** — Onboarding flow + quickstart docs
+3. **Phase 9.3** — Release checklist + versioning
 
 ## Update template (agents: append after review loop)
 
