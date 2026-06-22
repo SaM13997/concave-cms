@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as PreviewTokenRouteImport } from './routes/preview.$token'
+import { Route as PEntryIdRouteImport } from './routes/p.$entryId'
 import { Route as AuthenticatedSchemaRouteImport } from './routes/_authenticated/schema'
 import { Route as AuthenticatedContentRouteImport } from './routes/_authenticated/content'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -31,6 +33,16 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const PreviewTokenRoute = PreviewTokenRouteImport.update({
+  id: '/preview/$token',
+  path: '/preview/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PEntryIdRoute = PEntryIdRouteImport.update({
+  id: '/p/$entryId',
+  path: '/p/$entryId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSchemaRoute = AuthenticatedSchemaRouteImport.update({
   id: '/schema',
@@ -64,6 +76,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/content': typeof AuthenticatedContentRoute
   '/schema': typeof AuthenticatedSchemaRoute
+  '/p/$entryId': typeof PEntryIdRoute
+  '/preview/$token': typeof PreviewTokenRoute
   '/': typeof AuthenticatedIndexRoute
   '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
   '/debug/system': typeof AuthenticatedDebugSystemRoute
@@ -73,6 +87,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/content': typeof AuthenticatedContentRoute
   '/schema': typeof AuthenticatedSchemaRoute
+  '/p/$entryId': typeof PEntryIdRoute
+  '/preview/$token': typeof PreviewTokenRoute
   '/': typeof AuthenticatedIndexRoute
   '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
   '/debug/system': typeof AuthenticatedDebugSystemRoute
@@ -84,6 +100,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/content': typeof AuthenticatedContentRoute
   '/_authenticated/schema': typeof AuthenticatedSchemaRoute
+  '/p/$entryId': typeof PEntryIdRoute
+  '/preview/$token': typeof PreviewTokenRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/debug/reactive': typeof AuthenticatedDebugReactiveRoute
   '/_authenticated/debug/system': typeof AuthenticatedDebugSystemRoute
@@ -95,6 +113,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/content'
     | '/schema'
+    | '/p/$entryId'
+    | '/preview/$token'
     | '/'
     | '/debug/reactive'
     | '/debug/system'
@@ -104,6 +124,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/content'
     | '/schema'
+    | '/p/$entryId'
+    | '/preview/$token'
     | '/'
     | '/debug/reactive'
     | '/debug/system'
@@ -114,6 +136,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/content'
     | '/_authenticated/schema'
+    | '/p/$entryId'
+    | '/preview/$token'
     | '/_authenticated/'
     | '/_authenticated/debug/reactive'
     | '/_authenticated/debug/system'
@@ -123,6 +147,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PEntryIdRoute: typeof PEntryIdRoute
+  PreviewTokenRoute: typeof PreviewTokenRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -148,6 +174,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
+    }
+    '/preview/$token': {
+      id: '/preview/$token'
+      path: '/preview/$token'
+      fullPath: '/preview/$token'
+      preLoaderRoute: typeof PreviewTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/p/$entryId': {
+      id: '/p/$entryId'
+      path: '/p/$entryId'
+      fullPath: '/p/$entryId'
+      preLoaderRoute: typeof PEntryIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/schema': {
       id: '/_authenticated/schema'
@@ -210,6 +250,8 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  PEntryIdRoute: PEntryIdRoute,
+  PreviewTokenRoute: PreviewTokenRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

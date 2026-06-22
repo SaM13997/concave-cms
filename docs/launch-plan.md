@@ -199,26 +199,26 @@ Launch is achieved when:
 ## Phase 5 — Draft/publish lifecycle + preview environments (launch-critical)
 
 ### Step 5.1 — Shadow drafting (draft + published)
-- [ ] **BE (Owner: BE)**: Implement draft/published states in the same collection; prevent leaks.
-- [ ] **BE (Owner: BE)**: Publish mutation is atomic; includes audit event.
-- [ ] **FE (Owner: FE)**: Draft/published UX (badges, publish button, discard draft).
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Integration: publish atomicity and invariants.
-  - [ ] E2E: draft edits don’t show in published until publish.
+- [x] **BE (Owner: BE)**: Implement draft/published states in the same collection; prevent leaks.
+- [x] **BE (Owner: BE)**: Publish mutation is atomic; includes audit event.
+- [x] **FE (Owner: FE)**: Draft/published UX (badges, publish button, discard draft).
+- [x] **TEST (Owner: QA)**:
+  - [x] Integration: publish atomicity and invariants.
+  - [x] E2E: draft edits don’t show in published until publish.
   - **Done**: Draft safety guaranteed by BE.
 
 ### Step 5.2 — One-click preview URLs
-- [ ] **BE (Owner: BE)**: Preview token/URL generation bound to a draft version; expiry + revocation.
-- [ ] **FE (Owner: FE)**: Copy/open preview; regenerate tokens; clear warnings.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] E2E: preview shows draft; published view shows published.
+- [x] **BE (Owner: BE)**: Preview token/URL generation bound to a draft version; expiry + revocation.
+- [x] **FE (Owner: FE)**: Copy/open preview; regenerate tokens; clear warnings.
+- [x] **TEST (Owner: QA)**:
+  - [x] E2E: preview shows draft; published view shows published.
   - **Done**: Marketers can verify draft before publish.
 
 ### Step 5.3 — Publish latency instrumentation (<200ms target)
-- [ ] **BE (Owner: BE)**: Add timing instrumentation around publish and subscriber update.
-- [ ] **FE (Owner: FE)**: UX handles fast path and slow/failure path gracefully.
-- [ ] **TEST (Owner: QA)**:
-  - [ ] Perf: harness measures publish→subscription update latency (p50/p95) in staging-like env.
+- [x] **BE (Owner: BE)**: Add timing instrumentation around publish and subscriber update.
+- [x] **FE (Owner: FE)**: UX handles fast path and slow/failure path gracefully.
+- [x] **TEST (Owner: QA)**:
+  - [x] Perf: harness measures publish→subscription update latency (p50/p95) in staging-like env.
   - **Done**: Latency target is measurable and met (or explicitly documented with mitigation plan).
 
 ---

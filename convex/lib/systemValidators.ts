@@ -91,6 +91,8 @@ export const systemTableSummaryValidator = v.object({
   mediaAssets: v.number(),
   auditLog: v.number(),
   presenceSessions: v.number(),
+  previewTokens: v.number(),
+  publishMetrics: v.number(),
 });
 
 export const contentEntryListItemValidator = v.object({
@@ -99,6 +101,7 @@ export const contentEntryListItemValidator = v.object({
   contentType: v.string(),
   title: v.string(),
   status: entryStatusValidator,
+  hasUnpublishedChanges: v.boolean(),
   updatedAt: v.number(),
 });
 
@@ -133,6 +136,11 @@ export const contentEntryDetailValidator = v.object({
   title: v.string(),
   status: entryStatusValidator,
   data: v.any(),
+  publishedTitle: v.optional(v.string()),
+  publishedData: v.optional(v.any()),
+  hasUnpublishedChanges: v.boolean(),
+  draftRevision: v.number(),
+  publishedRevision: v.optional(v.number()),
   schemaFields: v.array(schemaFieldValidator),
   resolvedReferences: v.record(v.string(), v.union(resolvedReferenceValidator, v.null())),
   resolvedMedia: v.record(v.string(), v.union(resolvedMediaValidator, v.null())),
@@ -141,6 +149,32 @@ export const contentEntryDetailValidator = v.object({
   createdAt: v.number(),
   updatedAt: v.number(),
   publishedAt: v.optional(v.number()),
+});
+
+export const publicContentViewValidator = v.object({
+  _id: v.id("contentEntries"),
+  contentType: v.string(),
+  title: v.string(),
+  data: v.any(),
+  publishedAt: v.optional(v.number()),
+  isPreview: v.boolean(),
+});
+
+export const previewTokenListItemValidator = v.object({
+  _id: v.id("previewTokens"),
+  token: v.string(),
+  draftRevision: v.number(),
+  expiresAt: v.number(),
+  revokedAt: v.optional(v.number()),
+  createdAt: v.number(),
+  isExpired: v.boolean(),
+  isRevoked: v.boolean(),
+  isStale: v.boolean(),
+});
+
+export const publishResultValidator = v.object({
+  entry: contentEntryListItemValidator,
+  publishDurationMs: v.number(),
 });
 
 export const referenceOptionValidator = v.object({

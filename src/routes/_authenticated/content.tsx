@@ -16,6 +16,47 @@ export const Route = createFileRoute("/_authenticated/content")({
   component: ContentPage,
 });
 
+type PublishStatus = "idle" | "publishing" | "fast" | "slow" | "error";
+
+function StatusBadge({
+  status,
+  hasUnpublishedChanges,
+}: {
+  status: "draft" | "published";
+  hasUnpublishedChanges: boolean;
+}) {
+  if (status === "draft") {
+    return (
+      <span
+        data-testid="content-badge-draft"
+        className="inline-flex rounded-full bg-slate-500/20 px-2 py-0.5 text-xs font-medium text-slate-300"
+      >
+        Draft
+      </span>
+    );
+  }
+
+  if (hasUnpublishedChanges) {
+    return (
+      <span
+        data-testid="content-badge-unpublished-changes"
+        className="inline-flex rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-200"
+      >
+        Unpublished changes
+      </span>
+    );
+  }
+
+  return (
+    <span
+      data-testid="content-badge-published"
+      className="inline-flex rounded-full bg-emerald-500/20 px-2 py-0.5 text-xs font-medium text-emerald-200"
+    >
+      Published
+    </span>
+  );
+}
+
 function ContentPage() {
   const { hasPermission, isLoading: roleLoading } = useMyRole();
   const canQuery = !roleLoading && hasPermission("content:read");
@@ -41,14 +82,27 @@ function ContentPage() {
     canQuery && selectedId ? { entryId: selectedId } : "skip",
   );
 
+  const previewTokens = useQuery(
+    api.preview.listPreviewTokens,
+    canQuery && selectedId ? { entryId: selectedId } : "skip",
+  );
+
   const createEntry = useMutation(api.content.createContentEntry);
   const updateEntry = useMutation(api.content.updateContentEntry);
+  const publishEntry = useMutation(api.content.publishContentEntry);
+  const discardDraftMutation = useMutation(api.content.discardDraft);
+  const generatePreviewToken = useMutation(api.preview.generatePreviewToken);
+  const revokePreviewToken = useMutation(api.preview.revokePreviewToken);
 
   const [title, setTitle] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editData, setEditData] = useState<Record<string, unknown>>({});
   const [error, setError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [publishStatus, setPublishStatus] = useState<PublishStatus>("idle");
+  const [publishMessage, setPublishMessage] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewCopied, setPreviewCopied] = useState(false);
 
   useEffect(() => {
     if (selectedEntry) {
@@ -57,7 +111,19 @@ function ContentPage() {
     }
   }, [selectedEntry]);
 
+  const resetPublishPreviewState = () => {
+    setPreviewUrl(null);
+    setPreviewCopied(false);
+    setPublishStatus("idle");
+    setPublishMessage(null);
+  };
+
   const activeType = contentTypes?.find((t) => t.slug === selectedType);
+
+  const canPublish =
+    selectedEntry && (selectedEntry.status === "draft" || selectedEntry.hasUnpublishedChanges);
+
+  const canDiscard = selectedEntry?.status === "published" && selectedEntry.hasUnpublishedChanges;
 
   const handleCreate = async () => {
     if (!selectedType) return;
@@ -70,6 +136,7 @@ function ContentPage() {
       });
       setTitle("");
       setSelectedId(created._id);
+      resetPublishPreviewState();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create entry");
     }
@@ -92,6 +159,79 @@ function ContentPage() {
       setError(err instanceof Error ? err.message : "Failed to save entry");
     }
   }, [selectedId, editTitle, editData, updateEntry]);
+
+  const handlePublish = async () => {
+    if (!selectedId) return;
+    setError(null);
+    setPublishStatus("publishing");
+    setPublishMessage(null);
+
+    const clientStarted = performance.now();
+    try {
+      const result = await publishEntry({ entryId: selectedId });
+      const totalMs = Math.round(performance.now() - clientStarted);
+      const durationMs = Math.max(result.publishDurationMs, totalMs);
+
+      if (durationMs < 200) {
+        setPublishStatus("fast");
+        setPublishMessage(`Published in ${durationMs}ms`);
+      } else {
+        setPublishStatus("slow");
+        setPublishMessage(`Published in ${durationMs}ms (slower than 200ms target)`);
+      }
+
+      setTimeout(() => {
+        setPublishStatus("idle");
+        setPublishMessage(null);
+      }, 4000);
+    } catch (err) {
+      setPublishStatus("error");
+      setPublishMessage(err instanceof Error ? err.message : "Publish failed");
+      setError(err instanceof Error ? err.message : "Publish failed");
+    }
+  };
+
+  const handleDiscard = async () => {
+    if (!selectedId) return;
+    setError(null);
+    try {
+      await discardDraftMutation({ entryId: selectedId });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to discard draft");
+    }
+  };
+
+  const handleGeneratePreview = async (revokeExisting: boolean) => {
+    if (!selectedId) return;
+    setError(null);
+    try {
+      const result = await generatePreviewToken({
+        entryId: selectedId,
+        revokeExisting,
+      });
+      const url = `${window.location.origin}${result.previewPath}`;
+      setPreviewUrl(url);
+      setPreviewCopied(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate preview link");
+    }
+  };
+
+  const handleCopyPreview = async () => {
+    if (!previewUrl) return;
+    await navigator.clipboard.writeText(previewUrl);
+    setPreviewCopied(true);
+    setTimeout(() => setPreviewCopied(false), 2000);
+  };
+
+  const handleRevokeToken = async (tokenId: Id<"previewTokens">) => {
+    setError(null);
+    try {
+      await revokePreviewToken({ tokenId });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to revoke preview token");
+    }
+  };
 
   if (roleLoading) {
     return <div data-testid="content-loading">Loading...</div>;
@@ -130,6 +270,7 @@ function ContentPage() {
                   onClick={() => {
                     setSelectedType(type.slug);
                     setSelectedId(null);
+                    resetPublishPreviewState();
                   }}
                   className={cn(
                     "rounded-md border border-border px-3 py-1.5 text-sm transition-colors",
@@ -165,14 +306,20 @@ function ContentPage() {
                       <button
                         type="button"
                         data-testid={`content-entry-${entry._id}`}
-                        onClick={() => setSelectedId(entry._id)}
+                        onClick={() => {
+                          setSelectedId(entry._id);
+                          resetPublishPreviewState();
+                        }}
                         className={cn(
                           "w-full rounded-md border border-border px-3 py-2 text-left text-sm transition-colors",
                           selectedId === entry._id && "border-primary bg-muted",
                         )}
                       >
                         <span className="font-medium">{entry.title}</span>
-                        <span className="ml-2 text-xs text-muted-foreground">{entry.status}</span>
+                        <span className="ml-2 text-xs text-muted-foreground">
+                          {entry.status}
+                          {entry.hasUnpublishedChanges ? " · changes" : ""}
+                        </span>
                       </button>
                     </li>
                   ))
@@ -207,10 +354,22 @@ function ContentPage() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <StatusBadge
+                      status={selectedEntry.status}
+                      hasUnpublishedChanges={selectedEntry.hasUnpublishedChanges}
+                    />
                     <span data-testid="content-detail-status">{selectedEntry.status}</span>
                     <span>·</span>
                     <span>{selectedEntry.contentType}</span>
+                    {selectedEntry.status === "published" && selectedEntry.publishedAt && (
+                      <>
+                        <span>·</span>
+                        <span data-testid="content-published-at">
+                          Published {new Date(selectedEntry.publishedAt).toLocaleString()}
+                        </span>
+                      </>
+                    )}
                   </div>
 
                   {selectedEntry.schemaFields.length > 0 && (
@@ -221,19 +380,161 @@ function ContentPage() {
                     />
                   )}
 
-                  {canWrite && (
-                    <Button
-                      data-testid="content-save-button"
-                      onClick={() => void handleSave()}
-                      disabled={saveStatus === "saving"}
-                      type="button"
+                  <div className="flex flex-wrap gap-2">
+                    {canWrite && (
+                      <Button
+                        data-testid="content-save-button"
+                        onClick={() => void handleSave()}
+                        disabled={saveStatus === "saving"}
+                        type="button"
+                        variant="secondary"
+                      >
+                        {saveStatus === "saving"
+                          ? "Saving..."
+                          : saveStatus === "saved"
+                            ? "Saved"
+                            : "Save"}
+                      </Button>
+                    )}
+
+                    {canWrite && canPublish && (
+                      <Button
+                        data-testid="content-publish-button"
+                        onClick={() => void handlePublish()}
+                        disabled={publishStatus === "publishing"}
+                        type="button"
+                      >
+                        {publishStatus === "publishing" ? "Publishing..." : "Publish"}
+                      </Button>
+                    )}
+
+                    {canWrite && canDiscard && (
+                      <Button
+                        data-testid="content-discard-button"
+                        onClick={() => void handleDiscard()}
+                        type="button"
+                        variant="outline"
+                      >
+                        Discard draft
+                      </Button>
+                    )}
+                  </div>
+
+                  {publishMessage && (
+                    <p
+                      data-testid="content-publish-message"
+                      className={cn(
+                        "text-sm",
+                        publishStatus === "error" && "text-destructive",
+                        publishStatus === "slow" && "text-amber-400",
+                        publishStatus === "fast" && "text-emerald-400",
+                      )}
                     >
-                      {saveStatus === "saving"
-                        ? "Saving..."
-                        : saveStatus === "saved"
-                          ? "Saved"
-                          : "Save"}
-                    </Button>
+                      {publishMessage}
+                    </p>
+                  )}
+
+                  {selectedId && selectedEntry.status === "published" && (
+                    <div
+                      data-testid="content-published-link"
+                      className="rounded-md border border-border bg-muted/30 p-3 text-sm"
+                    >
+                      <p className="font-medium">Published site</p>
+                      <a
+                        href={`/p/${selectedId}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-testid="content-open-published"
+                        className="text-primary underline"
+                      >
+                        Open published view
+                      </a>
+                    </div>
+                  )}
+
+                  {canWrite && selectedId && (
+                    <section
+                      data-testid="content-preview-section"
+                      className="space-y-2 rounded-md border border-dashed border-border p-3"
+                    >
+                      <p className="text-sm font-medium">Preview</p>
+                      <p className="text-xs text-muted-foreground">
+                        Generate a shareable link to preview draft content before publishing.
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          data-testid="content-preview-generate"
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => void handleGeneratePreview(false)}
+                        >
+                          Generate preview link
+                        </Button>
+                        <Button
+                          data-testid="content-preview-regenerate"
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => void handleGeneratePreview(true)}
+                        >
+                          Regenerate (revoke old)
+                        </Button>
+                      </div>
+
+                      {previewUrl && (
+                        <div className="space-y-2">
+                          <Input data-testid="content-preview-url" readOnly value={previewUrl} />
+                          <div className="flex gap-2">
+                            <Button
+                              data-testid="content-preview-copy"
+                              type="button"
+                              size="sm"
+                              variant="secondary"
+                              onClick={() => void handleCopyPreview()}
+                            >
+                              {previewCopied ? "Copied!" : "Copy link"}
+                            </Button>
+                            <Button
+                              data-testid="content-preview-open"
+                              type="button"
+                              size="sm"
+                              asChild
+                            >
+                              <a href={previewUrl} target="_blank" rel="noreferrer">
+                                Open preview
+                              </a>
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {previewTokens && previewTokens.length > 0 && (
+                        <ul data-testid="content-preview-tokens" className="space-y-1 text-xs">
+                          {previewTokens.map((token) => (
+                            <li key={token._id} className="flex items-center justify-between gap-2">
+                              <span data-testid={`content-preview-token-${token._id}`}>
+                                {token.isRevoked && "Revoked · "}
+                                {token.isExpired && "Expired · "}
+                                {token.isStale && "Stale · "}
+                                expires {new Date(token.expiresAt).toLocaleString()}
+                              </span>
+                              {!token.isRevoked && (
+                                <Button
+                                  data-testid={`content-preview-revoke-${token._id}`}
+                                  type="button"
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => void handleRevokeToken(token._id)}
+                                >
+                                  Revoke
+                                </Button>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </section>
                   )}
 
                   {selectedEntry.resolvedReferences &&

@@ -57,6 +57,8 @@ export const getSystemSummary = adminQuery({
       mediaAssets,
       auditLog,
       presenceSessions,
+      previewTokens,
+      publishMetrics,
     ] = await Promise.all([
       ctx.db.query("schemas").take(1000),
       ctx.db.query("schemaVersions").take(1000),
@@ -65,6 +67,8 @@ export const getSystemSummary = adminQuery({
       ctx.db.query("mediaAssets").take(1000),
       ctx.db.query("auditLog").take(1000),
       ctx.db.query("presenceSessions").take(1000),
+      ctx.db.query("previewTokens").take(1000),
+      ctx.db.query("publishMetrics").take(1000),
     ]);
 
     return {
@@ -75,6 +79,8 @@ export const getSystemSummary = adminQuery({
       mediaAssets: mediaAssets.length,
       auditLog: auditLog.length,
       presenceSessions: presenceSessions.length,
+      previewTokens: previewTokens.length,
+      publishMetrics: publishMetrics.length,
     };
   },
 });

@@ -60,6 +60,11 @@ export default defineSchema({
     title: v.string(),
     status: entryStatusValidator,
     data: v.any(),
+    publishedTitle: v.optional(v.string()),
+    publishedData: v.optional(v.any()),
+    draftRevision: v.number(),
+    publishedRevision: v.optional(v.number()),
+    hasUnpublishedChanges: v.boolean(),
     createdBy: v.id("cmsUsers"),
     updatedBy: v.id("cmsUsers"),
     createdAt: v.number(),
@@ -69,6 +74,25 @@ export default defineSchema({
     .index("by_content_type", ["contentType"])
     .index("by_content_type_and_status", ["contentType", "status"])
     .index("by_updated_at", ["updatedAt"]),
+
+  previewTokens: defineTable({
+    entryId: v.id("contentEntries"),
+    token: v.string(),
+    draftRevision: v.number(),
+    expiresAt: v.number(),
+    revokedAt: v.optional(v.number()),
+    createdBy: v.id("cmsUsers"),
+    createdAt: v.number(),
+  })
+    .index("by_token", ["token"])
+    .index("by_entry", ["entryId"]),
+
+  publishMetrics: defineTable({
+    entryId: v.id("contentEntries"),
+    publishDurationMs: v.number(),
+    timestamp: v.number(),
+    actorId: v.id("cmsUsers"),
+  }).index("by_timestamp", ["timestamp"]),
 
   versionEvents: defineTable({
     entityType: versionEntityTypeValidator,

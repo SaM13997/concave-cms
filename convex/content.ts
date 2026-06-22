@@ -2,6 +2,13 @@ import { v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
 import type { MutationCtx, QueryCtx } from "./_generated/server";
 import { writeAuditLog } from "./lib/audit";
+import {
+  buildDiscardPatch,
+  buildDraftUpdatePatch,
+  buildPublishPatch,
+  planDiscardDraft,
+  planPublish,
+} from "./lib/contentPublish";
 import { getActiveSchemaBySlug, getSchemaFields } from "./lib/contentSchemas";
 import { assertEntryData } from "./lib/contentValidation";
 import { type AuthedRoleCtx, editorMutation, editorQuery } from "./lib/rbac";
@@ -9,6 +16,7 @@ import {
   contentEntryDetailValidator,
   contentEntryListItemValidator,
   contentTypeDescriptorValidator,
+  publishResultValidator,
   referenceOptionValidator,
 } from "./lib/systemValidators";
 
@@ -19,6 +27,7 @@ function toListItem(entry: Doc<"contentEntries">) {
     contentType: entry.contentType,
     title: entry.title,
     status: entry.status,
+    hasUnpublishedChanges: entry.hasUnpublishedChanges,
     updatedAt: entry.updatedAt,
   };
 }
@@ -185,6 +194,11 @@ export const getContentEntry = editorQuery({
       title: entry.title,
       status: entry.status,
       data: entry.data,
+      publishedTitle: entry.publishedTitle,
+      publishedData: entry.publishedData,
+      hasUnpublishedChanges: entry.hasUnpublishedChanges,
+      draftRevision: entry.draftRevision,
+      publishedRevision: entry.publishedRevision,
       schemaFields: fields,
       resolvedReferences,
       resolvedMedia,
@@ -263,6 +277,8 @@ export const createContentEntry = editorMutation({
       title: args.title.trim(),
       status: "draft",
       data: entryData,
+      draftRevision: 1,
+      hasUnpublishedChanges: false,
       createdBy: roleCtx.cmsUser._id,
       updatedBy: roleCtx.cmsUser._id,
       createdAt: now,
@@ -331,11 +347,11 @@ export const updateContentEntry = editorMutation({
       entryData.title = title;
     }
 
+    const draftPatch = buildDraftUpdatePatch(entry, title, entryData, now);
+
     await ctx.db.patch(args.entryId, {
-      title,
-      data: entryData,
+      ...draftPatch,
       updatedBy: roleCtx.cmsUser._id,
-      updatedAt: now,
     });
 
     await ctx.db.insert("versionEvents", {
@@ -362,5 +378,162 @@ export const updateContentEntry = editorMutation({
     }
 
     return toListItem(updated);
+  },
+});
+
+export const publishContentEntry = editorMutation({
+  args: { entryId: v.id("contentEntries") },
+  returns: publishResultValidator,
+  handler: async (ctx, args) => {
+    const roleCtx = ctx as typeof ctx & AuthedRoleCtx;
+    const startedAt = Date.now();
+
+    const entry = await ctx.db.get(args.entryId);
+    if (!entry) {
+      throw new Error("Content entry not found");
+    }
+
+    const plan = planPublish(entry);
+    if (!plan.ok) {
+      throw new Error(plan.reason);
+    }
+
+    const now = Date.now();
+    const publishPatch = buildPublishPatch(entry, now);
+
+    await ctx.db.patch(args.entryId, {
+      ...publishPatch,
+      updatedBy: roleCtx.cmsUser._id,
+      updatedAt: now,
+    });
+
+    await ctx.db.insert("versionEvents", {
+      entityType: "entry",
+      entityId: args.entryId,
+      eventType: "published",
+      summary: `Published "${entry.title}"`,
+      actorId: roleCtx.cmsUser._id,
+      timestamp: now,
+      payload: {
+        title: entry.title,
+        draftRevision: entry.draftRevision,
+        publishedRevision: publishPatch.publishedRevision,
+      },
+    });
+
+    await writeAuditLog(ctx, {
+      action: "content.publish",
+      resourceType: "contentEntry",
+      resourceId: args.entryId,
+      actorId: roleCtx.cmsUser._id,
+      metadata: {
+        title: entry.title,
+        draftRevision: entry.draftRevision,
+        publishedRevision: publishPatch.publishedRevision,
+      },
+    });
+
+    const publishDurationMs = Date.now() - startedAt;
+
+    await ctx.db.insert("publishMetrics", {
+      entryId: args.entryId,
+      publishDurationMs,
+      timestamp: now,
+      actorId: roleCtx.cmsUser._id,
+    });
+
+    const updated = await ctx.db.get(args.entryId);
+    if (!updated) {
+      throw new Error("Content entry not found after publish");
+    }
+
+    return {
+      entry: toListItem(updated),
+      publishDurationMs,
+    };
+  },
+});
+
+export const discardDraft = editorMutation({
+  args: { entryId: v.id("contentEntries") },
+  returns: contentEntryListItemValidator,
+  handler: async (ctx, args) => {
+    const roleCtx = ctx as typeof ctx & AuthedRoleCtx;
+    const entry = await ctx.db.get(args.entryId);
+    if (!entry) {
+      throw new Error("Content entry not found");
+    }
+
+    const plan = planDiscardDraft(entry);
+    if (!plan.ok) {
+      throw new Error(plan.reason);
+    }
+
+    const now = Date.now();
+    const discardPatch = buildDiscardPatch(entry);
+
+    await ctx.db.patch(args.entryId, {
+      ...discardPatch,
+      updatedBy: roleCtx.cmsUser._id,
+      updatedAt: now,
+    });
+
+    await ctx.db.insert("versionEvents", {
+      entityType: "entry",
+      entityId: args.entryId,
+      eventType: "updated",
+      summary: `Discarded draft changes for "${discardPatch.title}"`,
+      actorId: roleCtx.cmsUser._id,
+      timestamp: now,
+      payload: { action: "discard_draft" },
+    });
+
+    await writeAuditLog(ctx, {
+      action: "content.update",
+      resourceType: "contentEntry",
+      resourceId: args.entryId,
+      actorId: roleCtx.cmsUser._id,
+      metadata: { action: "discard_draft", title: discardPatch.title },
+    });
+
+    const updated = await ctx.db.get(args.entryId);
+    if (!updated) {
+      throw new Error("Content entry not found after discard");
+    }
+
+    return toListItem(updated);
+  },
+});
+
+export const getPublishMetricsSummary = editorQuery({
+  args: { limit: v.optional(v.number()) },
+  returns: v.object({
+    count: v.number(),
+    p50Ms: v.number(),
+    p95Ms: v.number(),
+    latestMs: v.optional(v.number()),
+  }),
+  handler: async (ctx, args) => {
+    const limit = args.limit ?? 100;
+    const metrics = await ctx.db
+      .query("publishMetrics")
+      .withIndex("by_timestamp")
+      .order("desc")
+      .take(limit);
+
+    if (metrics.length === 0) {
+      return { count: 0, p50Ms: 0, p95Ms: 0 };
+    }
+
+    const durations = metrics.map((m) => m.publishDurationMs).sort((a, b) => a - b);
+    const p50Index = Math.floor(durations.length * 0.5);
+    const p95Index = Math.min(durations.length - 1, Math.floor(durations.length * 0.95));
+
+    return {
+      count: durations.length,
+      p50Ms: durations[p50Index] ?? 0,
+      p95Ms: durations[p95Index] ?? 0,
+      latestMs: metrics[0]?.publishDurationMs,
+    };
   },
 });
