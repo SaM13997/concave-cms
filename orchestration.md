@@ -2,10 +2,10 @@
 
 > **Read this file first** before starting any implementation work. It is the single source of truth for project status, branch pointers, and next actions. Do not re-read the full git history or Slack thread unless something here is stale.
 
-**Last updated:** 2026-06-22 12:40 UTC (orchestration cron)  
-**Orchestration branch:** `cursor/orchestration-agent-system-6e2f`  
+**Last updated:** 2026-06-22 11:40 UTC (orchestration cron)  
+**Orchestration branch:** `cursor/orchestration-agent-system-714a`  
 **Implementation branch:** `cursor/concave-cms-launch-plan-26c1`  
-**Launch plan:** `docs/launch-plan.md`
+**Launch plan:** `docs/launch-plan.md` (on impl branch)
 
 ---
 
@@ -17,7 +17,7 @@
 4. **Review/fix loop:** After each phase or significant chunk of work, spawn a review pass. Fix all feedback before marking done. Repeat until clean.
 5. **When done:** Run `npm run check` and `npm run test` (and relevant E2E). Commit, push, update this file, and notify Slack.
 6. **Check off items** in `docs/launch-plan.md` as you complete them.
-7. **E2E rule:** Never run `bash scripts/e2e-server.sh` directly — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts`.
+7. **E2E rule:** Never run `bash scripts/e2e-server.sh` (blocks forever). Use `npm run test:e2e -- e2e/<spec>.spec.ts`.
 
 ---
 
@@ -27,7 +27,7 @@
 |------|--------|
 | Implementation agents running | **None** |
 | Launch plan (`docs/launch-plan.md` on impl branch) | **123/123 checked** (0 unchecked) |
-| Release checklist | **Fully checked** |
+| Release checklist | **8/8 checked** |
 | Phases 0–9 | **Complete** |
 | Latest impl commit | `9045ee3` — `test(phase-0): add unit tests for deterministic test env fixtures` |
 | Tests (last verified) | `npm run check` ✅ · `npm run test` ✅ (122 tests, 18 files) |
@@ -83,7 +83,7 @@
 
 These are **optional post-launch** steps — not launch-plan blockers:
 
-1. **Merge** implementation PR #1 → `master`
+1. **Merge** implementation PR → `master`
 2. **Tag** `v1.0.0` per `docs/release.md`
 3. **Measure** live publish p50/p95 latency in staging/production
 4. **Run** staging backup/restore drill in a real environment
@@ -107,9 +107,12 @@ If a new implementation agent is spawned for post-launch work, assign one of the
 
 | Timestamp (UTC) | Event |
 |-----------------|-------|
-| 2026-06-22 12:40 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. Created `orchestration.md` on `cursor/orchestration-agent-system-6e2f`. No agent spawned. |
-| 2026-06-22 12:30 | Cron: verified impl branch 123/123, no agents running, launch complete. |
-| 2026-06-22 11:10 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. |
+| 2026-06-22 11:40 | Cron: verified impl branch 123/123, Phase 9 artifacts present (Docker, onboarding E2E, CHANGELOG, Makefile), no agents running, launch complete. Created `orchestration.md` on `cursor/orchestration-agent-system-714a`. No agent spawned. |
+| 2026-06-22 11:30 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. Created `orchestration.md` on `cursor/orchestration-agent-system-725d`. No agent spawned. |
+| 2026-06-22 11:20 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. Updated `orchestration.md` on `cursor/orchestration-agent-system-b889`. No agent spawned. |
+| 2026-06-22 11:10 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. Updated `orchestration.md`. No agent spawned. |
+| 2026-06-22 11:00 | Cron: verified impl branch 123/123, no agents running, launch complete. Updated `orchestration.md`. No agent spawned. |
+| 2026-06-22 10:50 | Cron: verified complete, no agent spawned. |
 | 2026-06-22 10:39 | Impl agent finished Phase 0 delta + verified all phases. Review loop pass. |
 | 2026-06-22 10:30 | Spawned `composer-2.5` agent for Phase 0 remainder → led to full verification. |
 | 2026-06-22 07:10 | Phase 9 complete — all phases 0–9 done (`1a6dd04`). |
