@@ -18,7 +18,7 @@
 
 1. **Model:** Use `composer-2.5` (non-fast) only.
 2. **Read first:** `orchestration.md` → `docs/launch-plan.md` (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–6).
+3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–7).
 4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
 5. **Push gate:** NEVER mark a phase complete without verifying remote:
    ```bash
@@ -41,13 +41,13 @@
 | 4 — Content engine | ✅ Complete |
 | 5 — Draft/publish + preview | ✅ Complete |
 | **6 — Time travel** | ✅ Complete (`3623f93`) |
-| **7 — Admin UX** | 🔲 **NEXT** |
-| 8 — Hardening | 🔲 Pending |
+| **7 — Admin UX** | ✅ Complete (`45c5a8a`) |
+| **8 — Hardening** | 🔲 **NEXT** |
 | 9 — Packaging | 🔲 Pending |
 
-**CI on PR #1:** Pending re-run after impl commit `3623f93`.
+**CI on PR #1:** Pending re-run after impl commit `45c5a8a`.
 
-**Verified 2026-06-22T02:36Z:** Impl branch pushed to `3623f93`. Remote contains `convex/contentHistory.ts`, `convex/lib/contentHistory.ts`, `ContentHistoryPanel`, and `e2e/content-history.spec.ts`.
+**Verified 2026-06-22T03:28Z:** Impl branch pushed to `45c5a8a`. Remote contains `convex/search.ts`, `convex/presence.ts`, `AdminChrome`, `CommandPalette`, and `e2e/navigation.spec.ts`, `e2e/command-search.spec.ts`, `e2e/presence.spec.ts`.
 
 ## Active agent
 
@@ -56,6 +56,15 @@
 | — | — | — | **idle** |
 
 ## Completed work (log)
+
+### 2026-06-22T03:28Z — Phase 7 admin experience (navigation, Cmd+K, presence, toasts)
+
+- **Agent:** composer-2.5
+- **Branch:** cursor/concave-cms-launch-plan-26c1
+- **Commit:** `45c5a8a`
+- **Done:** `globalSearch` API with RBAC + ranking; presence heartbeat/disconnect with expiry; `getContentEntryNavSummary`; AdminChrome with breadcrumbs, Cmd+K palette, presence avatars, toast notifications; URL-driven content/schema routing; media library route; launch-plan Phase 7 checked off.
+- **Tests:** `npm run check` ✅ · `npm run test` (101) ✅ · `npm run test:e2e -- e2e/navigation.spec.ts e2e/command-search.spec.ts e2e/presence.spec.ts` (6) ✅
+- **Next:** Phase 8.1 — Security hardening
 
 ### 2026-06-22T02:36Z — Phase 6 time travel (history, compare, revert)
 
@@ -88,28 +97,27 @@
 
 ## Next up
 
-1. **Phase 7.1** — Fluid navigation (breadcrumbs, keyboard nav)
-2. **Phase 7.2** — Cmd+K global search
-3. **Phase 7.3** — Presence + toasts
+1. **Phase 8.1** — Security hardening (rate limiting, input validation, security regression suite)
+2. **Phase 8.2** — Observability + audit log UI
+3. **Phase 8.3** — Accessibility baseline
 
-## Phase 7 task spec (for implementation agent)
+## Phase 8 task spec (for implementation agent)
 
-Implement **Phase 7 — Admin experience** per `docs/launch-plan.md` on branch `cursor/concave-cms-launch-plan-26c1`:
+Implement **Phase 8 — Launch hardening** per `docs/launch-plan.md` on branch `cursor/concave-cms-launch-plan-26c1`:
 
-### Step 7.1 — Fluid navigation
-- **BE:** Optimize queries for fast list/detail navigation.
-- **FE:** Route structure, breadcrumbs, keyboard-first navigation.
-- **TEST:** E2E — primary navigation paths; no broken states.
+### Step 8.1 — Security hardening
+- **BE:** Rate limiting/abuse controls for auth/publish/schema apply; input validation everywhere.
+- **FE:** Safe error messages; no sensitive data leaks.
+- **TEST:** Security regression suite.
 
-### Step 7.2 — Command Center (Cmd+K)
-- **BE:** Search APIs across content/schema/media with RBAC filtering.
-- **FE:** Cmd+K palette UI with grouped results.
-- **TEST:** E2E — search finds each entity type; forbidden results never appear.
+### Step 8.2 — Observability + audit log UI
+- **BE:** Structured logs; correlation IDs; audit log query APIs.
+- **FE:** Audit log viewer in admin UI.
+- **TEST:** E2E audit log visibility.
 
-### Step 7.3 — Presence + toasts
-- **BE:** Presence sessions with expiry; standardized event payloads.
-- **FE:** Presence UI and toast UX.
-- **TEST:** E2E — two sessions show presence; disconnect clears.
+### Step 8.3 — Accessibility baseline
+- **FE:** Keyboard navigation, focus management, axe checks on core routes.
+- **TEST:** Automated a11y checks in CI.
 
 ## Update template (agents: append after review loop)
 
