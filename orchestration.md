@@ -1,104 +1,141 @@
-# Concave CMS — Orchestration Log
+# Concave CMS — Orchestration State
 
-> **MANDATORY for all spawned agents:** Read this file first before any other project files. It is the single source of truth for current progress and next actions.
+> **Read this file first** before starting any implementation work. It is the single source of truth for project status, branch pointers, and next actions. Do not re-read the full git history or Slack thread unless something here is stale.
 
-## Session
+**Last updated:** 2026-06-22 12:50 UTC (orchestration cron)  
+**Orchestration branch:** `cursor/orchestration-agent-system-5e22`  
+**Implementation branch:** `cursor/concave-cms-launch-plan-26c1`  
+**Launch plan:** `docs/launch-plan.md`
 
-| Field | Value |
-|-------|-------|
-| **Last updated** | 2026-06-22T01:20Z |
-| **Orchestrator** | Cursor Automation (cron) |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-4ba6` |
-| **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
-| **Launch plan** | `docs/launch-plan.md` |
+---
 
-## Agent rules
+## Agent instructions (mandatory)
 
-1. **Model:** Use `composer-2.5` (non-fast) only.
-2. **Read first:** `orchestration.md` → `docs/launch-plan.md` (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (has Phases 0–5).
-4. **Review loop:** After implementation, spawn a review/fix sub-loop until CI-quality feedback is addressed (`bun run verify` or `bun run check` + `bun run test` + e2e if touched).
-5. **Update this file** when your task + review loop completes (append to Completed work log; update phase table).
-6. **Convex:** Use `function-creator` skill; `npx convex dev` with `CONVEX_AGENT_MODE=anonymous` for cloud agents.
-7. **Commit & push** to impl branch after review loop passes.
+1. **Read this file first** — catch up here before touching code.
+2. **Model:** Use `composer-2.5` (non-fast). Do not use `composer-2.5-fast`.
+3. **Branch:** All implementation work goes on `cursor/concave-cms-launch-plan-26c1` (not master/orchestration branches).
+4. **Review/fix loop:** After each phase or significant chunk of work, spawn a review pass. Fix all feedback before marking done. Repeat until clean.
+5. **When done:** Run `npm run check` and `npm run test` (and relevant E2E). Commit, push, update this file, and notify Slack.
+6. **Check off items** in `docs/launch-plan.md` as you complete them.
+7. **E2E rule:** Never run `bash scripts/e2e-server.sh` directly — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts`.
 
-## Current status
+---
 
-| Phase | Status |
-|-------|--------|
-| 0 — Bootstrap | ✅ Complete |
-| 1 — Auth + RBAC | ✅ Complete |
-| 2 — Convex foundation | ✅ Complete |
-| 3 — Schema engine | ✅ Complete |
-| 4 — Content engine | ✅ Complete |
-| 5 — Draft/publish + preview | ✅ Complete |
-| **6 — Time travel** | 🔄 **IN PROGRESS** |
-| 7 — Admin UX | 🔲 Pending |
-| 8 — Hardening | 🔲 Pending |
-| 9 — Packaging | 🔲 Pending |
+## Current status: LAUNCH COMPLETE
 
-**CI on PR #1:** Green (typecheck, lint, build, test, e2e) as of last impl commit `7b98eac`.
+| Item | Status |
+|------|--------|
+| Implementation agents running | **None** |
+| Launch plan (`docs/launch-plan.md` on impl branch) | **123/123 checked** (0 unchecked) |
+| Release checklist | **Fully checked** |
+| Phases 0–9 | **Complete** |
+| Latest impl commit | `9045ee3` — `test(phase-0): add unit tests for deterministic test env fixtures` |
+| Tests (last verified) | `npm run check` ✅ · `npm run test` ✅ (122 tests, 18 files) |
+| PR | https://github.com/SaM13997/concave-cms/pull/1 |
 
-**Verified 2026-06-22:** No `contentHistory.ts`, `ContentHistoryPanel`, or Phase 6 tests on impl branch. Prior "Phase 6 complete" Slack post was incorrect.
+**No new implementation agent needed.** The launch plan is fully implemented on the implementation branch.
 
-## Active agent
+---
 
-| Agent | Model | Task | Status |
-|-------|-------|------|--------|
-| Phase 6 impl | composer-2.5 | Phase 6.1 + 6.2 time travel | **spawned** (2026-06-22T01:20Z) |
+## What was done (summary)
 
-## Completed work (log)
+### Phase 0 — Bootstrap
+- Repo scaffolding, CI, ADRs, env config, `.env.example`, quickstart docs
+- Deterministic test secrets (`src/test/fixtures/env.ts`)
+- Schema apply UX contract + contract test plan
 
-### 2026-06-22 — Orchestration cron (env recovered)
+### Phase 1 — Auth & RBAC
+- Better Auth integration, session handling, server-side identity verification
+- RBAC matrix enforced on all sensitive mutations
 
-- Environment healthy again; prior session blocked on file/shell access.
-- Audited impl branch: Phases 0–5 verified complete; Phase 6 not started.
-- Updated `orchestration.md` on orchestration branch.
-- Spawned Phase 6 implementation agent (`composer-2.5`) with review/fix loop instructions.
+### Phase 2 — Convex foundation
+- System tables (schema, content, media, audit, presence)
+- Reactive query patterns
 
-### 2026-06-22 — Orchestration bootstrap
+### Phase 3 — Visual Schema Engine
+- Canonical schema validation, drag-and-drop builder, export/apply workflow
 
-- Created `orchestration.md` and status audit.
-- Confirmed PR #1 branch has Phases 0–5 implemented; Phase 6 unchecked.
-- Prior Phase 6 agent blocked by unreachable workspace.
+### Phase 4 — Content engine
+- Schema-driven CRUD, rich text, media, references
 
-## Next up (after Phase 6)
+### Phase 5 — Draft/publish & preview
+- Shadow drafting, atomic publish, preview URLs, publish latency instrumentation
 
-1. **Phase 7.1** — Fluid navigation (breadcrumbs, keyboard nav)
-2. **Phase 7.2** — Cmd+K global search
-3. **Phase 7.3** — Presence + toasts
+### Phase 6 — Time travel
+- Version history, compare, revert (`ContentHistoryPanel`, audit events)
 
-## Phase 6 task spec (for implementation agent)
+### Phase 7 — Admin UX
+- Fluid navigation, Cmd+K search, presence indicators, toasts
 
-Implement **Phase 6 — Time travel** per `docs/launch-plan.md` on branch `cursor/concave-cms-launch-plan-26c1`:
+### Phase 8 — Launch hardening
+- Rate limiting, input validation, structured logs, audit viewer
+- Backup/restore scripts, a11y CI, security regression suite
 
-### Step 6.1 — Version history capture
-- **BE:** Persist history events (who/when/what summary) on content edits and publish. Full snapshots on create/update/publish/discard.
-- **FE:** History timeline view on entry detail (`ContentHistoryPanel`).
-- **TEST:** Integration — each edit/publish creates expected history event.
+### Phase 9 — Packaging & release
+- Docker Compose + Dockerfile + Makefile + install-smoke CI
+- Onboarding wizard (Blog → post → publish) + `e2e/onboarding.spec.ts`
+- CHANGELOG, release/upgrade/rollback docs
+- Release checklist fully checked
 
-### Step 6.2 — Compare + revert
-- **BE:** Compare/diff API; atomic revert mutation + audit event.
-- **FE:** Side-by-side compare UI; revert with confirmation.
-- **TEST:** E2E — revert restores prior version; audit event created.
+---
 
-### Suggested files
-- `convex/lib/contentHistory.ts`, `convex/contentHistory.ts`
-- Enhance `convex/content.ts` to emit version events
-- `src/components/content/ContentHistoryPanel.tsx` (or similar)
-- `convex/lib/contentHistory.test.ts`, `e2e/content-history.spec.ts`
+## What's next (post-launch)
 
-Check off completed items in `docs/launch-plan.md` when done.
+These are **optional post-launch** steps — not launch-plan blockers:
 
-## Update template (agents: append after review loop)
+1. **Merge** implementation PR #1 → `master`
+2. **Tag** `v1.0.0` per `docs/release.md`
+3. **Measure** live publish p50/p95 latency in staging/production
+4. **Run** staging backup/restore drill in a real environment
 
-```markdown
-### YYYY-MM-DD — <short title>
-- **Agent:** composer-2.5
-- **Branch:** cursor/concave-cms-launch-plan-26c1
-- **Done:** ...
-- **Tests:** ...
-- **PR:** updated / unchanged
-- **Next:** ...
+If a new implementation agent is spawned for post-launch work, assign one of the above explicitly.
+
+---
+
+## Branch map
+
+| Branch | Purpose | Launch plan progress |
+|--------|---------|---------------------|
+| `master` / orchestration branches | Scaffold + orchestration docs only | ~7/123 (Phase 0.1 only) |
+| `cursor/concave-cms-launch-plan-26c1` | **All implementation** | **123/123 complete** |
+
+> The orchestration/scaffold branch intentionally lags. Never use its `docs/launch-plan.md` checkboxes as implementation progress — always check the impl branch.
+
+---
+
+## Orchestration log
+
+| Timestamp (UTC) | Event |
+|-----------------|-------|
+| 2026-06-22 12:50 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. Created `orchestration.md` on `cursor/orchestration-agent-system-5e22`. No agent spawned. |
+| 2026-06-22 12:40 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. Created `orchestration.md` on `cursor/orchestration-agent-system-6e2f`. No agent spawned. |
+| 2026-06-22 12:30 | Cron: verified impl branch 123/123, no agents running, launch complete. |
+| 2026-06-22 11:10 | Cron: verified impl branch 123/123, Phase 9 artifacts present, no agents running, launch complete. |
+| 2026-06-22 10:39 | Impl agent finished Phase 0 delta + verified all phases. Review loop pass. |
+| 2026-06-22 10:30 | Spawned `composer-2.5` agent for Phase 0 remainder → led to full verification. |
+| 2026-06-22 07:10 | Phase 9 complete — all phases 0–9 done (`1a6dd04`). |
+| 2026-06-22 05:42 | Phase 8 complete — launch hardening (`0718a5c`). |
+| 2026-06-22 03:31 | Phase 7 complete — admin UX (`45c5a8a`). |
+| 2026-06-22 02:36 | Phase 6 complete — time travel (`3623f93`). |
+
+---
+
+## Spawn template (for orchestrator use)
+
+When work remains and no agent is running, spawn with:
+
+```
+Model: composer-2.5 (NOT fast)
+
+FIRST: Read orchestration.md at repo root — do not re-derive state from git/Slack.
+
+Branch: cursor/concave-cms-launch-plan-26c1
+
+Task: [specific phase/step from launch-plan.md]
+
+After completing:
+1. Run npm run check && npm run test (and E2E if UI-facing)
+2. Check off items in docs/launch-plan.md
+3. Spawn review/fix loop until all feedback addressed
+4. Commit, push, update orchestration.md, notify Slack
 ```
