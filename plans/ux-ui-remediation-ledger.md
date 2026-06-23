@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:16Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:21Z
 
 ## Branches
 
@@ -13,10 +13,10 @@
 
 | Field | Value |
 |-------|-------|
-| **batch** | 1.3 |
-| **model** | composer-2.5 |
-| **started_at** | 2026-06-23T20:16Z |
-| **prompt** | `plans/batches/1.3-shared-page-layout.md` |
+| **batch** | — |
+| **model** | — |
+| **started_at** | — |
+| **prompt** | — |
 
 ## Batch status
 
@@ -24,12 +24,20 @@
 |-------|--------|------------|--------------|-------|
 | 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
-| 1.3 | in_progress | 1.1 | — | shared admin page layout |
+| 1.3 | done | 1.1 | 2026-06-23T20:21Z | commit `c174ce0` on `dev-agent` |
 | 2.1 | pending | 1.3 | — | |
 | 2.2 | pending | 1.3 | — | |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T20:21Z — Batch 1.3 complete (shared admin page layout)
+
+- **Agent:** composer-2.5 (implementation)
+- **Branch:** `dev-agent`
+- **Commit:** `c174ce0`
+- **Done:** Extracted `AdminPageLayout` / `AdminPageHeader`; migrated dashboard, content, media, audit, settings routes; schema header only (body stays `max-w-5xl`); consistent `max-w-4xl` + `UserButton` placement.
+- **Tests:** unit 128/128 ✅
 
 ### 2026-06-23T20:16Z — Orchestrator selected batch 1.3
 
