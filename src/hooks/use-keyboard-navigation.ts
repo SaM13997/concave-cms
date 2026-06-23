@@ -79,9 +79,12 @@ export function useGlobalKeyboardShortcuts() {
       clearGoMode();
 
       if (
-        (destination === "schema" || destination === "audit" || destination === "settings") &&
+        (destination === "schema" || destination === "audit") &&
         !hasPermission("schema:read")
       ) {
+        return;
+      }
+      if (destination === "settings" && !hasPermission("schema:write")) {
         return;
       }
       if (

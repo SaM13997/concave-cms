@@ -6,6 +6,7 @@ import {
   type DashboardSection,
   dashboardSections,
   dashboardSectionsForPermissions,
+  isPublicNavItem,
 } from "@/config/navigation";
 import { useMyRole } from "@/hooks/use-my-role";
 import { cn } from "@/lib/utils";
@@ -54,7 +55,7 @@ function HomePage() {
   const { permissions } = useMyRole();
   const visibleSections = permissions
     ? dashboardSectionsForPermissions(permissions)
-    : dashboardSections.filter((section) => !section.requiredPermission);
+    : dashboardSections.filter(isPublicNavItem);
 
   return (
     <div className="flex min-h-screen flex-col bg-background px-4 py-6 pb-24 text-foreground sm:px-6 lg:px-8">

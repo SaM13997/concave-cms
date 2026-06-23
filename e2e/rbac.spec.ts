@@ -145,4 +145,15 @@ test.describe("RBAC", () => {
     await expect(settingsNav).toBeVisible();
     await expect(page.getByTestId("nav-content")).toBeVisible();
   });
+
+  test("editor cannot open settings via g+, shortcut", async ({ page }) => {
+    await prepareEditor(page);
+    await page.getByTestId("nav-home").waitFor({ timeout: 15_000 });
+
+    await page.keyboard.press("g");
+    await page.keyboard.press(",");
+    await page.waitForLoadState("networkidle");
+
+    await expect(page).not.toHaveURL(/\/settings/);
+  });
 });

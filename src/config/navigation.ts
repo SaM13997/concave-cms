@@ -84,8 +84,13 @@ export type PermissionGated = {
   requiresAdmin?: boolean;
 };
 
-function hasAdminAccess(permissions: readonly Permission[]): boolean {
+export function hasAdminAccess(permissions: readonly Permission[]): boolean {
   return permissions.includes(ADMIN_PERMISSION);
+}
+
+/** Items visible before role permissions load (no permission or admin gate). */
+export function isPublicNavItem(item: PermissionGated): boolean {
+  return !item.requiredPermission && !item.requiresAdmin;
 }
 
 export function itemsForPermissions<T extends PermissionGated>(

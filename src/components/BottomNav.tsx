@@ -1,7 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 
-import { bottomNavItems, navItemsForPermissions } from "@/config/navigation";
+import {
+  bottomNavItems,
+  isPublicNavItem,
+  navItemsForPermissions,
+} from "@/config/navigation";
 import { useMyRole } from "@/hooks/use-my-role";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +17,7 @@ export function BottomNav() {
   const [mounted, setMounted] = useState(false);
   const visibleNavItems = permissions
     ? navItemsForPermissions(permissions)
-    : bottomNavItems.filter((item) => !item.requiredPermission);
+    : bottomNavItems.filter(isPublicNavItem);
 
   useEffect(() => {
     setMounted(true);
