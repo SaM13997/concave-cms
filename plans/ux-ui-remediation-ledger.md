@@ -39,6 +39,7 @@
 - **Commit:** `783e7a3`
 - **Done:** Settings nav/dashboard gated via `requiresAdmin` (`schema:write`); settings page uses `InsufficientPermissions`; RBAC E2E expanded.
 - **Tests:** unit 122/122 ✅ · E2E rbac: auth infra flake on `prepareAdmin` (Not authenticated on onboarding query) — review agents spawned.
+- **Review fixes:** `a2b9df2` (loading-state nav leak, settings shortcut RBAC, unit tests) · `1cfe69f` (shared E2E auth helpers, rbac 10/10 ✅)
 
 ### 2026-06-23T19:30Z — Orchestrator selected batch 1.2
 
