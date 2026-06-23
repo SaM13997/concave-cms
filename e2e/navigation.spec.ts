@@ -71,4 +71,22 @@ test.describe("Fluid navigation", () => {
     await page.keyboard.press("h");
     await page.waitForURL("/");
   });
+
+  test("E2E-NAV-03: editor sees content and media nav, not schema or settings cards", async ({
+    page,
+  }) => {
+    await signUp(page);
+    await waitForAuth(page);
+    await page.getByTestId("admin-chrome").waitFor({ timeout: 15_000 });
+
+    await expect(page.getByTestId("nav-content")).toBeVisible();
+    await expect(page.getByTestId("nav-media")).toBeVisible();
+    await expect(page.getByTestId("nav-schema")).not.toBeVisible();
+    await expect(page.getByTestId("nav-settings")).not.toBeVisible();
+
+    await expect(page.getByRole("link", { name: /Content Entries/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Media Library/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Content Types/i })).not.toBeVisible();
+    await expect(page.getByRole("link", { name: /Settings/i })).not.toBeVisible();
+  });
 });

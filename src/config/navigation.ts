@@ -77,8 +77,64 @@ export const bottomNavItems: BottomNavItem[] = [
   },
 ] as const;
 
-export function navItemsForPermissions(permissions: readonly Permission[]): BottomNavItem[] {
-  return bottomNavItems.filter(
+export type PermissionGated = {
+  requiredPermission?: Permission;
+};
+
+export function itemsForPermissions<T extends PermissionGated>(
+  items: readonly T[],
+  permissions: readonly Permission[],
+): T[] {
+  return items.filter(
     (item) => !item.requiredPermission || permissions.includes(item.requiredPermission),
   );
+}
+
+export function navItemsForPermissions(permissions: readonly Permission[]): BottomNavItem[] {
+  return itemsForPermissions(bottomNavItems, permissions);
+}
+
+export type DashboardSection = {
+  href: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  requiredPermission?: Permission;
+};
+
+export const dashboardSections: DashboardSection[] = [
+  {
+    icon: Layers,
+    title: "Content Types",
+    description: "Define and manage your content schemas",
+    href: "/schema",
+    requiredPermission: "schema:read",
+  },
+  {
+    icon: FileText,
+    title: "Content Entries",
+    description: "Create, edit, and publish content",
+    href: "/content",
+    requiredPermission: "content:read",
+  },
+  {
+    icon: Image,
+    title: "Media Library",
+    description: "Upload and organize your assets",
+    href: "/media",
+    requiredPermission: "content:read",
+  },
+  {
+    icon: Settings,
+    title: "Settings",
+    description: "Configure your CMS instance",
+    href: "/settings",
+    requiredPermission: "schema:read",
+  },
+];
+
+export function dashboardSectionsForPermissions(
+  permissions: readonly Permission[],
+): DashboardSection[] {
+  return itemsForPermissions(dashboardSections, permissions);
 }

@@ -1,39 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { UserButton } from "@/components/User-button";
+import {
+  type DashboardSection,
+  dashboardSections,
+  dashboardSectionsForPermissions,
+} from "@/config/navigation";
+import { useMyRole } from "@/hooks/use-my-role";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: HomePage,
 });
-
-const dashboardSections = [
-  {
-    icon: Layers,
-    title: "Content Types",
-    description: "Define and manage your content schemas",
-    href: "/schema",
-  },
-  {
-    icon: FileText,
-    title: "Content Entries",
-    description: "Create, edit, and publish content",
-    href: "/content",
-  },
-  {
-    icon: Image,
-    title: "Media Library",
-    description: "Upload and organize your assets",
-    href: "/media",
-  },
-  {
-    icon: Settings,
-    title: "Settings",
-    description: "Configure your CMS instance",
-    href: "/settings",
-  },
-] as const;
 
 function DashboardCard({
   icon: Icon,
@@ -44,7 +23,7 @@ function DashboardCard({
   icon: LucideIcon;
   title: string;
   description: string;
-  href: (typeof dashboardSections)[number]["href"];
+  href: DashboardSection["href"];
 }) {
   return (
     <Link
@@ -72,6 +51,11 @@ function DashboardCard({
 }
 
 function HomePage() {
+  const { permissions } = useMyRole();
+  const visibleSections = permissions
+    ? dashboardSectionsForPermissions(permissions)
+    : dashboardSections.filter((section) => !section.requiredPermission);
+
   return (
     <div className="flex min-h-screen flex-col bg-background px-4 py-6 pb-24 text-foreground sm:px-6 lg:px-8">
       <header className="mx-auto flex w-full max-w-3xl items-center justify-between">
@@ -86,7 +70,7 @@ function HomePage() {
         <OnboardingWizard />
 
         <div className="grid gap-3 sm:grid-cols-2">
-          {dashboardSections.map((section) => (
+          {visibleSections.map((section) => (
             <DashboardCard
               key={section.title}
               icon={section.icon}
