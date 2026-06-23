@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T22:40Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T22:45Z
 
 ## Branches
 
@@ -27,6 +27,15 @@
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T22:45Z — Batch 2.2 UI review (debug nav gating)
+
+- **Agent:** composer-2.5 (UI review)
+- **Branch reviewed:** `dev-agent` @ `9c1d960`
+- **Issues found:** None requiring code changes.
+- **Review notes:** Debug/Live use the same `requiresAdmin` gate as Settings; editor bottom nav shrinks to Home/Content/Media (no layout regression); admin nav item count unchanged (8) with existing `overflow-x-auto` + `shrink-0` handling; tap targets/focus rings unchanged and consistent across roles; no visual regressions in `BottomNav`.
+- **Fixes:** None.
+- **Tests:** unit 128/128 ✅
 
 ### 2026-06-23T22:40Z — Batch 2.2 complete (debug nav gating)
 
