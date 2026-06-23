@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test";
-import { assignRole, signUp } from "./helpers/auth";
+import { assignRole, signUp, waitForAuth } from "./helpers/auth";
 
 async function prepareAdmin(page: import("@playwright/test").Page) {
   await signUp(page);
   await assignRole(page, "admin");
   await page.reload();
   await page.waitForLoadState("networkidle");
+  await waitForAuth(page);
   await page.getByTestId("admin-chrome").waitFor({ timeout: 15_000 });
 }
 
@@ -22,6 +23,11 @@ test.describe("Fluid navigation", () => {
     await page.waitForURL("/content**");
     await expect(page.getByTestId("content-editor")).toBeVisible({ timeout: 15_000 });
     await expect(page.getByTestId("breadcrumb-current")).toHaveText("Content");
+
+    await page.getByTestId("nav-media").click();
+    await page.waitForURL("/media**");
+    await expect(page.getByTestId("media-library")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("breadcrumb-current")).toHaveText("Media");
 
     await page.getByTestId("nav-schema").click();
     await page.waitForURL("/schema**");
@@ -42,9 +48,24 @@ test.describe("Fluid navigation", () => {
     await expect(page.getByTestId("content-editor")).toBeVisible({ timeout: 15_000 });
 
     await page.keyboard.press("g");
+    await page.keyboard.press("m");
+    await page.waitForURL("/media**");
+    await expect(page.getByTestId("media-library")).toBeVisible({ timeout: 15_000 });
+
+    await page.keyboard.press("g");
     await page.keyboard.press("s");
     await page.waitForURL("/schema**");
     await expect(page.getByTestId("schema-builder")).toBeVisible({ timeout: 15_000 });
+
+    await page.keyboard.press("g");
+    await page.keyboard.press("a");
+    await page.waitForURL("/audit**");
+    await expect(page.getByTestId("audit-log-viewer")).toBeVisible({ timeout: 15_000 });
+
+    await page.keyboard.press("g");
+    await page.keyboard.press(",");
+    await page.waitForURL("/settings**");
+    await expect(page.getByTestId("export-tools")).toBeVisible({ timeout: 15_000 });
 
     await page.keyboard.press("g");
     await page.keyboard.press("h");

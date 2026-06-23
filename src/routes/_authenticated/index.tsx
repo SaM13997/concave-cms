@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
 import { UserButton } from "@/components/User-button";
@@ -47,8 +47,9 @@ function DashboardCard({
   href: string;
 }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
+      viewTransition
       className={cn(
         "group relative rounded-lg border border-border bg-card p-5",
         "transition-colors hover:border-muted-foreground/25",
@@ -65,7 +66,7 @@ function DashboardCard({
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
