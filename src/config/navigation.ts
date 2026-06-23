@@ -1,14 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  Bug,
-  ClipboardList,
-  FileText,
-  Home,
-  Image,
-  Layers,
-  Radio,
-  Settings,
-} from "lucide-react";
+import { Bug, ClipboardList, FileText, Home, Image, Layers, Radio, Settings } from "lucide-react";
 import type { Permission } from "../../convex/lib/permissions";
 
 export type BottomNavItem = {

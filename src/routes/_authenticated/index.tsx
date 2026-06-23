@@ -44,15 +44,16 @@ function DashboardCard({
   icon: LucideIcon;
   title: string;
   description: string;
-  href: string;
+  href: (typeof dashboardSections)[number]["href"];
 }) {
   return (
     <Link
       to={href}
       viewTransition
       className={cn(
-        "group relative rounded-lg border border-border bg-card p-5",
-        "transition-colors hover:border-muted-foreground/25",
+        "group relative cursor-pointer rounded-lg border border-border bg-card p-5",
+        "transition-colors hover:border-muted-foreground/25 hover:bg-muted/40",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       )}
     >
       <div className="flex items-start justify-between">
@@ -72,7 +73,7 @@ function DashboardCard({
 
 function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
+    <div className="flex min-h-screen flex-col bg-background px-4 py-6 pb-24 text-foreground sm:px-6 lg:px-8">
       <header className="mx-auto flex w-full max-w-3xl items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-foreground">Concave CMS</h1>
@@ -95,6 +96,30 @@ function HomePage() {
             />
           ))}
         </div>
+
+        <p className="text-center text-xs text-muted-foreground">
+          Keyboard: press{" "}
+          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+            g
+          </kbd>{" "}
+          then a letter —{" "}
+          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+            h
+          </kbd>{" "}
+          home,{" "}
+          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+            c
+          </kbd>{" "}
+          content,{" "}
+          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+            m
+          </kbd>{" "}
+          media,{" "}
+          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+            s
+          </kbd>{" "}
+          schema
+        </p>
       </main>
     </div>
   );

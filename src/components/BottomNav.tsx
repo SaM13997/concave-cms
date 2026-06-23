@@ -33,7 +33,10 @@ export function BottomNav() {
 
   return (
     <div className="sticky bottom-6 left-0 right-0 z-50 mt-auto flex justify-center px-4">
-      <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 p-2 backdrop-blur-[80px]">
+      <nav
+        aria-label="Primary"
+        className="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-white/10 p-1.5 backdrop-blur-[80px] [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-2 sm:p-2 [&::-webkit-scrollbar]:hidden"
+      >
         {visibleNavItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.href);
@@ -43,9 +46,10 @@ export function BottomNav() {
               key={item.href}
               to={item.href}
               viewTransition
+              aria-current={active ? "page" : undefined}
               data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
               className={cn(
-                "p-3 transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
+                "shrink-0 rounded-full p-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 sm:p-3",
                 active ? item.color : "hover:bg-white/10",
               )}
             >
@@ -59,7 +63,7 @@ export function BottomNav() {
             </Link>
           );
         })}
-      </div>
+      </nav>
     </div>
   );
 }

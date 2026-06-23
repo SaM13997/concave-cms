@@ -40,6 +40,7 @@ export function useGlobalKeyboardShortcuts() {
       }
 
       if (event.key === "g") {
+        event.preventDefault();
         goMode = true;
         if (goTimer !== null) {
           window.clearTimeout(goTimer);
