@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T18:22Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T19:30Z
 
 ## Branches
 
@@ -13,23 +13,29 @@
 
 | Field | Value |
 |-------|-------|
-| **batch** | — |
-| **model** | — |
-| **started_at** | — |
-| **prompt** | — |
+| **batch** | 1.2 |
+| **model** | composer-2.5 |
+| **started_at** | 2026-06-23T19:30Z |
+| **prompt** | `plans/batches/1.2-rbac-nav-alignment.md` |
 
 ## Batch status
 
 | Batch | Status | Depends on | Completed at | Notes |
 |-------|--------|------------|--------------|-------|
 | 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
-| 1.2 | pending | 1.1 | — | |
+| 1.2 | in_progress | 1.1 | — | |
 | 1.3 | pending | 1.1 | — | |
 | 2.1 | pending | 1.3 | — | |
 | 2.2 | pending | 1.3 | — | |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T19:30Z — Orchestrator selected batch 1.2
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-3dce`)
+- **Selected:** batch **1.2** (RBAC nav alignment) — lowest pending with deps satisfied (1.1 done).
+- **Spawned:** implementation agent on `dev-agent`, model `composer-2.5`.
 
 ### 2026-06-23T18:22Z — Batch 1.1 complete (navigation consistency)
 
