@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:58Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T21:02Z
 
 ## Branches
 
@@ -20,11 +20,21 @@ _None._
 | 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
-| 2.1 | done | 1.3 | 2026-06-23T20:58Z | commit `6a4a519` on `dev-agent` |
+| 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
 | 2.2 | pending | 1.3 | — | |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T21:02Z — Batch 2.1 UI review (login legal routes)
+
+- **Agent:** composer-2.5 (UI review)
+- **Branch:** `dev-agent`
+- **Commit:** `f0207a1`
+- **Issues found:** Legal page “Back to sign in” links lacked hover affordance (inconsistent with login footer links) and had a small mobile tap target.
+- **Fixes:** Added `transition-colors hover:text-foreground` and `inline-flex min-h-11 items-center` on `/terms` and `/privacy` back links.
+- **No change:** Dark theme, readability, mobile content layout, login `Link` footer — all acceptable.
+- **Tests:** unit 128/128 ✅
 
 ### 2026-06-23T20:58Z — Batch 2.1 complete (login legal routes)
 
