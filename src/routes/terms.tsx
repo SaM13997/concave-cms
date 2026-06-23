@@ -11,7 +11,10 @@ function TermsPage() {
       className="mx-auto flex min-h-screen max-w-2xl flex-col px-4 py-10"
     >
       <p className="mb-6">
-        <Link to="/login" className="text-sm text-muted-foreground underline underline-offset-2">
+        <Link
+          to="/login"
+          className="inline-flex min-h-11 items-center text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+        >
           Back to sign in
         </Link>
       </p>
