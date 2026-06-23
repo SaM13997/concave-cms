@@ -60,13 +60,16 @@ export const bottomNavItems: BottomNavItem[] = [
     darkColor: "text-slate-400",
     requiresAdmin: true,
   },
+  // Debug/Live are hidden from bottom nav for non-admins (requiresAdmin). Cmd+K global search
+  // and direct URLs (/debug/system, /debug/reactive) are unchanged — those routes enforce
+  // their own page-level permission checks, not bottom-nav visibility.
   {
     href: "/debug/system",
     label: "Debug",
     icon: Bug,
     color: "bg-amber-500/10",
     darkColor: "text-amber-400",
-    requiredPermission: "schema:read",
+    requiresAdmin: true,
   },
   {
     href: "/debug/reactive",
@@ -74,13 +77,13 @@ export const bottomNavItems: BottomNavItem[] = [
     icon: Radio,
     color: "bg-rose-500/10",
     darkColor: "text-rose-400",
-    requiredPermission: "content:read",
+    requiresAdmin: true,
   },
 ];
 
 export type PermissionGated = {
   requiredPermission?: Permission;
-  /** Settings/exports are admin-only; maps to admin role via schema:write permission. */
+  /** Settings, debug tools, and exports are admin-only; maps to admin role via schema:write permission. */
   requiresAdmin?: boolean;
 };
 

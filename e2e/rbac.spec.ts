@@ -88,4 +88,34 @@ test.describe("RBAC", () => {
 
     await expect(page).not.toHaveURL(/\/settings/);
   });
+
+  test("debug and live nav hidden for editor", async ({ page }) => {
+    await prepareEditor(page);
+    await page.getByTestId("nav-home").waitFor({ timeout: 15_000 });
+    await expect(page.getByTestId("nav-debug")).not.toBeVisible();
+    await expect(page.getByTestId("nav-live")).not.toBeVisible();
+    await expect(page.getByTestId("nav-content")).toBeVisible();
+  });
+
+  test("debug and live nav visible for admin", async ({ page }) => {
+    await prepareAdmin(page);
+    await expect(page.getByTestId("nav-debug")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("nav-live")).toBeVisible();
+  });
+
+  test("editor can still open live debug page via direct URL", async ({ page }) => {
+    await prepareEditor(page);
+    await page.goto("/debug/reactive");
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByTestId("reactive-demo")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("insufficient-permissions")).not.toBeVisible();
+  });
+
+  test("editor cannot open system debug page via direct URL", async ({ page }) => {
+    await prepareEditor(page);
+    await page.goto("/debug/system");
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByTestId("insufficient-permissions")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("debug-system")).not.toBeVisible();
+  });
 });
