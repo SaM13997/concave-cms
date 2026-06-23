@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T17:30Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T18:22Z
 
 ## Branches
 
@@ -13,16 +13,16 @@
 
 | Field | Value |
 |-------|-------|
-| **batch** | 1.1 |
-| **model** | composer-2.5 |
-| **started_at** | 2026-06-23T17:30Z |
-| **prompt** | `plans/batches/1.1-navigation-consistency.md` |
+| **batch** | — |
+| **model** | — |
+| **started_at** | — |
+| **prompt** | — |
 
 ## Batch status
 
 | Batch | Status | Depends on | Completed at | Notes |
 |-------|--------|------------|--------------|-------|
-| 1.1 | in_progress | — | — | Orchestrator re-spawned after stale-agent recovery |
+| 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
 | 1.2 | pending | 1.1 | — | |
 | 1.3 | pending | 1.1 | — | |
 | 2.1 | pending | 1.3 | — | |
@@ -30,6 +30,14 @@
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T18:22Z — Batch 1.1 complete (navigation consistency)
+
+- **Agent:** composer-2.5 (implementation)
+- **Branch:** `dev-agent`
+- **Commit:** `9bf810d`
+- **Done:** Media in bottom nav; dashboard cards use TanStack `Link`; `g`+ shortcuts for media/audit/settings; E2E specs updated; `waitForAuth` after reload in E2E helpers usage.
+- **Tests:** unit 122/122 ✅ · E2E re-run blocked by `version.convex.dev` 500 (external); earlier run: E2E-NAV-01 passed including media nav.
 
 ### 2026-06-23T17:30Z — Stale-agent recovery + batch 1.1 re-spawn
 
