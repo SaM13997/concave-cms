@@ -2,9 +2,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { ChevronDown, ChevronUp, Download, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AdminPageHeader } from "@/components/admin/AdminPageLayout";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
-import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMyRole } from "@/hooks/use-my-role";
@@ -304,25 +304,24 @@ function SchemaBuilderPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Schema Builder</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Define content types and fields</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            data-testid="schema-export-button"
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-            type="button"
-          >
-            <Download className="mr-1 h-4 w-4" />
-            Export
-          </Button>
-          <UserButton />
-        </div>
-      </header>
+      <div className="mx-auto w-full max-w-4xl">
+        <AdminPageHeader
+          title="Schema Builder"
+          description="Define content types and fields"
+          actions={
+            <Button
+              data-testid="schema-export-button"
+              variant="outline"
+              size="sm"
+              onClick={handleExport}
+              type="button"
+            >
+              <Download className="mr-1 h-4 w-4" />
+              Export
+            </Button>
+          }
+        />
+      </div>
 
       <main data-testid="schema-builder" className="mx-auto mt-8 w-full max-w-5xl flex-1 space-y-6">
         {search.onboarding === "1" && <OnboardingBanner step="schema" />}

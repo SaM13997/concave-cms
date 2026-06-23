@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Download } from "lucide-react";
 import { useCallback } from "react";
+import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { useMyRole } from "@/hooks/use-my-role";
 import { api } from "../../../convex/_generated/api";
@@ -43,14 +44,11 @@ function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-      <header>
-        <h1 className="text-xl font-semibold tracking-tight">Settings & exports</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Download schema and content snapshots for backup or migration.
-        </p>
-      </header>
-
+    <AdminPageLayout
+      title="Settings & exports"
+      description="Download schema and content snapshots for backup or migration."
+      stacked
+    >
       <section
         data-testid="export-tools"
         className="grid gap-4 rounded-lg border border-border bg-card p-5"
@@ -91,6 +89,6 @@ function SettingsPage() {
           </button>
         </div>
       </section>
-    </div>
+    </AdminPageLayout>
   );
 }

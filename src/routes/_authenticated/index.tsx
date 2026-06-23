@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
+import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
-import { UserButton } from "@/components/User-button";
 import {
   type DashboardSection,
   dashboardSections,
@@ -58,54 +58,49 @@ function HomePage() {
     : dashboardSections.filter(isPublicNavItem);
 
   return (
-    <div className="flex min-h-screen flex-col bg-background px-4 py-6 pb-24 text-foreground sm:px-6 lg:px-8">
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Concave CMS</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Convex-native headless CMS</p>
-        </div>
-        <UserButton />
-      </header>
+    <AdminPageLayout
+      title="Concave CMS"
+      description="Convex-native headless CMS"
+      className="pb-24"
+      contentClassName="space-y-6"
+    >
+      <OnboardingWizard />
 
-      <main className="mx-auto mt-8 w-full max-w-3xl flex-1 space-y-6">
-        <OnboardingWizard />
+      <div className="grid gap-3 sm:grid-cols-2">
+        {visibleSections.map((section) => (
+          <DashboardCard
+            key={section.title}
+            icon={section.icon}
+            title={section.title}
+            description={section.description}
+            href={section.href}
+          />
+        ))}
+      </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {visibleSections.map((section) => (
-            <DashboardCard
-              key={section.title}
-              icon={section.icon}
-              title={section.title}
-              description={section.description}
-              href={section.href}
-            />
-          ))}
-        </div>
-
-        <p className="text-center text-xs text-muted-foreground">
-          Keyboard: press{" "}
-          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
-            g
-          </kbd>{" "}
-          then a letter —{" "}
-          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
-            h
-          </kbd>{" "}
-          home,{" "}
-          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
-            c
-          </kbd>{" "}
-          content,{" "}
-          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
-            m
-          </kbd>{" "}
-          media,{" "}
-          <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
-            s
-          </kbd>{" "}
-          schema
-        </p>
-      </main>
-    </div>
+      <p className="text-center text-xs text-muted-foreground">
+        Keyboard: press{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          g
+        </kbd>{" "}
+        then a letter —{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          h
+        </kbd>{" "}
+        home,{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          c
+        </kbd>{" "}
+        content,{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          m
+        </kbd>{" "}
+        media,{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          s
+        </kbd>{" "}
+        schema
+      </p>
+    </AdminPageLayout>
   );
 }
