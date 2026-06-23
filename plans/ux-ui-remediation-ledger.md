@@ -1,19 +1,22 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T23:25Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T23:30Z
 
 ## Branches
 
 | Role | Branch |
 |------|--------|
 | Implementation | `dev-agent` |
-| Ledger | `cursor/ux-ui-remediation-orchestration-eb16` |
+| Ledger | `cursor/ux-ui-remediation-orchestration-8607` |
 
 ## Active agent
 
 | Field | Value |
 |-------|-------|
-| — | **none** |
+| batch | **3.1** (schema dialog modals) |
+| model | `composer-2.5` |
+| started_at | 2026-06-23T23:30Z |
+| status | **in_progress** |
 
 ## Batch status
 
@@ -24,9 +27,15 @@
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
 | 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
 | 2.2 | done | 1.3 | 2026-06-23T22:40Z | commits `9c1d960`, `028e93f` on `dev-agent` |
-| 3.1 | pending | 1.3 | — | |
+| 3.1 | in_progress | 1.3 | — | orchestrator spawned 2026-06-23T23:30Z |
 
 ## Log
+
+### 2026-06-23T23:30Z — Orchestrator selected batch 3.1
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-8607`)
+- **Selected:** batch **3.1** (schema dialog modals) — lowest pending with deps satisfied (1.3 done).
+- **Spawned:** implementation agent on `dev-agent`, model `composer-2.5`.
 
 ### 2026-06-23T23:25Z — Batch 2.2 functionality review (debug nav gating)
 
