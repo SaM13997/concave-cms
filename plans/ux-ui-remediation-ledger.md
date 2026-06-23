@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:21Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:25Z
 
 ## Branches
 
@@ -24,12 +24,19 @@
 |-------|--------|------------|--------------|-------|
 | 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
-| 1.3 | done | 1.1 | 2026-06-23T20:21Z | commit `c174ce0` on `dev-agent` |
+| 1.3 | done | 1.1 | 2026-06-23T20:21Z | commit `c174ce0`; review fix `869399e` |
 | 2.1 | pending | 1.3 | — | |
 | 2.2 | pending | 1.3 | — | |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T20:25Z — Batch 1.3 review complete
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-d317`)
+- **Review agents:** 2× composer-2.5 (functionality + UI)
+- **Fix:** `869399e` — completed schema full `AdminPageLayout` migration (`max-w-4xl` alignment); responsive header wrapping on narrow screens.
+- **Tests:** unit 128/128 ✅
 
 ### 2026-06-23T20:21Z — Batch 1.3 complete (shared admin page layout)
 
