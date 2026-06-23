@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T22:45Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T23:25Z
 
 ## Branches
 
@@ -23,10 +23,18 @@
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
 | 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
-| 2.2 | done | 1.3 | 2026-06-23T22:40Z | commit `9c1d960` on `dev-agent` |
+| 2.2 | done | 1.3 | 2026-06-23T22:40Z | commits `9c1d960`, `028e93f` on `dev-agent` |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T23:25Z — Batch 2.2 functionality review (debug nav gating)
+
+- **Agent:** composer-2.5 (functionality review)
+- **Branch reviewed:** `dev-agent` @ `9c1d960` → fix `028e93f`
+- **Issues found:** `/debug/system` fired `adminQuery` hooks before the page-level `schema:read` check, so editors hitting the direct URL got Convex query errors instead of `InsufficientPermissions` (RBAC E2E failure). Nav gating (`requiresAdmin`) and direct-URL behavior for `/debug/reactive` (editor allowed via `content:read`) are correct.
+- **Fixes:** `028e93f` — skip system debug queries until role loaded and `schema:read` confirmed (matches `schema.tsx` / `reactive.tsx`); navigation unit tests assert Debug/Live admin gating.
+- **Tests:** unit 128/128 ✅ · E2E `rbac` system-debug direct URL ✅ (isolated) · E2E `navigation` NAV-03 ✅ (isolated) · full combined run: 15/18 pass with 2 failures pre-fix (system debug URL, flaky NAV-03 nav-live) and 1 flaky auth signup (NAV-02); Playwright webServer teardown hangs after tests complete in agent env.
 
 ### 2026-06-23T22:45Z — Batch 2.2 UI review (debug nav gating)
 
