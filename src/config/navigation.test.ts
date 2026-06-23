@@ -24,12 +24,16 @@ describe("navigation RBAC helpers", () => {
   it("hides admin-only settings from bottom nav for editors", () => {
     const editorNav = navItemsForPermissions(editorPermissions);
     expect(editorNav.some((item) => item.href === "/settings")).toBe(false);
+    expect(editorNav.some((item) => item.href === "/debug/system")).toBe(false);
+    expect(editorNav.some((item) => item.href === "/debug/reactive")).toBe(false);
     expect(editorNav.some((item) => item.href === "/content")).toBe(true);
   });
 
   it("shows settings in bottom nav for admins", () => {
     const adminNav = navItemsForPermissions(adminPermissions);
     expect(adminNav.some((item) => item.href === "/settings")).toBe(true);
+    expect(adminNav.some((item) => item.href === "/debug/system")).toBe(true);
+    expect(adminNav.some((item) => item.href === "/debug/reactive")).toBe(true);
   });
 
   it("hides admin-only settings card from dashboard for editors", () => {
