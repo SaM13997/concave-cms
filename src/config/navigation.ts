@@ -2,13 +2,14 @@ import type { LucideIcon } from "lucide-react";
 import { Bug, ClipboardList, FileText, Home, Image, Layers, Radio, Settings } from "lucide-react";
 import type { Permission } from "../../convex/lib/permissions";
 
-export type BottomNavItem = {
+const ADMIN_PERMISSION: Permission = "schema:write";
+
+export type BottomNavItem = PermissionGated & {
   href: string;
   icon: LucideIcon;
   label: string;
   color: string;
   darkColor: string;
-  requiredPermission?: Permission;
 };
 
 export const bottomNavItems: BottomNavItem[] = [
@@ -57,7 +58,7 @@ export const bottomNavItems: BottomNavItem[] = [
     icon: Settings,
     color: "bg-slate-500/10",
     darkColor: "text-slate-400",
-    requiredPermission: "schema:read",
+    requiresAdmin: true,
   },
   {
     href: "/debug/system",
@@ -75,31 +76,39 @@ export const bottomNavItems: BottomNavItem[] = [
     darkColor: "text-rose-400",
     requiredPermission: "content:read",
   },
-] as const;
+];
 
 export type PermissionGated = {
   requiredPermission?: Permission;
+  /** Settings/exports are admin-only; maps to admin role via schema:write permission. */
+  requiresAdmin?: boolean;
 };
+
+function hasAdminAccess(permissions: readonly Permission[]): boolean {
+  return permissions.includes(ADMIN_PERMISSION);
+}
 
 export function itemsForPermissions<T extends PermissionGated>(
   items: readonly T[],
   permissions: readonly Permission[],
 ): T[] {
-  return items.filter(
-    (item) => !item.requiredPermission || permissions.includes(item.requiredPermission),
-  );
+  return items.filter((item) => {
+    if (item.requiresAdmin && !hasAdminAccess(permissions)) {
+      return false;
+    }
+    return !item.requiredPermission || permissions.includes(item.requiredPermission);
+  });
 }
 
 export function navItemsForPermissions(permissions: readonly Permission[]): BottomNavItem[] {
   return itemsForPermissions(bottomNavItems, permissions);
 }
 
-export type DashboardSection = {
+export type DashboardSection = PermissionGated & {
   href: string;
   title: string;
   description: string;
   icon: LucideIcon;
-  requiredPermission?: Permission;
 };
 
 export const dashboardSections: DashboardSection[] = [
@@ -129,7 +138,7 @@ export const dashboardSections: DashboardSection[] = [
     title: "Settings",
     description: "Configure your CMS instance",
     href: "/settings",
-    requiredPermission: "schema:read",
+    requiresAdmin: true,
   },
 ];
 

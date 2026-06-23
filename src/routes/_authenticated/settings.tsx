@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "convex/react";
 import { Download } from "lucide-react";
 import { useCallback } from "react";
+import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { useMyRole } from "@/hooks/use-my-role";
 import { api } from "../../../convex/_generated/api";
 
@@ -38,12 +39,7 @@ function SettingsPage() {
   }, [contentSnapshot]);
 
   if (role !== "admin") {
-    return (
-      <div className="mx-auto max-w-3xl px-4 py-8" data-testid="insufficient-permissions">
-        <h1 className="text-lg font-semibold">Settings</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Admin access is required.</p>
-      </div>
-    );
+    return <InsufficientPermissions requiredPermission="admin" />;
   }
 
   return (

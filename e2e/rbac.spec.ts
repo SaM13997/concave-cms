@@ -1,5 +1,72 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
-import { assignRole, signUp } from "./helpers/auth";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../convex/_generated/api";
+import type { Role } from "../convex/lib/permissions";
+import { assignRole, CONVEX_URL, signUp, waitForAuth } from "./helpers/auth";
+
+function getConvexUrlFromEnvFile(): string {
+  try {
+    const env = readFileSync(".env.local", "utf8");
+    const match = env.match(/^VITE_CONVEX_URL=(.+)$/m);
+    if (match?.[1]) {
+      return match[1].trim();
+    }
+  } catch {
+    // fall through
+  }
+  return CONVEX_URL;
+}
+
+async function getConvexAuthToken(page: import("@playwright/test").Page): Promise<string> {
+  const token = await page.evaluate(async () => {
+    const response = await fetch("/api/auth/convex/token", { credentials: "include" });
+    if (!response.ok) {
+      return null;
+    }
+    const data = (await response.json()) as { token?: string };
+    return data.token ?? null;
+  });
+
+  if (!token) {
+    throw new Error("Could not obtain Convex auth token");
+  }
+
+  return token;
+}
+
+async function waitForRole(page: import("@playwright/test").Page, role: Role): Promise<void> {
+  await expect
+    .poll(
+      async () => {
+        const token = await getConvexAuthToken(page);
+        const client = new ConvexHttpClient(getConvexUrlFromEnvFile());
+        client.setAuth(token);
+        const result = await client.query(api.cmsUsers.getMyRole, {});
+        return result.role;
+      },
+      { timeout: 30_000 },
+    )
+    .toBe(role);
+}
+
+async function prepareAdmin(page: import("@playwright/test").Page) {
+  await signUp(page);
+  await waitForAuth(page);
+  await assignRole(page, "admin");
+  await waitForRole(page, "admin");
+  await page.reload();
+  await page.waitForLoadState("networkidle");
+  await waitForAuth(page);
+  await waitForRole(page, "admin");
+  await page.getByTestId("admin-chrome").waitFor({ timeout: 15_000 });
+}
+
+async function prepareEditor(page: import("@playwright/test").Page) {
+  await signUp(page);
+  await waitForAuth(page);
+  await page.getByTestId("admin-chrome").waitFor({ timeout: 15_000 });
+}
 
 async function openSchemaBuilder(page: import("@playwright/test").Page) {
   await page.getByTestId("nav-schema").waitFor({ timeout: 15_000 });
@@ -24,10 +91,7 @@ test.describe("RBAC", () => {
   });
 
   test("admin can access schema builder", async ({ page }) => {
-    await signUp(page);
-    await assignRole(page, "admin");
-    await page.reload();
-    await page.waitForLoadState("networkidle");
+    await prepareAdmin(page);
     await openSchemaBuilder(page);
     await expect(page.getByTestId("schema-builder")).toBeVisible();
     await expect(page.getByTestId("insufficient-permissions")).not.toBeVisible();
@@ -47,12 +111,38 @@ test.describe("RBAC", () => {
   });
 
   test("schema nav visible for admin", async ({ page }) => {
-    await signUp(page);
-    await assignRole(page, "admin");
-    await page.reload();
+    await prepareAdmin(page);
+    await expect(page.getByTestId("nav-schema")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("nav-content")).toBeVisible();
+  });
+
+  test("editor cannot access settings exports", async ({ page }) => {
+    await prepareEditor(page);
+    await page.goto("/settings");
     await page.waitForLoadState("networkidle");
-    await page.getByTestId("nav-home").waitFor();
-    await expect(page.getByTestId("nav-schema")).toBeVisible();
+    await expect(page.getByTestId("insufficient-permissions")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("export-tools")).not.toBeVisible();
+  });
+
+  test("admin can access settings exports", async ({ page }) => {
+    await prepareAdmin(page);
+    await page.goto("/settings");
+    await expect(page.getByTestId("export-tools")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByTestId("insufficient-permissions")).not.toBeVisible();
+  });
+
+  test("settings nav hidden for editor", async ({ page }) => {
+    await prepareEditor(page);
+    await expect(page.getByTestId("nav-settings")).not.toBeVisible();
+    await expect(page.getByTestId("nav-content")).toBeVisible();
+  });
+
+  test("settings nav visible for admin", async ({ page }) => {
+    await prepareAdmin(page);
+    const settingsNav = page.getByTestId("nav-settings");
+    await settingsNav.waitFor({ state: "attached", timeout: 30_000 });
+    await settingsNav.scrollIntoViewIfNeeded();
+    await expect(settingsNav).toBeVisible();
     await expect(page.getByTestId("nav-content")).toBeVisible();
   });
 });
