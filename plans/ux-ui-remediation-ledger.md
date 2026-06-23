@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:30Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T22:40Z
 
 ## Branches
 
@@ -13,11 +13,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Model** | `composer-2.5` |
-| **Batch** | 2.2 (debug nav gating) |
-| **Branch** | `dev-agent` |
-| **Started at** | 2026-06-23T20:30Z |
-| **Status** | in_progress |
+| — | **none** |
 
 ## Batch status
 
@@ -27,10 +23,18 @@
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
 | 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
-| 2.2 | in_progress | 1.3 | — | orchestrator spawned 2026-06-23T20:30Z |
+| 2.2 | done | 1.3 | 2026-06-23T22:40Z | commit `9c1d960` on `dev-agent` |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T22:40Z — Batch 2.2 complete (debug nav gating)
+
+- **Agent:** composer-2.5 (implementation)
+- **Branch:** `dev-agent`
+- **Commit:** `9c1d960`
+- **Done:** Debug/Live bottom-nav items gated via `requiresAdmin` (like Settings); code comment documents unchanged Cmd+K/direct URL behavior; E2E NAV-03/NAV-04 + RBAC direct-URL coverage.
+- **Tests:** unit 128/128 ✅ · E2E navigation NAV-03/NAV-04 ✅ (full `navigation.spec.ts` 4/4 pass; Playwright webServer teardown hangs in agent env after tests complete)
 
 ### 2026-06-23T20:30Z — Orchestrator selected batch 2.2
 
