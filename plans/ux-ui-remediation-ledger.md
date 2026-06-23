@@ -1,22 +1,22 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T19:35Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:16Z
 
 ## Branches
 
 | Role | Branch |
 |------|--------|
 | Implementation | `dev-agent` |
-| Ledger | `cursor/ux-ui-remediation-orchestration-3dce` |
+| Ledger | `cursor/ux-ui-remediation-orchestration-d317` |
 
 ## Active agent
 
 | Field | Value |
 |-------|-------|
-| **batch** | — |
-| **model** | — |
-| **started_at** | — |
-| **prompt** | — |
+| **batch** | 1.3 |
+| **model** | composer-2.5 |
+| **started_at** | 2026-06-23T20:16Z |
+| **prompt** | `plans/batches/1.3-shared-page-layout.md` |
 
 ## Batch status
 
@@ -24,12 +24,18 @@
 |-------|--------|------------|--------------|-------|
 | 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
-| 1.3 | pending | 1.1 | — | |
+| 1.3 | in_progress | 1.1 | — | shared admin page layout |
 | 2.1 | pending | 1.3 | — | |
 | 2.2 | pending | 1.3 | — | |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T20:16Z — Orchestrator selected batch 1.3
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-d317`)
+- **Selected:** batch **1.3** (shared admin page layout) — lowest pending with deps satisfied (1.1 done).
+- **Spawned:** implementation agent on `dev-agent`, model `composer-2.5`.
 
 ### 2026-06-23T19:35Z — Batch 1.2 complete (stale-agent recovery)
 
