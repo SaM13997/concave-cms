@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { ChevronDown, ChevronUp, Download, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AdminPageHeader } from "@/components/admin/AdminPageLayout";
+import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
 import { Button } from "@/components/ui/button";
@@ -303,27 +303,25 @@ function SchemaBuilderPage() {
     validationErrors.length === 0;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-4xl">
-        <AdminPageHeader
-          title="Schema Builder"
-          description="Define content types and fields"
-          actions={
-            <Button
-              data-testid="schema-export-button"
-              variant="outline"
-              size="sm"
-              onClick={handleExport}
-              type="button"
-            >
-              <Download className="mr-1 h-4 w-4" />
-              Export
-            </Button>
-          }
-        />
-      </div>
-
-      <main data-testid="schema-builder" className="mx-auto mt-8 w-full max-w-5xl flex-1 space-y-6">
+    <>
+      <AdminPageLayout
+        title="Schema Builder"
+        description="Define content types and fields"
+        contentTestId="schema-builder"
+        contentClassName="space-y-6"
+        actions={
+          <Button
+            data-testid="schema-export-button"
+            variant="outline"
+            size="sm"
+            onClick={handleExport}
+            type="button"
+          >
+            <Download className="mr-1 h-4 w-4" />
+            Export
+          </Button>
+        }
+      >
         {search.onboarding === "1" && <OnboardingBanner step="schema" />}
         {selectedTable?.hasUnpublishedChanges && (
           <div
@@ -564,7 +562,7 @@ function SchemaBuilderPage() {
             No tables yet. Create a table to start building your schema.
           </p>
         )}
-      </main>
+      </AdminPageLayout>
 
       {showConflictModal && (
         <div
@@ -641,6 +639,6 @@ function SchemaBuilderPage() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
