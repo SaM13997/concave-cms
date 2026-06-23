@@ -6,10 +6,11 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T09:20Z |
-| **Orchestrator** | Cursor Automation (cron) |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-e7c8` |
+| **Last updated** | 2026-06-23T16:50Z |
+| **Orchestrator** | Cursor Automation (cron) — UX/UI remediation |
+| **Implementation branch** | `dev-agent` |
+| **Orchestration branch** | `cursor/ux-ui-remediation-orchestration-6b85` |
+| **Remediation ledger** | `plans/ux-ui-remediation-ledger.md` |
 | **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
 | **Launch plan** | `docs/launch-plan.md` |
 | **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
