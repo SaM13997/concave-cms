@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:30Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-23T20:58Z
 
 ## Branches
 
@@ -11,12 +11,7 @@
 
 ## Active agent
 
-| Field | Value |
-|-------|-------|
-| **batch** | 2.1 |
-| **model** | composer-2.5 |
-| **started_at** | 2026-06-23T20:30Z |
-| **prompt** | `plans/batches/2.1-login-legal-routes.md` |
+_None._
 
 ## Batch status
 
@@ -25,11 +20,19 @@
 | 1.1 | done | — | 2026-06-23T18:22Z | commit `9bf810d` on `dev-agent` |
 | 1.2 | done | 1.1 | 2026-06-23T19:35Z | commit `783e7a3` on `dev-agent` |
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
-| 2.1 | in_progress | 1.3 | — | spawned 2026-06-23T20:30Z |
+| 2.1 | done | 1.3 | 2026-06-23T20:58Z | commit `6a4a519` on `dev-agent` |
 | 2.2 | pending | 1.3 | — | |
 | 3.1 | pending | 1.3 | — | |
 
 ## Log
+
+### 2026-06-23T20:58Z — Batch 2.1 complete (login legal routes)
+
+- **Agent:** composer-2.5 (implementation)
+- **Branch:** `dev-agent`
+- **Commit:** `6a4a519`
+- **Done:** Added `/terms` and `/privacy` static legal pages (dark theme); login form links use TanStack Router `Link`; route tree updated.
+- **Tests:** unit 128/128 ✅ · E2E auth 3/3 ✅
 
 ### 2026-06-23T20:30Z — Orchestrator selected batch 2.1
 
