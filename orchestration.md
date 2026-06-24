@@ -2,102 +2,45 @@
 
 > **MANDATORY for all spawned agents:** Read this file first before any other project files. It is the single source of truth for current progress and next actions.
 
-## Session
+## Active program
+
+**UX/UI Remediation** (2026-06-23) — see `plans/ux-ui-remediation-ledger.md` for batch progress.
 
 | Field | Value |
-|-------|-------|
-| **Last updated** | 2026-06-22T09:20Z |
-| **Orchestrator** | Cursor Automation (cron) |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-e7c8` |
-| **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
-| **Launch plan** | `docs/launch-plan.md` |
-| **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
+| --- | --- |
+| **Last updated** | 2026-06-23T00:00Z |
+| **Orchestrator** | Cursor Automation — `ux-ui-remediation-orchestrator` |
+| **Implementation branch** | `dev-agent` |
+| **Orchestration branch** | `cursor/ux-ui-remediation-orchestration` |
+| **Source plan** | `plans/ux-ui-remediation-plan-2026-06-23.md` |
+| **Batch manifest** | `plans/ux-ui-remediation-batches.md` |
+| **Next batch** | 1.1 (`plans/batches/1.1-schema-draft-buffer.md`) |
 
 ## Agent rules
 
-1. **Model:** Use `composer-2.5` (non-fast) only.
-2. **Read first:** `orchestration.md` → `docs/launch-plan.md` → `docs/agent-testing.md` if running E2E (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (Phases 0–9 complete).
-4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
-5. **E2E trap (important):** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts` only. See `docs/agent-testing.md`.
-6. **Push gate:** NEVER mark a phase complete without verifying remote:
-   ```bash
-   git push -u origin cursor/concave-cms-launch-plan-26c1
-   git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
-   ```
-7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-e7c8`).
-8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
-9. **Commit & push** impl branch after review loop passes.
-10. **Check off** completed items in `docs/launch-plan.md` on the impl branch.
-
-## Current status
-
-| Phase | Status |
-|-------|--------|
-| 0 — Bootstrap | ✅ Complete |
-| 1 — Auth + RBAC | ✅ Complete |
-| 2 — Convex foundation | ✅ Complete |
-| 3 — Schema engine | ✅ Complete |
-| 4 — Content engine | ✅ Complete |
-| 5 — Draft/publish + preview | ✅ Complete |
-| 6 — Time travel | ✅ Complete (`3623f93`) |
-| 7 — Admin UX | ✅ Complete (`45c5a8a`) |
-| 8 — Hardening | ✅ Complete (`0718a5c`) |
-| 9 — Packaging | ✅ Complete (`1a6dd04`) |
-
-**Impl branch HEAD:** `1a6dd04` (verified on remote)
-
-**Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (123/123 checked); release checklist fully checked (8/8).
+1. **Model:** Use `composer-2.5` only. Never `composer-2.5-fast` or any other model (orchestrator and spawned agents).
+2. **Read first:** `orchestration.md` → `plans/ux-ui-remediation-ledger.md` → **only** the active `plans/batches/*.md` file (do not read the full remediation plan unless the batch says so).
+3. **Work branch:** `dev-agent`.
+4. **Scope:** Only files listed in the active batch prompt. One batch per agent run.
+5. **Review loop:** `bun run test` every batch; `bun run check` informational (Biome backlog may be pre-existing). E2E only when batch requires it.
+6. **E2E trap:** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `bun run test:e2e -- e2e/<spec>.spec.ts`. See `docs/agent-testing.md`.
+7. **Push gate:** Commit and push `dev-agent` after batch completes. Verify remote if orchestrator requires it.
+8. **Ledger updates:** On orchestration branch `cursor/ux-ui-remediation-orchestration`, update `plans/ux-ui-remediation-ledger.md` — set batch `done`, clear `active_agent`, append completed work log.
+9. **STOP conditions:** Set batch `blocked` in ledger; do not start dependent batches.
+10. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
 
 ## Active agent
 
-| Agent | Model | Task | Status |
-|-------|-------|------|--------|
+| Agent | Model | Batch | Status |
+| --- | --- | --- | --- |
 | — | — | — | **none** |
 
-## Completed work (log)
+## Prior program (launch — complete)
 
-### 2026-06-22T09:20Z — Orchestration audit (launch complete)
+Launch plan Phases 0–9 completed 2026-06-22 on `cursor/concave-cms-launch-plan-26c1` (PR #1). See git history and `docs/launch-plan.md` on that branch for details.
 
-- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-e7c8`)
-- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present (Dockerfile, docker-compose.yml, CHANGELOG, onboarding E2E, Makefile, release docs); 0 unchecked launch-plan items (123/123 checked); release checklist 8/8 checked.
-- **Agents:** No implementation agents running.
-- **Action:** No new implementation agent spawned — launch plan fully implemented.
-- **Next:** Post-launch ops (see below).
+---
 
-### 2026-06-22T09:10Z — Orchestration audit (launch complete)
+## Completed work (remediation log)
 
-- **Orchestrator:** cron automation (`cursor/orchestration-agent-system-c73f`)
-- **Verified:** Remote impl branch at `1a6dd04`; Phase 9 artifacts present; 0 unchecked launch-plan items.
-- **Action:** No new implementation agent spawned.
-
-### 2026-06-22T07:12Z — Phase 9 packaging + release
-
-- **Agent:** composer-2.5
-- **Branch:** cursor/concave-cms-launch-plan-26c1
-- **Commit:** `1a6dd04`
-- **Done:** Docker Compose + Dockerfile + Makefile + install-smoke CI; onboarding wizard (Blog → post → publish); CHANGELOG + release/upgrade/rollback/self-hosted/troubleshooting docs; release checklist fully checked.
-- **Tests:** check ✅ · unit 119 ✅ · E2E onboarding 1/1 ✅ (~12s)
-
-### 2026-06-22T05:45Z — Phase 8 launch hardening
-
-- **Commit:** `0718a5c`
-- **Done:** Rate limiting, validation, audit viewer, backup/restore, a11y CI, security regression tests.
-
-### 2026-06-22T03:28Z — Phase 7 admin experience
-
-- **Commit:** `45c5a8a`
-- **Done:** Global search, presence, breadcrumbs, Cmd+K, toasts, URL routing.
-
-### 2026-06-22T02:36Z — Phase 6 time travel
-
-- **Commit:** `3623f93`
-- **Done:** History capture, compare, revert APIs + ContentHistoryPanel.
-
-## Next up (post-launch — not launch-plan scope)
-
-1. **Merge PR #1** — `cursor/concave-cms-launch-plan-26c1` → master
-2. **Tag v1.0.0** per `docs/release.md`
-3. **Deploy** and measure live publish p50/p95 from `publishMetrics`
-4. **Staging backup/restore drill** in production-like environment
+See `plans/ux-ui-remediation-ledger.md` for per-batch status and detailed log entries.

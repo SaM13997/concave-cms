@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "subagentStop": [
+      {
+        "command": ".cursor/hooks/remediation-handoff.sh",
+        "matcher": "generalPurpose|explore|shell",
+        "loop_limit": 3
+      }
+    ]
+  }
+}
