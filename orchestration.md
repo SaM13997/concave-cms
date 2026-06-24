@@ -6,10 +6,11 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T09:20Z |
-| **Orchestrator** | Cursor Automation (cron) |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-e7c8` |
+| **Last updated** | 2026-06-24T05:30Z |
+| **Orchestrator** | Cursor Automation (cron) — UX/UI remediation |
+| **Implementation branch** | `dev-agent` |
+| **Orchestration branch** | `cursor/ux-ui-remediation-orchestration-8394` |
+| **Remediation ledger** | `plans/ux-ui-remediation-ledger.md` |
 | **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
 | **Launch plan** | `docs/launch-plan.md` |
 | **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
@@ -50,6 +51,8 @@
 
 **Launch status:** ✅ **Launch plan complete** — 0 unchecked items in `docs/launch-plan.md` on impl branch (123/123 checked); release checklist fully checked (8/8).
 
+**UX/UI remediation:** ✅ **Complete** — all manifest batches (1.1–3.1) `done` on `dev-agent` @ `3691d60`. See `plans/ux-ui-remediation-ledger.md`.
+
 ## Active agent
 
 | Agent | Model | Task | Status |
@@ -57,6 +60,24 @@
 | — | — | — | **none** |
 
 ## Completed work (log)
+
+### 2026-06-24T05:30Z — Orchestration audit (UX/UI remediation complete)
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-8394`)
+- **Verified:** All manifest batches 1.1–3.1 `done`; `dev-agent` @ `3691d60`; no active agent; no blocked batches.
+- **Action:** Synced plan/ledger from `fd0b` → `8394`; no implementation agent spawned.
+
+### 2026-06-24T00:45Z — Orchestration audit (UX/UI remediation complete)
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-fd0b`)
+- **Verified:** All manifest batches 1.1–3.1 `done`; `dev-agent` @ `3691d60`; no active agent; no blocked batches.
+- **Action:** Synced plan/ledger from `79c4` → `fd0b`; no implementation agent spawned.
+
+### 2026-06-24T00:30Z — Orchestration audit (UX/UI remediation complete)
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-79c4`)
+- **Verified:** All manifest batches 1.1–3.1 `done`; `dev-agent` @ `3691d60`; no active agent; no blocked batches.
+- **Action:** Synced plan/ledger to `79c4`; no implementation agent spawned.
 
 ### 2026-06-22T09:20Z — Orchestration audit (launch complete)
 
