@@ -573,7 +573,12 @@ function SchemaBuilderPage() {
       </AdminPageLayout>
 
       <Dialog open={showConflictModal} onOpenChange={setShowConflictModal}>
-        <DialogContent data-testid="schema-conflict-modal" showCloseButton={false}>
+        <DialogContent
+          data-testid="schema-conflict-modal"
+          showCloseButton={false}
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto"
+          onInteractOutside={(event) => event.preventDefault()}
+        >
           <DialogHeader className="text-left">
             <DialogTitle>Schema changed elsewhere</DialogTitle>
             <DialogDescription>
@@ -581,7 +586,7 @@ function SchemaBuilderPage() {
               applying.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="sm:justify-start">
+          <DialogFooter className="sm:justify-start [&>button]:min-h-11 [&>button]:w-full sm:[&>button]:w-auto">
             <Button
               data-testid="schema-conflict-overwrite"
               variant="destructive"
@@ -608,7 +613,12 @@ function SchemaBuilderPage() {
       </Dialog>
 
       <Dialog open={showDestructiveModal} onOpenChange={setShowDestructiveModal}>
-        <DialogContent data-testid="schema-destructive-modal" showCloseButton={false}>
+        <DialogContent
+          data-testid="schema-destructive-modal"
+          showCloseButton={false}
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto"
+          onInteractOutside={(event) => event.preventDefault()}
+        >
           <DialogHeader className="text-left">
             <DialogTitle>Destructive change</DialogTitle>
             <DialogDescription asChild>
@@ -619,7 +629,7 @@ function SchemaBuilderPage() {
               </ul>
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="sm:justify-start">
+          <DialogFooter className="sm:justify-start [&>button]:min-h-11 [&>button]:w-full sm:[&>button]:w-auto">
             <Button
               data-testid="schema-destructive-confirm"
               variant="destructive"
