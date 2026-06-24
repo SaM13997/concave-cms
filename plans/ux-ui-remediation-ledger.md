@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-24T06:02Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-24T06:16Z
 
 ## Branches
 
@@ -13,10 +13,7 @@
 
 | Field | Value |
 |-------|-------|
-| model | `composer-2.5` |
-| task | batch 3.1 review (functionality + UI) |
-| started_at | 2026-06-24T06:02Z |
-| branch | `dev-agent` |
+| — | **none** |
 
 ## Batch status
 
@@ -27,9 +24,33 @@
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
 | 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
 | 2.2 | done | 1.3 | 2026-06-23T22:40Z | commits `9c1d960`, `028e93f` on `dev-agent` |
-| 3.1 | in_progress | 1.3 | — | commits `14eaa7d`, `3691d60` on `dev-agent` (ledger sync + review) |
+| 3.1 | done | 1.3 | 2026-06-24T06:16Z | commits `14eaa7d`, `3691d60`, `38e86d2`, `940041a` on `dev-agent` |
 
 ## Log
+
+### 2026-06-24T06:16Z — Batch 3.1 complete + remediation finished
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-febd`)
+- **Action:** Marked batch **3.1** done after functionality + UI reviews; all manifest batches complete.
+- **Tests:** unit 128/128 ✅ · E2E `schema-builder` 3/3 ✅
+
+### 2026-06-24T06:15Z — Batch 3.1 functionality review (schema Dialog modals)
+
+- **Agent:** composer-2.5 (functionality review)
+- **Branch reviewed:** `dev-agent` @ `3691d60` → fixes `38e86d2`, `940041a`
+- **Issues found:** Outside-click could dismiss confirmation modals (Radix default vs hand-rolled); E2E `schema-builder.spec.ts` flaky auth setup.
+- **Fixes:** `38e86d2` — block outside-click dismiss, mobile footer tap targets, scrollable dialog on short viewports; `940041a` — E2E uses `prepareAdmin` for stable nav.
+- **Pre-existing gaps (not fixed):** no discard-draft confirmation modal; conflict modal missing Compare/Use current actions.
+- **Tests:** unit 128/128 ✅ · E2E schema-builder 3/3 ✅
+
+### 2026-06-24T06:15Z — Batch 3.1 UI review (schema Dialog modals)
+
+- **Agent:** composer-2.5 (UI review)
+- **Branch reviewed:** `dev-agent` @ `3691d60` → fix `38e86d2`
+- **Issues found:** Outside-click dismiss regression; mobile footer tap targets below `min-h-11`; short viewport overflow risk.
+- **Fixes:** `38e86d2` (shared with functionality review).
+- **Review notes:** Destructive hierarchy and z-index above bottom nav correct from `3691d60`; mobile `flex-col-reverse` footer stacks Cancel above destructive action.
+- **Tests:** unit 128/128 ✅
 
 ### 2026-06-24T06:02Z — Orchestrator selected batch 3.1 (stale-ledger sync)
 
