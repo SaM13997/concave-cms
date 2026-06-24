@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-24T00:01Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-24T00:05Z
 
 ## Branches
 
@@ -22,9 +22,18 @@ _None._
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
 | 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
 | 2.2 | done | 1.3 | 2026-06-23T22:40Z | commits `9c1d960`, `028e93f` on `dev-agent` |
-| 3.1 | done | 1.3 | 2026-06-24T00:01Z | commit `14eaa7d` on `dev-agent` |
+| 3.1 | done | 1.3 | 2026-06-24T00:01Z | commits `14eaa7d`, `3691d60` on `dev-agent` |
 
 ## Log
+
+### 2026-06-24T00:05Z — Batch 3.1 UI review (schema dialog modals)
+
+- **Agent:** composer-2.5 (UI review)
+- **Branch reviewed:** `dev-agent` @ `14eaa7d` → fix `3691d60`
+- **Issues found:** Dialog headers centered on mobile (regression vs hand-rolled left-aligned titles); `DialogFooter` override forced horizontal button row on narrow screens (worse touch targets); Overwrite/Confirm used default button styling instead of destructive hierarchy; dialog overlay/content shared `z-50` with bottom nav.
+- **Fixes:** `3691d60` — `text-left` on dialog headers; responsive footer stacking with `sm:justify-start`; `variant="destructive"` on Overwrite/Confirm; dialog z-index raised to `z-[60]`.
+- **Review notes:** Dark theme tokens (`bg-background`, `border`, `text-muted-foreground`) consistent with app; Radix portal stacking improves over in-tree hand-rolled modals; conflict modal still missing Compare/Use current actions per UX contract (pre-existing scope gap, not Dialog regression); first Dialog usage in app — no other consumers to compare.
+- **Tests:** unit 128/128 ✅ · E2E not re-run (styling-only changes).
 
 ### 2026-06-24T00:01Z — Batch 3.1 complete (schema dialog modals)
 
