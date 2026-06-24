@@ -574,16 +574,17 @@ function SchemaBuilderPage() {
 
       <Dialog open={showConflictModal} onOpenChange={setShowConflictModal}>
         <DialogContent data-testid="schema-conflict-modal" showCloseButton={false}>
-          <DialogHeader>
+          <DialogHeader className="text-left">
             <DialogTitle>Schema changed elsewhere</DialogTitle>
             <DialogDescription>
               The active schema was updated while you were editing. Review differences before
               applying.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex-row justify-start gap-2 sm:justify-start">
+          <DialogFooter className="sm:justify-start">
             <Button
               data-testid="schema-conflict-overwrite"
+              variant="destructive"
               size="sm"
               onClick={() => {
                 setShowConflictModal(false);
@@ -608,7 +609,7 @@ function SchemaBuilderPage() {
 
       <Dialog open={showDestructiveModal} onOpenChange={setShowDestructiveModal}>
         <DialogContent data-testid="schema-destructive-modal" showCloseButton={false}>
-          <DialogHeader>
+          <DialogHeader className="text-left">
             <DialogTitle>Destructive change</DialogTitle>
             <DialogDescription asChild>
               <ul className="space-y-1">
@@ -618,9 +619,10 @@ function SchemaBuilderPage() {
               </ul>
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex-row justify-start gap-2 sm:justify-start">
+          <DialogFooter className="sm:justify-start">
             <Button
               data-testid="schema-destructive-confirm"
+              variant="destructive"
               size="sm"
               onClick={() => void handleApply({ confirmDestructive: true })}
               type="button"
