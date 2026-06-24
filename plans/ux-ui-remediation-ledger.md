@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-24T00:05Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-24T00:12Z
 
 ## Branches
 
@@ -25,6 +25,15 @@ _None._
 | 3.1 | done | 1.3 | 2026-06-24T00:01Z | commits `14eaa7d`, `3691d60` on `dev-agent` |
 
 ## Log
+
+### 2026-06-24T00:12Z — Batch 3.1 functionality review (schema dialog modals)
+
+- **Agent:** composer-2.5 (functionality review)
+- **Branch reviewed:** `dev-agent` @ `3691d60` (includes UI review fix on top of `14eaa7d`)
+- **Issues found:** None requiring code changes.
+- **Review notes:** Conflict/destructive modals correctly driven by `showConflictModal` / `showDestructiveModal`; `handleApply` / `handleDiscard` / validation flows unchanged; Radix Dialog adds focus trap and Escape-to-cancel (contract requirement; improvement over hand-rolled `role="dialog"` only); overlay click dismisses via `onOpenChange` (equivalent to Cancel — acceptable behavior change); all contract test IDs preserved (`schema-conflict-modal`, `schema-destructive-modal`, overwrite/cancel/confirm buttons); RBAC unchanged (`schema:read` gate + `InsufficientPermissions`); pre-existing UX contract gaps unchanged (conflict modal lacks Compare/Use current; discard has no confirmation modal); no E2E coverage for modals in `schema-builder.spec.ts`.
+- **Fixes:** None.
+- **Tests:** unit 128/128 ✅ · E2E `schema-builder` 0/3 pass — auth infra flake (`Not authenticated` on `onboarding:getStatus` / `cmsUsers:ensureProfile` during `signUp`/`assignRole` setup); Playwright webServer teardown hangs after tests complete in agent env (same as prior batches).
 
 ### 2026-06-24T00:05Z — Batch 3.1 UI review (schema dialog modals)
 
