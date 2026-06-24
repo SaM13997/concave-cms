@@ -1,6 +1,6 @@
 # UX/UI Remediation Ledger
 
-> **Orchestrator:** cron automation · **Updated:** 2026-06-23T23:30Z
+> **Orchestrator:** cron automation · **Updated:** 2026-06-24T00:01Z
 
 ## Branches
 
@@ -11,12 +11,7 @@
 
 ## Active agent
 
-| Field | Value |
-|-------|-------|
-| batch | **3.1** (schema dialog modals) |
-| model | `composer-2.5` |
-| started_at | 2026-06-23T23:30Z |
-| status | **in_progress** |
+_None._
 
 ## Batch status
 
@@ -27,9 +22,17 @@
 | 1.3 | done | 1.1 | 2026-06-23T20:20Z | commits `c174ce0`, `869399e` on `dev-agent` |
 | 2.1 | done | 1.3 | 2026-06-23T20:58Z | commits `6a4a519`, `f0207a1` on `dev-agent` |
 | 2.2 | done | 1.3 | 2026-06-23T22:40Z | commits `9c1d960`, `028e93f` on `dev-agent` |
-| 3.1 | in_progress | 1.3 | — | orchestrator spawned 2026-06-23T23:30Z |
+| 3.1 | done | 1.3 | 2026-06-24T00:01Z | commit `14eaa7d` on `dev-agent` |
 
 ## Log
+
+### 2026-06-24T00:01Z — Batch 3.1 complete (schema dialog modals)
+
+- **Agent:** composer-2.5 (implementation)
+- **Branch:** `dev-agent`
+- **Commit:** `14eaa7d`
+- **Done:** Added shadcn `Dialog` component; migrated schema conflict and destructive confirmation modals from hand-rolled overlays; preserved apply/discard/validation UX contract test IDs.
+- **Tests:** unit 128/128 ✅ · E2E `schema-builder` 0/3 pass — auth infra flake (`Not authenticated` on `onboarding:getStatus` / `cmsUsers:ensureProfile` during `signUp`/`assignRole` setup); Playwright webServer teardown hangs after tests complete in agent env (same as prior batches).
 
 ### 2026-06-23T23:30Z — Orchestrator selected batch 3.1
 
