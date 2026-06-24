@@ -6,6 +6,14 @@ import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useMyRole } from "@/hooks/use-my-role";
 import { toSafeErrorMessage } from "@/lib/safe-error";
@@ -564,81 +572,73 @@ function SchemaBuilderPage() {
         )}
       </AdminPageLayout>
 
-      {showConflictModal && (
-        <div
-          data-testid="schema-conflict-modal"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="max-w-md rounded-lg bg-background p-6 shadow-lg">
-            <h3 className="text-lg font-semibold">Schema changed elsewhere</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
+      <Dialog open={showConflictModal} onOpenChange={setShowConflictModal}>
+        <DialogContent data-testid="schema-conflict-modal" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Schema changed elsewhere</DialogTitle>
+            <DialogDescription>
               The active schema was updated while you were editing. Review differences before
               applying.
-            </p>
-            <div className="mt-4 flex gap-2">
-              <Button
-                data-testid="schema-conflict-overwrite"
-                size="sm"
-                onClick={() => {
-                  setShowConflictModal(false);
-                  handleApply({ overwriteConflict: true });
-                }}
-                type="button"
-              >
-                Overwrite
-              </Button>
-              <Button
-                data-testid="schema-conflict-cancel"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowConflictModal(false)}
-                type="button"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-row justify-start gap-2 sm:justify-start">
+            <Button
+              data-testid="schema-conflict-overwrite"
+              size="sm"
+              onClick={() => {
+                setShowConflictModal(false);
+                void handleApply({ overwriteConflict: true });
+              }}
+              type="button"
+            >
+              Overwrite
+            </Button>
+            <Button
+              data-testid="schema-conflict-cancel"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowConflictModal(false)}
+              type="button"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      {showDestructiveModal && (
-        <div
-          data-testid="schema-destructive-modal"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          role="dialog"
-          aria-modal="true"
-        >
-          <div className="max-w-md rounded-lg bg-background p-6 shadow-lg">
-            <h3 className="text-lg font-semibold">Destructive change</h3>
-            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-              {destructiveChanges.map((change) => (
-                <li key={change.message}>{change.message}</li>
-              ))}
-            </ul>
-            <div className="mt-4 flex gap-2">
-              <Button
-                data-testid="schema-destructive-confirm"
-                size="sm"
-                onClick={() => handleApply({ confirmDestructive: true })}
-                type="button"
-              >
-                Confirm
-              </Button>
-              <Button
-                data-testid="schema-destructive-cancel"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowDestructiveModal(false)}
-                type="button"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={showDestructiveModal} onOpenChange={setShowDestructiveModal}>
+        <DialogContent data-testid="schema-destructive-modal" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Destructive change</DialogTitle>
+            <DialogDescription asChild>
+              <ul className="space-y-1">
+                {destructiveChanges.map((change) => (
+                  <li key={change.message}>{change.message}</li>
+                ))}
+              </ul>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-row justify-start gap-2 sm:justify-start">
+            <Button
+              data-testid="schema-destructive-confirm"
+              size="sm"
+              onClick={() => void handleApply({ confirmDestructive: true })}
+              type="button"
+            >
+              Confirm
+            </Button>
+            <Button
+              data-testid="schema-destructive-cancel"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDestructiveModal(false)}
+              type="button"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
