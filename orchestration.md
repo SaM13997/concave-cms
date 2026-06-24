@@ -6,19 +6,18 @@
 
 | Field | Value |
 |-------|-------|
-| **Last updated** | 2026-06-22T09:20Z |
-| **Orchestrator** | Cursor Automation (cron) |
-| **Implementation branch** | `cursor/concave-cms-launch-plan-26c1` |
-| **Orchestration branch** | `cursor/orchestration-agent-system-e7c8` |
-| **Impl PR** | https://github.com/SaM13997/concave-cms/pull/1 |
-| **Launch plan** | `docs/launch-plan.md` |
-| **Slack thread** | ts: 1782091709.754369 (#concave-cms) |
+| **Last updated** | 2026-06-24T02:00Z |
+| **Orchestrator** | Cursor Automation (cron) — UX/UI remediation |
+| **Implementation branch** | `dev-agent` |
+| **Orchestration branch** | `cursor/ux-ui-remediation-orchestration-b628` |
+| **UX/UI ledger** | `plans/ux-ui-remediation-ledger.md` |
+| **Launch plan** | `docs/launch-plan.md` (complete) |
 
 ## Agent rules
 
 1. **Model:** Use `composer-2.5` (non-fast) only.
-2. **Read first:** `orchestration.md` → `docs/launch-plan.md` → `docs/agent-testing.md` if running E2E (do not re-read full git history).
-3. **Work branch:** Check out `cursor/concave-cms-launch-plan-26c1` (Phases 0–9 complete).
+2. **Read first:** `orchestration.md` → `plans/ux-ui-remediation-ledger.md` → batch prompt; `docs/agent-testing.md` if running E2E.
+3. **Work branch:** Check out `dev-agent` for UX/UI remediation (or `cursor/concave-cms-launch-plan-26c1` for launch plan work).
 4. **Review loop:** After implementation, spawn review/fix sub-agents until all feedback is addressed (`npm run check` + `npm run test`; run e2e if UI touched).
 5. **E2E trap (important):** **Never run or inspect `scripts/e2e-server.sh`** — it blocks forever. Use `npm run test:e2e -- e2e/<spec>.spec.ts` only. See `docs/agent-testing.md`.
 6. **Push gate:** NEVER mark a phase complete without verifying remote:
@@ -26,12 +25,27 @@
    git push -u origin cursor/concave-cms-launch-plan-26c1
    git ls-remote origin cursor/concave-cms-launch-plan-26c1  # must show NEW commit
    ```
-7. **Update this file** when task + review loop completes (on orchestration branch `cursor/orchestration-agent-system-e7c8`).
+7. **Update this file** when task + review loop completes (on orchestration branch `cursor/ux-ui-remediation-orchestration-b628`).
 8. **Convex:** Use `function-creator` skill; `CONVEX_AGENT_MODE=anonymous npx convex dev` for cloud agents.
 9. **Commit & push** impl branch after review loop passes.
 10. **Check off** completed items in `docs/launch-plan.md` on the impl branch.
 
 ## Current status
+
+### UX/UI remediation (2026-06-23 plan)
+
+| Batch | Status |
+|-------|--------|
+| 1.1 — Navigation consistency | ✅ Complete |
+| 1.2 — RBAC nav alignment | ✅ Complete |
+| 1.3 — Shared page layout | ✅ Complete |
+| 2.1 — Login legal routes | ✅ Complete |
+| 2.2 — Debug nav gating | ✅ Complete |
+| 3.1 — Schema dialog modals | ✅ Complete |
+
+**Remediation status:** ✅ **Complete** — all manifest batches done; `dev-agent` @ `3691d60`.
+
+### Launch plan (Phases 0–9)
 
 | Phase | Status |
 |-------|--------|
@@ -57,6 +71,12 @@
 | — | — | — | **none** |
 
 ## Completed work (log)
+
+### 2026-06-24T02:00Z — UX/UI remediation audit (complete)
+
+- **Orchestrator:** cron (`cursor/ux-ui-remediation-orchestration-b628`)
+- **Verified:** All batches 1.1–3.1 `done`; `dev-agent` @ `3691d60`; no `active_agent`; no blockers.
+- **Action:** Synced plan/ledger from `d10f`; **no implementation agent spawned** — remediation complete.
 
 ### 2026-06-22T09:20Z — Orchestration audit (launch complete)
 
