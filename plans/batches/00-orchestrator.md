@@ -16,7 +16,7 @@ Do **not** read `plans/ux-ui-remediation-plan-2026-06-23.md` in full.
 - **Model:** `composer-2.5` only (never `composer-2.5-fast` or other models).
 - Spawn **exactly one** implementation batch per run.
 - Implementation branch: `dev-agent`
-- Ledger branch: `cursor/ux-ui-remediation-orchestration-1643`
+- Ledger branch: `cursor/ux-ui-remediation-orchestration-7f8b`
 
 ## Spawn template (required fields for implementation agent)
 
