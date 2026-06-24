@@ -7,7 +7,7 @@
 | Role | Branch |
 |------|--------|
 | Implementation | `dev-agent` |
-| Ledger | `cursor/ux-ui-remediation-orchestration-2b19` |
+| Ledger | `cursor/ux-ui-remediation-orchestration-4313` |
 
 ## Selection algorithm
 
