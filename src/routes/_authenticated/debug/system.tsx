@@ -11,16 +11,19 @@ export const Route = createFileRoute("/_authenticated/debug/system")({
 
 function SystemDebugPage() {
   const { hasPermission, isLoading: roleLoading } = useMyRole();
-  const summary = useQuery(api.systemDebug.getSystemSummary);
-  const auditLog = useQuery(api.systemDebug.listRecentAuditLog, {
-    paginationOpts: { numItems: 10, cursor: null },
-  });
-  const versionEvents = useQuery(api.systemDebug.listRecentVersionEvents, {
-    paginationOpts: { numItems: 10, cursor: null },
-  });
-  const presence = useQuery(api.systemDebug.listPresenceSessions);
-  const media = useQuery(api.systemDebug.listMediaAssets);
-  const schemaVersions = useQuery(api.systemDebug.listSchemaVersions);
+  const canQuery = !roleLoading && hasPermission("schema:read");
+  const summary = useQuery(api.systemDebug.getSystemSummary, canQuery ? {} : "skip");
+  const auditLog = useQuery(
+    api.systemDebug.listRecentAuditLog,
+    canQuery ? { paginationOpts: { numItems: 10, cursor: null } } : "skip",
+  );
+  const versionEvents = useQuery(
+    api.systemDebug.listRecentVersionEvents,
+    canQuery ? { paginationOpts: { numItems: 10, cursor: null } } : "skip",
+  );
+  const presence = useQuery(api.systemDebug.listPresenceSessions, canQuery ? {} : "skip");
+  const media = useQuery(api.systemDebug.listMediaAssets, canQuery ? {} : "skip");
+  const schemaVersions = useQuery(api.systemDebug.listSchemaVersions, canQuery ? {} : "skip");
 
   if (roleLoading) {
     return <div data-testid="debug-system-loading">Loading...</div>;

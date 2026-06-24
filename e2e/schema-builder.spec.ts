@@ -1,8 +1,7 @@
 import { expect, test } from "@playwright/test";
-import { assignRole, signUp } from "./helpers/auth";
+import { prepareAdmin } from "./helpers/auth";
 
 async function openSchemaBuilder(page: import("@playwright/test").Page) {
-  await page.getByTestId("nav-schema").waitFor({ timeout: 15_000 });
   await page.getByTestId("nav-schema").click();
   await page.waitForURL("/schema");
   await page.getByTestId("schema-builder").waitFor();
@@ -10,10 +9,7 @@ async function openSchemaBuilder(page: import("@playwright/test").Page) {
 
 test.describe("Schema Builder", () => {
   test.beforeEach(async ({ page }) => {
-    await signUp(page);
-    await assignRole(page, "admin");
-    await page.reload();
-    await page.waitForLoadState("networkidle");
+    await prepareAdmin(page);
     await openSchemaBuilder(page);
   });
 

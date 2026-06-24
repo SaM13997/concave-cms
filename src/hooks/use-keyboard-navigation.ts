@@ -2,12 +2,15 @@ import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useMyRole } from "@/hooks/use-my-role";
 
-type GoTarget = "home" | "content" | "schema";
+type GoTarget = "home" | "content" | "media" | "schema" | "audit" | "settings";
 
 const GO_PATHS: Record<GoTarget, string> = {
   home: "/",
   content: "/content",
+  media: "/media",
   schema: "/schema",
+  audit: "/audit",
+  settings: "/settings",
 };
 
 export function useGlobalKeyboardShortcuts() {
@@ -37,6 +40,7 @@ export function useGlobalKeyboardShortcuts() {
       }
 
       if (event.key === "g") {
+        event.preventDefault();
         goMode = true;
         if (goTimer !== null) {
           window.clearTimeout(goTimer);
@@ -57,9 +61,15 @@ export function useGlobalKeyboardShortcuts() {
           ? "home"
           : event.key === "c"
             ? "content"
-            : event.key === "s"
-              ? "schema"
-              : null;
+            : event.key === "m"
+              ? "media"
+              : event.key === "s"
+                ? "schema"
+                : event.key === "a"
+                  ? "audit"
+                  : event.key === ","
+                    ? "settings"
+                    : null;
 
       if (!destination) {
         return;
@@ -68,10 +78,19 @@ export function useGlobalKeyboardShortcuts() {
       event.preventDefault();
       clearGoMode();
 
-      if (destination === "schema" && !hasPermission("schema:read")) {
+      if (
+        (destination === "schema" || destination === "audit") &&
+        !hasPermission("schema:read")
+      ) {
         return;
       }
-      if (destination === "content" && !hasPermission("content:read")) {
+      if (destination === "settings" && !hasPermission("schema:write")) {
+        return;
+      }
+      if (
+        (destination === "content" || destination === "media") &&
+        !hasPermission("content:read")
+      ) {
         return;
       }
 

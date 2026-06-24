@@ -1,39 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { FileText, Image, Layers, type LucideIcon, Settings } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import type { LucideIcon } from "lucide-react";
+import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard";
-import { UserButton } from "@/components/User-button";
+import {
+  type DashboardSection,
+  dashboardSections,
+  dashboardSectionsForPermissions,
+  isPublicNavItem,
+} from "@/config/navigation";
+import { useMyRole } from "@/hooks/use-my-role";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/")({
   component: HomePage,
 });
-
-const dashboardSections = [
-  {
-    icon: Layers,
-    title: "Content Types",
-    description: "Define and manage your content schemas",
-    href: "/schema",
-  },
-  {
-    icon: FileText,
-    title: "Content Entries",
-    description: "Create, edit, and publish content",
-    href: "/content",
-  },
-  {
-    icon: Image,
-    title: "Media Library",
-    description: "Upload and organize your assets",
-    href: "/media",
-  },
-  {
-    icon: Settings,
-    title: "Settings",
-    description: "Configure your CMS instance",
-    href: "/settings",
-  },
-] as const;
 
 function DashboardCard({
   icon: Icon,
@@ -44,14 +24,16 @@ function DashboardCard({
   icon: LucideIcon;
   title: string;
   description: string;
-  href: string;
+  href: DashboardSection["href"];
 }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
+      viewTransition
       className={cn(
-        "group relative rounded-lg border border-border bg-card p-5",
-        "transition-colors hover:border-muted-foreground/25",
+        "group relative cursor-pointer rounded-lg border border-border bg-card p-5",
+        "transition-colors hover:border-muted-foreground/25 hover:bg-muted/40",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       )}
     >
       <div className="flex items-start justify-between">
@@ -65,36 +47,60 @@ function DashboardCard({
           </div>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
 function HomePage() {
+  const { permissions } = useMyRole();
+  const visibleSections = permissions
+    ? dashboardSectionsForPermissions(permissions)
+    : dashboardSections.filter(isPublicNavItem);
+
   return (
-    <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      <header className="mx-auto flex w-full max-w-3xl items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Concave CMS</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Convex-native headless CMS</p>
-        </div>
-        <UserButton />
-      </header>
+    <AdminPageLayout
+      title="Concave CMS"
+      description="Convex-native headless CMS"
+      className="pb-24"
+      contentClassName="space-y-6"
+    >
+      <OnboardingWizard />
 
-      <main className="mx-auto mt-8 w-full max-w-3xl flex-1 space-y-6">
-        <OnboardingWizard />
+      <div className="grid gap-3 sm:grid-cols-2">
+        {visibleSections.map((section) => (
+          <DashboardCard
+            key={section.title}
+            icon={section.icon}
+            title={section.title}
+            description={section.description}
+            href={section.href}
+          />
+        ))}
+      </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {dashboardSections.map((section) => (
-            <DashboardCard
-              key={section.title}
-              icon={section.icon}
-              title={section.title}
-              description={section.description}
-              href={section.href}
-            />
-          ))}
-        </div>
-      </main>
-    </div>
+      <p className="text-center text-xs text-muted-foreground">
+        Keyboard: press{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          g
+        </kbd>{" "}
+        then a letter —{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          h
+        </kbd>{" "}
+        home,{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          c
+        </kbd>{" "}
+        content,{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          m
+        </kbd>{" "}
+        media,{" "}
+        <kbd className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[10px]">
+          s
+        </kbd>{" "}
+        schema
+      </p>
+    </AdminPageLayout>
   );
 }

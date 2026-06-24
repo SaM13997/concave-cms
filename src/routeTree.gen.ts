@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
@@ -23,6 +25,16 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedDebugSystemRouteImport } from './routes/_authenticated/debug/system'
 import { Route as AuthenticatedDebugReactiveRouteImport } from './routes/_authenticated/debug/reactive'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -91,7 +103,10 @@ const AuthenticatedDebugReactiveRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/content': typeof AuthenticatedContentRoute
   '/media': typeof AuthenticatedMediaRoute
@@ -99,13 +114,14 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/p/$entryId': typeof PEntryIdRoute
   '/preview/$token': typeof PreviewTokenRoute
-  '/': typeof AuthenticatedIndexRoute
   '/debug/reactive': typeof AuthenticatedDebugReactiveRoute
   '/debug/system': typeof AuthenticatedDebugSystemRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/audit': typeof AuthenticatedAuditRoute
   '/content': typeof AuthenticatedContentRoute
   '/media': typeof AuthenticatedMediaRoute
@@ -122,6 +138,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
   '/_authenticated/audit': typeof AuthenticatedAuditRoute
   '/_authenticated/content': typeof AuthenticatedContentRoute
   '/_authenticated/media': typeof AuthenticatedMediaRoute
@@ -137,7 +155,10 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/login'
+    | '/privacy'
+    | '/terms'
     | '/audit'
     | '/content'
     | '/media'
@@ -145,13 +166,14 @@ export interface FileRouteTypes {
     | '/settings'
     | '/p/$entryId'
     | '/preview/$token'
-    | '/'
     | '/debug/reactive'
     | '/debug/system'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
+    | '/privacy'
+    | '/terms'
     | '/audit'
     | '/content'
     | '/media'
@@ -167,6 +189,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/login'
+    | '/privacy'
+    | '/terms'
     | '/_authenticated/audit'
     | '/_authenticated/content'
     | '/_authenticated/media'
@@ -183,6 +207,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
   PEntryIdRoute: typeof PEntryIdRoute
   PreviewTokenRoute: typeof PreviewTokenRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -190,6 +216,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -200,7 +240,7 @@ declare module '@tanstack/react-router' {
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -313,6 +353,8 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
   PEntryIdRoute: PEntryIdRoute,
   PreviewTokenRoute: PreviewTokenRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

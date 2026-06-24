@@ -2,10 +2,18 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { ChevronDown, ChevronUp, Download, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
-import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useMyRole } from "@/hooks/use-my-role";
 import { toSafeErrorMessage } from "@/lib/safe-error";
@@ -303,13 +311,13 @@ function SchemaBuilderPage() {
     validationErrors.length === 0;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      <header className="mx-auto flex w-full max-w-5xl items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Schema Builder</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Define content types and fields</p>
-        </div>
-        <div className="flex items-center gap-2">
+    <>
+      <AdminPageLayout
+        title="Schema Builder"
+        description="Define content types and fields"
+        contentTestId="schema-builder"
+        contentClassName="space-y-6"
+        actions={
           <Button
             data-testid="schema-export-button"
             variant="outline"
@@ -320,11 +328,8 @@ function SchemaBuilderPage() {
             <Download className="mr-1 h-4 w-4" />
             Export
           </Button>
-          <UserButton />
-        </div>
-      </header>
-
-      <main data-testid="schema-builder" className="mx-auto mt-8 w-full max-w-5xl flex-1 space-y-6">
+        }
+      >
         {search.onboarding === "1" && <OnboardingBanner step="schema" />}
         {selectedTable?.hasUnpublishedChanges && (
           <div
@@ -565,83 +570,87 @@ function SchemaBuilderPage() {
             No tables yet. Create a table to start building your schema.
           </p>
         )}
-      </main>
+      </AdminPageLayout>
 
-      {showConflictModal && (
-        <div
+      <Dialog open={showConflictModal} onOpenChange={setShowConflictModal}>
+        <DialogContent
           data-testid="schema-conflict-modal"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          role="dialog"
-          aria-modal="true"
+          showCloseButton={false}
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto"
+          onInteractOutside={(event) => event.preventDefault()}
         >
-          <div className="max-w-md rounded-lg bg-background p-6 shadow-lg">
-            <h3 className="text-lg font-semibold">Schema changed elsewhere</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
+          <DialogHeader className="text-left">
+            <DialogTitle>Schema changed elsewhere</DialogTitle>
+            <DialogDescription>
               The active schema was updated while you were editing. Review differences before
               applying.
-            </p>
-            <div className="mt-4 flex gap-2">
-              <Button
-                data-testid="schema-conflict-overwrite"
-                size="sm"
-                onClick={() => {
-                  setShowConflictModal(false);
-                  handleApply({ overwriteConflict: true });
-                }}
-                type="button"
-              >
-                Overwrite
-              </Button>
-              <Button
-                data-testid="schema-conflict-cancel"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowConflictModal(false)}
-                type="button"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start [&>button]:min-h-11 [&>button]:w-full sm:[&>button]:w-auto">
+            <Button
+              data-testid="schema-conflict-overwrite"
+              variant="destructive"
+              size="sm"
+              onClick={() => {
+                setShowConflictModal(false);
+                void handleApply({ overwriteConflict: true });
+              }}
+              type="button"
+            >
+              Overwrite
+            </Button>
+            <Button
+              data-testid="schema-conflict-cancel"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowConflictModal(false)}
+              type="button"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
-      {showDestructiveModal && (
-        <div
+      <Dialog open={showDestructiveModal} onOpenChange={setShowDestructiveModal}>
+        <DialogContent
           data-testid="schema-destructive-modal"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          role="dialog"
-          aria-modal="true"
+          showCloseButton={false}
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto"
+          onInteractOutside={(event) => event.preventDefault()}
         >
-          <div className="max-w-md rounded-lg bg-background p-6 shadow-lg">
-            <h3 className="text-lg font-semibold">Destructive change</h3>
-            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
-              {destructiveChanges.map((change) => (
-                <li key={change.message}>{change.message}</li>
-              ))}
-            </ul>
-            <div className="mt-4 flex gap-2">
-              <Button
-                data-testid="schema-destructive-confirm"
-                size="sm"
-                onClick={() => handleApply({ confirmDestructive: true })}
-                type="button"
-              >
-                Confirm
-              </Button>
-              <Button
-                data-testid="schema-destructive-cancel"
-                variant="outline"
-                size="sm"
-                onClick={() => setShowDestructiveModal(false)}
-                type="button"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+          <DialogHeader className="text-left">
+            <DialogTitle>Destructive change</DialogTitle>
+            <DialogDescription asChild>
+              <ul className="space-y-1">
+                {destructiveChanges.map((change) => (
+                  <li key={change.message}>{change.message}</li>
+                ))}
+              </ul>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start [&>button]:min-h-11 [&>button]:w-full sm:[&>button]:w-auto">
+            <Button
+              data-testid="schema-destructive-confirm"
+              variant="destructive"
+              size="sm"
+              onClick={() => void handleApply({ confirmDestructive: true })}
+              type="button"
+            >
+              Confirm
+            </Button>
+            <Button
+              data-testid="schema-destructive-cancel"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDestructiveModal(false)}
+              type="button"
+            >
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

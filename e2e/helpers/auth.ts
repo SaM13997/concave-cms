@@ -25,15 +25,57 @@ function uniqueEmail(prefix: string): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}@e2e.test`;
 }
 
-export async function waitForAuth(page: Page): Promise<void> {
-  await page.waitForFunction(async () => {
-    const response = await fetch("/api/auth/convex/token", { credentials: "include" });
-    if (!response.ok) {
-      return false;
-    }
-    const data = (await response.json()) as { token?: string };
-    return Boolean(data.token);
-  });
+export async function waitForAuth(page: Page, timeout = 30_000): Promise<void> {
+  await page.waitForFunction(
+    async () => {
+      const response = await fetch("/api/auth/convex/token", { credentials: "include" });
+      if (!response.ok) {
+        return false;
+      }
+      const data = (await response.json()) as { token?: string };
+      return Boolean(data.token);
+    },
+    { timeout },
+  );
+}
+
+export async function waitForRole(page: Page, role: Role): Promise<void> {
+  await expect
+    .poll(
+      async () => {
+        try {
+          const token = await getConvexAuthToken(page);
+          const client = new ConvexHttpClient(getConvexUrlFromEnvFile());
+          client.setAuth(token);
+          const result = await client.query(api.cmsUsers.getMyRole, {});
+          return result.role;
+        } catch {
+          return null;
+        }
+      },
+      { timeout: 30_000 },
+    )
+    .toBe(role);
+}
+
+/** Waits until admin permissions are reflected in the bottom nav (not just HTTP role). */
+export async function waitForAdminUi(page: Page): Promise<void> {
+  await page.getByTestId("nav-schema").waitFor({ state: "visible", timeout: 30_000 });
+}
+
+export async function prepareAdmin(page: Page): Promise<void> {
+  await signUp(page);
+  await assignRole(page, "admin");
+  await waitForRole(page, "admin");
+  await waitForAdminUi(page);
+}
+
+export async function prepareEditor(page: Page): Promise<void> {
+  await signUp(page);
+  await assignRole(page, "editor");
+  await waitForRole(page, "editor");
+  await page.getByTestId("admin-chrome").waitFor({ timeout: 15_000 });
+  await expect(page.getByTestId("nav-schema")).not.toBeVisible();
 }
 
 export async function signUp(

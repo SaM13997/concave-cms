@@ -1,4 +1,4 @@
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { GalleryVerticalEnd } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -194,8 +194,15 @@ export function LoginForm({
         </FieldGroup>
       </form>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="/terms">Terms of Service</a> and{" "}
-        <a href="/privacy">Privacy Policy</a>.
+        By clicking continue, you agree to our{" "}
+        <Link to="/terms" className="underline underline-offset-2 hover:text-foreground">
+          Terms of Service
+        </Link>{" "}
+        and{" "}
+        <Link to="/privacy" className="underline underline-offset-2 hover:text-foreground">
+          Privacy Policy
+        </Link>
+        .
       </FieldDescription>
     </div>
   );

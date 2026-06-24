@@ -3,9 +3,9 @@ import { useMutation, useQuery } from "convex/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ContentEntryEditor } from "@/components/content/ContentEntryEditor";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import { AdminPageLayout } from "@/components/admin/AdminPageLayout";
 import { InsufficientPermissions } from "@/components/insufficient-permissions";
 import { OnboardingBanner } from "@/components/onboarding/OnboardingWizard";
-import { UserButton } from "@/components/User-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -321,17 +321,13 @@ function ContentPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background px-4 py-6 text-foreground sm:px-6 lg:px-8">
-      <header className="mx-auto flex w-full max-w-4xl items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight">Content</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Schema-driven content management</p>
-        </div>
-        <UserButton />
-      </header>
-
-      <main data-testid="content-editor" className="mx-auto mt-8 w-full max-w-4xl flex-1 space-y-4">
-        {search.onboarding === "1" && <OnboardingBanner step="content" />}
+    <AdminPageLayout
+      title="Content"
+      description="Schema-driven content management"
+      contentTestId="content-editor"
+      contentClassName="space-y-4"
+    >
+      {search.onboarding === "1" && <OnboardingBanner step="content" />}
         <section data-testid="content-type-switcher">
           <Label className="mb-2 block text-sm font-medium">Content type</Label>
           {contentTypes === undefined ? (
@@ -659,7 +655,6 @@ function ContentPage() {
             {error}
           </p>
         )}
-      </main>
-    </div>
+    </AdminPageLayout>
   );
 }
